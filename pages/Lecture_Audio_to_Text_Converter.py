@@ -22,9 +22,11 @@ def create_pdf(text_content, filename):
 
     pdf.set_font("Arial", size=12)
     pdf.multi_cell(0, 8, txt=text_content)
+    pdf_buffer = BytesIO()
 
-    pdf_output = pdf.output(dest='S')
-    return BytesIO(pdf_output)
+    pdf.output(dest=pdf_buffer)
+    pdf_bytes = pdf_buffer.getvalue()
+    return pdf_bytes
 
 st.title("🎧Lecture Audio-to-text Converter & PDF Generator")
 st.markdown("Upload a lecture audio file to transcribe it and download the text as a PDF.")
@@ -56,14 +58,14 @@ if audio_file is not None:
                 st.code(transcribed_text)
                 
                 with st.spinner("Generating PDF..."):
-                    pdf_bytes_io = create_pdf(transcribed_text, audio_file.name.split('.')[0])
+                    pdf_data_bytes = create_pdf(transcribed_text, audio_file.name.split('.')[0])
                     
                     st.success("Transcription complete and PDF is ready!")
                     filename = os.path.splitext(audio_file.name)[0] + "transcription.pdf"
                     
                     st.download_button(
                         label="Download Transcription as PDF",
-                        data=pdf_bytes_io.getvalue(),
+                        data=pdf_data_bytes,
                         file_name=filename,
                         mime="application/pdf"
                     )
