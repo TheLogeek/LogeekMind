@@ -6,7 +6,7 @@
 
 LogeekMind is your all-in-one AI academic productivity platform and educational technology tool built using Streamlit and powered by Google's Gemini AI models. It’s designed to simplify studying, accelerate content mastery, and optimize academic planning for students across all disciplines.
 
-### 🚀 Getting Started
+## 🚀 Getting Started
 
 ### 🔑 Essential: Get Your Gemini API Key
 
