@@ -5,7 +5,7 @@ from utils import get_gemini_client
 from docx import Document
 import io
 
-model_name = "gemini-1.5-flash"
+model_name = "gemini-2.5-flash"
 
 st.title("📝Course Outline Generator")
 st.markdown("Instantly generate a detailed, university-level course syllabus and outline")
