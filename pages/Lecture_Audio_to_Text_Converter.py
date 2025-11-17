@@ -2,14 +2,14 @@ import streamlit as st
 import whisper
 import tempfile
 import os
-from fpdf import FPDF
-from io import BytesIO
+#from fpdf import FPDF
+#from io import BytesIO
 
 @st.cache_resource
 def load_whisper_model():
     return whisper.load_model("base")
 
-def create_pdf(text_content, filename):
+"""def create_pdf(text_content, filename):
     pdf = FPDF()
     pdf.add_page()
 
@@ -26,10 +26,10 @@ def create_pdf(text_content, filename):
 
     pdf.output(dest=pdf_buffer)
     pdf_bytes = pdf_buffer.getvalue()
-    return pdf_bytes
+    return pdf_bytes"""
 
-st.title("🎧Lecture Audio-to-text Converter & PDF Generator")
-st.markdown("Upload a lecture audio file to transcribe it and download the text as a PDF.")
+st.title("🎧Lecture Audio-to-text Converter & Document Generator")
+st.markdown("Upload a lecture audio file to transcribe it and download the text as a .txt.")
 
 model = load_whisper_model()
 st.success("STT model loaded successfully! Ready for audio")
@@ -58,16 +58,14 @@ if audio_file is not None:
                 st.code(transcribed_text)
                 
                 with st.spinner("Generating PDF..."):
-                    pdf_data_bytes = create_pdf(transcribed_text, audio_file.name.split('.')[0])
-                    
                     st.success("Transcription complete and PDF is ready!")
                     filename = os.path.splitext(audio_file.name)[0] + "transcription.pdf"
                     
                     st.download_button(
                         label="Download Transcription as PDF",
-                        data=pdf_data_bytes,
-                        file_name=filename,
-                        mime="application/pdf"
+                        data=transcribed_text.encode('utf-8'),
+                        file_name=f"{filename}.txt",
+                        mime="text/plain"
                     )
             except Exception as e:
                 st.error(f"An error occurred during transcription: {e}")
