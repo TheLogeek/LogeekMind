@@ -9,24 +9,6 @@ import os
 def load_whisper_model():
     return whisper.load_model("base")
 
-"""def create_pdf(text_content, filename):
-    pdf = FPDF()
-    pdf.add_page()
-
-    pdf.set_font("Arial", size=12)
-
-    pdf.set_font("Arial", 'B', 16)
-
-    pdf.cell(200, 10, txt="Lecture Transcription", ln=1, align="C")
-    pdf.ln(5)
-
-    pdf.set_font("Arial", size=12)
-    pdf.multi_cell(0, 8, txt=text_content)
-    pdf_buffer = BytesIO()
-
-    pdf.output(dest=pdf_buffer)
-    pdf_bytes = pdf_buffer.getvalue()
-    return pdf_bytes"""
 
 st.title("🎧Lecture Audio-to-text Converter & Document Generator")
 st.markdown("Upload a lecture audio file to transcribe it and download the text as a .txt.")
@@ -57,14 +39,14 @@ if audio_file is not None:
                 st.subheader("Transcription")
                 st.code(transcribed_text)
                 
-                with st.spinner("Generating PDF..."):
-                    st.success("Transcription complete and PDF is ready!")
-                    filename = os.path.splitext(audio_file.name)[0] + "transcription.pdf"
+                with st.spinner("Generating file..."):
+                    st.success("Transcription complete and file is ready!")
+                    filename = os.path.splitext(audio_file.name)[0] + "transcription.txt"
                     
                     st.download_button(
                         label="Download Transcription as PDF",
                         data=transcribed_text.encode('utf-8'),
-                        file_name=f"{filename}.txt",
+                        file_name=filename,
                         mime="text/plain"
                     )
             except Exception as e:
