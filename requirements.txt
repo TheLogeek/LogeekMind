@@ -6,3 +6,4 @@ python-docx
 openai-whisper
 gTTS
 Pillow
+fpdf
