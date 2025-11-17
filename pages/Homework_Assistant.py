@@ -5,7 +5,7 @@ from utils import get_gemini_client
 from docx import Document
 import io, time
 
-model_name = "gemini-2.5-flash"
+model_name = "gemini-1.5-flash"
 
 st.title("📸 Homework Assistant")
 st.markdown("Upload a picture of your homework problem and get a step-by-step, downloadable solution.")
