@@ -52,7 +52,7 @@ After creating your API key, you will see it displayed on the screen in the 'Key
 
 1.  **Clone the repository:**
     ```bash
-    git clone ![https://github.com/TheLogeek/LogeekMind.git](https://github.com/TheLogeek/LogeekMind.git)
+    git clone https://github.com/TheLogeek/LogeekMind.git
     cd LogeekMind
     ```
 
