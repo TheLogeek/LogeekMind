@@ -7,4 +7,4 @@ openai-whisper
 gTTS
 Pillow
 fpdf
-matplotlib
+sci-kit-learn
