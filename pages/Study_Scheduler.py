@@ -2,8 +2,6 @@ import streamlit as st
 import pandas as pd
 import random
 
-from matplotlib.dates import DAYS_PER_WEEK
-
 st.title("📅Study Scheduler")
 st.markdown("Create a structured daily or weekly study plan by listing your subjects and estimated time needs.")
 
