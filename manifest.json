@@ -1,4 +1,4 @@
-```json
+json
 {
   "name": "LogeekMind: AI Academic Assistant",
   "short_name": "LogeekMind",
@@ -25,4 +25,3 @@
     }
   ]
 }
-```
