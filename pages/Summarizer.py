@@ -7,7 +7,7 @@ from google.genai import types
 from utils import get_gemini_client
 import time
 
-model_name = "gemini-2.5-flash"
+model_name = "gemini-1.5-flash"
 
 st.title("📝 PDF/Notes Summarizer")
 st.markdown("Upload your document and instantly receive a summary of its key points.")
