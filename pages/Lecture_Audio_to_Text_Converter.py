@@ -29,7 +29,7 @@ if audio_file is not None:
         
     st.audio(audio_file)
     
-    if st.button("Convert and Generate PDF"):
+    if st.button("Convert and Generate File"):
         with st.spinner("Converting... this may take a few minutes for long lectures."):
             
             try:
@@ -44,7 +44,7 @@ if audio_file is not None:
                     filename = os.path.splitext(audio_file.name)[0] + "transcription.txt"
                     
                     st.download_button(
-                        label="Download Transcription as PDF",
+                        label="Download Transcription as .txt file",
                         data=transcribed_text.encode('utf-8'),
                         file_name=filename,
                         mime="text/plain"
