@@ -7,4 +7,3 @@ openai-whisper
 gTTS
 Pillow
 fpdf
-sci-kit-learn
