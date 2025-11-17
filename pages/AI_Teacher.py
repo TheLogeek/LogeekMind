@@ -1,4 +1,5 @@
 import streamlit as st
+from google.genai.errors import APIError
 from google.genai import types
 from utils import get_gemini_client
 
@@ -58,5 +59,37 @@ if prompt := st.chat_input("Ask your teacher a question..."):
             mime="text/plain"
         )
 
+
+
+    except APIError as e:
+
+        error_text = str(e)
+
+        if "429" in error_text or "RESOURCE_EXHAUSTED" in error_text.upper():
+
+            if "api_key" in st.session_state:
+                del st.session_state.api_key
+
+            st.error("🚨 **Quota Exceeded!** The shared key has hit its limit. Please enter your own Gemini API "
+
+                     "Key in the sidebar to continue.")
+
+            st.stop()
+
+        elif "503" in error_text:
+
+            st.markdown("The Gemini AI model is currently experiencing high traffic. Please try again later. "
+
+                        "Thank you for your patience!")
+
+            st.info(
+                "In the meantime, you can try other non-AI features **(GPA Calculator, Study Scheduler Lecture Note-to-Audio Converter, Lecture Audio-to-Text Converter)**")
+
+        else:
+
+            st.error(f"An API error occurred during generation: {e}")
+
+
     except Exception as e:
-        st.error(f"An error occurred during AI generation: {e}")
+
+        st.error(f"An unexpected error occurred: {e}")

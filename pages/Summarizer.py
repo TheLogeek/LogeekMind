@@ -3,9 +3,7 @@ from google.genai.errors import APIError
 from pypdf import PdfReader
 from io import BytesIO
 from docx import Document
-from google.genai import types
 from utils import get_gemini_client
-import time
 
 model_name = "gemini-2.5-flash"
 
@@ -88,6 +86,12 @@ except APIError as e:
 
         st.error("🚨 **Quota Exceeded!** The shared api key has hit its limit. Please enter your own Gemini api key in the sidebar to continue.")
         st.stop()
+
+    elif "503" in error_text:
+        st.markdown("The Gemini AI model is currently experiencing high traffic. Please try again later. "
+                    "Thank you for your patience!")
+        st.info(
+            "In the meantime, you can try other non-AI features **(GPA Calculator, Study Scheduler Lecture Note-to-Audio Converter, Lecture Audio-to-Text Converter)**")
 
     else:
         st.error(f"An API Error occurred: {e}")
