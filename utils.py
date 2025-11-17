@@ -1,0 +1,35 @@
+import streamlit as st
+from google import genai
+from google.genai.errors import APIError
+
+def get_gemini_client():
+    gemini_api_key = None
+
+    if "api_key" in st.session_state and st.session_state.api_key:
+        gemini_api_key = st.session_state.api_key
+    elif "GEMINI_API_KEY" in st.secrets:
+        gemini_api_key = st.secrets["GEMINI_API_KEY"]
+
+    if not gemini_api_key:
+        with st.sidebar:
+            st.warning("Please enter your Gemini API key to use the AI features.")
+
+            user_key = st.text_input("Gemini API key", type="password")
+
+            if user_key:
+                st.session_state.api_key = user_key
+                st.rerun()
+        st.stop()
+
+    try:
+        @st.cache_resource
+        def initialize_client():
+            return genai.Client(api_key=gemini_api_key)
+
+        return initialize_client()
+    except APIError as e:
+        st.error(f"API Key Error: Failed to initialize client. Please check your key. Details: {e}")
+        st.stop()
+    except Exception as e:
+        st.error(f"An unexpected error occurred during client initialization: {e}")
+        st.stop()
