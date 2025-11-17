@@ -2,7 +2,7 @@ import streamlit as st
 from google.genai import types
 from utils import get_gemini_client
 
-model_name = "gemini-1.5-flash"
+model_name = "gemini-2.5-flash"
 System_instruction = (
         "You are a patient, expert, and encouraging teacher."
         "Explain complex topics in a simple, step-by-step manner."
