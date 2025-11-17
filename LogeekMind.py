@@ -2,7 +2,7 @@ import streamlit as st
 
 st.set_page_config(
     page_title="LogeekMind: Your AI Academic Assistant",
-    page_icon="📘",
+    page_icon="favicon.ico",
     layout="wide",
     initial_sidebar_state="expanded"
 )
