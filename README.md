@@ -2,7 +2,7 @@
 
 ### Empowering Smarter Learning
 
-[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_square_white.svg)](https://[YOUR_DEPLOYMENT_LINK])
+[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_square_white.svg)](https://[logeekmind.streamlit.app])
 
 LogeekMind is your all-in-one AI academic productivity platform and educational technology tool built using Streamlit and powered by Google's Gemini AI models. It’s designed to simplify studying, accelerate content mastery, and optimize academic planning for students across all disciplines.
 
@@ -52,7 +52,7 @@ After creating your API key, you will see it displayed on the screen in the 'Key
 
 1.  **Clone the repository:**
     ```bash
-    git clone [https://github.com/YourUsername/LogeekMind.git](https://github.com/YourUsername/LogeekMind.git)
+    git clone [https://github.com/TheLogeek/LogeekMind.git](https://github.com/TheLogeek/LogeekMind.git)
     cd LogeekMind
     ```
 
