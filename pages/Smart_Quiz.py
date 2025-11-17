@@ -4,7 +4,7 @@ from utils import get_gemini_client
 import io
 from docx import Document
 
-model_name = "gemini-2.5-flash"
+model_name = "gemini-1.5-flash"
 
 st.title("❓ Smart Quiz Generator")
 st.markdown("Instantly generate a custom quiz on any topic, complete with answers and explanations.")
