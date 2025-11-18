@@ -7,3 +7,4 @@ openai-whisper
 gTTS
 Pillow
 fpdf
+matplotlib
