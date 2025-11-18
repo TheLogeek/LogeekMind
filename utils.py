@@ -22,7 +22,7 @@ def get_gemini_client():
 
         st.header("🔒 AI Features Locked")
         st.info("Please check the sidebar and enter your Gemini API Key to unlock LogeekMind's AI features.")
-        st.markdown("If you don't already have one, [**View the complete LogeekMind API Key Setup Guide here!**]({https://github.com/TheLogeek/LogeekMind}#getting-started)")
+        st.markdown("If you don't already have one, [**View the complete LogeekMind API Key Setup Guide here!**](https://github.com/TheLogeek/LogeekMind#getting-started)")
         st.stop()
 
     try:
