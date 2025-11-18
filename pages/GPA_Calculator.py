@@ -3,7 +3,7 @@ import pandas as pd
 from streamlit import session_state
 
 st.title("GPA Calculator")
-st.markdown("Enter your grades and credits to calculate your term GPA")
+st.markdown("Enter your grades and credit units to calculate your term GPA")
 
 GRADE_POINTS = {
     "A": 5.0, "B": 4.0, "C": 3.0, "D": 2.0, "E": 1.0, "F": 0.0
