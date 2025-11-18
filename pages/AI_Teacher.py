@@ -55,7 +55,7 @@ if prompt := st.chat_input("Ask your teacher a question..."):
         st.download_button(
             label="Download Notes",
             data=response.text.encode('utf-8'),
-            file_name="lecture_notes.txt",
+            file_name=f"{prompt}lecture_notes.txt",
             mime="text/plain"
         )
 
