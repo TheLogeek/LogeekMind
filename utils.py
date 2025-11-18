@@ -7,8 +7,8 @@ def get_gemini_client():
 
     if "api_key" in st.session_state and st.session_state.api_key:
         gemini_api_key = st.session_state.api_key
-    elif "GEMINI_API_KEY" in st.secrets:
-        gemini_api_key = st.secrets["GEMINI_API_KEY"]
+    #elif "GEMINI_API_KEY" in st.secrets :
+        #gemini_api_key = st.secrets["GEMINI_API_KEY"]
 
     if not gemini_api_key:
         with st.sidebar:
@@ -19,6 +19,9 @@ def get_gemini_client():
             if user_key:
                 st.session_state.api_key = user_key
                 st.rerun()
+
+        st.header("🔒 AI Features Locked")
+        st.info("Please check the sidebar and enter your Gemini API Key to unlock LogeekMind's AI features.")
         st.stop()
 
     try:
