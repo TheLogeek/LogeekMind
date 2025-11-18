@@ -84,7 +84,7 @@ except APIError as e:
         if "api_key" in st.session_state:
             del st.session_state.api_key
 
-        st.error("🚨 **Quota Exceeded!** The shared api key has hit its limit. Please enter your own Gemini api key in the sidebar to continue.")
+        st.error("🚨 **Quota Exceeded!** Your Gemini API key has hit it's limit")
         st.stop()
 
     elif "503" in error_text:
