@@ -10,7 +10,7 @@ LogeekMind is your all-in-one AI academic productivity platform and educational 
 
 ### 🔑 Essential: Get Your Gemini API Key
 
-While **LogeekMind** offers a shared key for initial testing, the application will prompt you for your own key if the shared quota is exceeded due to high traffic. Having your own key ensures uninterrupted access to all AI features.
+To access **LogeekMind** AI features (AI Teacher, Homework Assistant, Course Outline Generator, Smart Quiz Generator and Notes Summarizer) the application will prompt you to enter your Gemini API key. Having your own key ensures uninterrupted access to all AI features.
 
 1.  **Sign in to Google AI Studio:** 
 
@@ -42,7 +42,10 @@ Select the project name from the drop-down list and give your api key a name.The
 
 After creating your API key, you will see it displayed on the screen in the 'Key' columnn. It looks like a long mix of letters, numbers, and symbols. Copy and store this key somewhere safe so anytime you are prompted by the application to enter your key, you can simply copy and paste this key into the **"API Key Setup"** section in the app's sidebar.
 
+
 ![Copy your Key](screenshots/gemini_screenshot5.jpg)
+
+**LogeekMind does not store your API key, it's only saved temporarily for one-app session use, you will be prompted to enter your API key every time you open the application to access AI features.**
 
 ***
 
