@@ -1,5 +1,6 @@
 import streamlit as st
-from .__version__ import __version__ as APP_VERSION
+#from .__version__ import __version__ as APP_VERSION
+APP_VERSION = "1.1.0"
 
 st.set_page_config(
     page_title="LogeekMind: Your AI Academic Assistant",
