@@ -91,7 +91,7 @@ except APIError as e:
         st.markdown("The Gemini AI model is currently experiencing high traffic. Please try again later. "
                     "Thank you for your patience!")
         st.info(
-            "In the meantime, you can try other non-AI features **(GPA Calculator, Study Scheduler Lecture Note-to-Audio Converter, Lecture Audio-to-Text Converter)**")
+            "In the meantime, you can try other non-AI features **(GPA Calculator, Study Scheduler, Lecture Note-to-Audio Converter, Lecture Audio-to-Text Converter)**")
 
     else:
         st.error(f"An API Error occurred: {e}")
