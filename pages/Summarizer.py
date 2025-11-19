@@ -73,7 +73,7 @@ try:
                 st.download_button(
                     label="Download Summary",
                     data=summary.encode('utf-8'),
-                    file_name="lecture_summary.txt",
+                    file_name=f"{uploaded_file.name}lecture_summary.txt",
                     mime="text/plain"
                 )
 except APIError as e:
