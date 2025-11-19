@@ -148,6 +148,15 @@ LogeekMind combines nine distinct tools, accessible via the sidebar, to streamli
 
 ---
 
+## 🆕 What's New in v1.1.0
+
+There's a major update for the Notes-to-Audio Converter!
+
+* **File Upload Support:** You can now upload lecture notes directly from `.txt`, `.pdf`, `.docx` files, making it easier to process large documents.
+* *Other minor bug fixes/improvements in the summarizer...*
+
+[See the full release notes here](https://github.com/TheLogeek/LogeekMind/releases/tag/v1.1.0)
+
 
 ## 🤝 Developer & Feedback
 
