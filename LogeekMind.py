@@ -1,4 +1,5 @@
 import streamlit as st
+from LogeekMind import __version__ as APP_VERSION
 
 st.set_page_config(
     page_title="LogeekMind: Your AI Academic Assistant",
@@ -52,3 +53,7 @@ If you encounter any issues, find a bug, or have a brilliant feature suggestion,
 *📧 **Email:** [solomonadenuga8@gmail.com](mailto:solomonadenuga8@gmail.com)
 *📱 **WhatsApp: [+2348023710562](https://wa.me/+2348023710562)**
 """)
+
+with st.sidebar:
+	st.markdown("---")
+	st.info(f"**LogeekMind Version:** **`v{APP_VERSION}`**")
