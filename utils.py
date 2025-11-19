@@ -1,6 +1,24 @@
 import streamlit as st
+import requests
 from google import genai
 from google.genai.errors import APIError
+
+def is_gemini_key_valid(api_key: str) -> bool:
+    if not api_key:
+        return False
+
+    try:
+        client = genai.Client(api_key=api_key)
+        _ = client.models.get(model="gemini-2.5-flash")
+
+        return True
+
+    except APIError as e:
+        st.error("Invalid API Key! Please check your key and try again") if "400" in str(e) else st.error(f"Validation error: {e}")
+        return False
+    except Exception as e:
+        st.error(f"An unexpected error occurred: {e}")
+        return False
 
 def get_gemini_client():
     gemini_api_key = None
@@ -17,8 +35,13 @@ def get_gemini_client():
             user_key = st.text_input("Gemini API key", type="password")
 
             if user_key:
-                st.session_state.api_key = user_key
-                st.rerun()
+                if is_gemini_key_valid(user_key):
+                    st.session_state.api_key = user_key
+                    st.success("API Key accepted and validated!")
+                    st.rerun()
+                else:
+                    #st.error("Invalid API Key!. Please check your key and try again.")
+                    pass
 
         st.header("🔒 AI Features Locked")
         st.info("Please check the sidebar and enter your Gemini API Key to unlock LogeekMind's AI features.")
