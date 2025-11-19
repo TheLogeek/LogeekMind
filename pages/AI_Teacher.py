@@ -83,7 +83,7 @@ if prompt := st.chat_input("Ask your teacher a question..."):
                         "Thank you for your patience!")
 
                 st.info(
-                    "In the meantime, you can try other non-AI features **(GPA Calculator, Study Scheduler Lecture Note-to-Audio Converter, Lecture Audio-to-Text Converter)**")
+                    "In the meantime, you can try other non-AI features **(GPA Calculator, Study Scheduler, Lecture Note-to-Audio Converter, Lecture Audio-to-Text Converter)**")
 
             else:
 
