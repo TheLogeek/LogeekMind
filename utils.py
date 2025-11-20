@@ -1,5 +1,5 @@
 import streamlit as st
-import requests
+import requests, time
 from google import genai
 from google.genai.errors import APIError
 
@@ -38,6 +38,7 @@ def get_gemini_client():
                 if is_gemini_key_valid(user_key):
                     st.session_state.api_key = user_key
                     st.success("API Key accepted and validated!")
+                    time.sleep(2)
                     st.rerun()
                 else:
                     #st.error("Invalid API Key!. Please check your key and try again.")
