@@ -1,7 +1,7 @@
 {
   "name": "LogeekMind: AI Academic Assistant",
   "short_name": "LogeekMind",
-  "start_url": "./",
+  "start_url": "/",
   "display": "standalone",
   "background_color": "#1E90FF",
   "theme_color": "#1E90FF",
