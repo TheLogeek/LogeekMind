@@ -24,14 +24,14 @@ def extract_text_from_uploaded_file(file):
         return text
 
     elif file_name.endswith('.docx'):
-        document = Document(BytesIO(uploaded_file.read()))
+        document = Document(BytesIO(file.read()))
         text = ""
         for paragraph in document.paragraphs:
             text += paragraph.text + "\n"
         return text
 
     elif file_name.endswith('.txt'):
-        return uploaded_file.read().decode("utf-8")
+        return file.read().decode("utf-8")
 
     else:
         st.error("Unsupported file type. ")
