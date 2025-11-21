@@ -47,7 +47,7 @@ st.write("Use the **sidebar navigation** to access any of the powerful features.
 st.info("💡 **Tip:** You will be required to enter your Gemini API key in the sidebar to use AI features")
 #st.sidebar.markdown("---")
 st.sidebar.header("Developer & Feedback")
-st.sidebar.info("Developed by **Solomon Adenuga a.k.a Logeek**.")
+st.sidebar.info("Developed by **[Solomon Adenuga a.k.a Logeek]**(https://github.com/TheLogeek).")
 
 st.sidebar.markdown("""
 If you encounter any issues, find a bug, or have a brilliant feature suggestion, your feedback is highly valued!
