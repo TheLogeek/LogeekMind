@@ -157,6 +157,12 @@ There's a major update for the Notes-to-Audio Converter!
 
 [See the full release notes here](https://github.com/TheLogeek/LogeekMind/releases/tag/v1.1.0)
 
+---
+
+## 🆕 What's New in v1.2.0
+
+**Community Chat:** LogeekMind's users can now exchange live text messages with the new community chat feature.
+
 
 ## 🤝 Developer & Feedback
 
