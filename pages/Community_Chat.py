@@ -10,7 +10,7 @@ def init_connection():
 
 supabase = init_connection()
 
-st.header("LogeekMind Community Chat💬")
+st.title("LogeekMind Community Chat💬")
 
 with st.sidebar:
     st.write("### Chat Settings")
