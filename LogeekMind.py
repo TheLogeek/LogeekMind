@@ -1,6 +1,6 @@
 import streamlit as st
 
-APP_VERSION = "1.2.0"
+APP_VERSION = "1.2.1"
 
 st.set_page_config(
     page_title="LogeekMind: Your AI Academic Assistant",
@@ -44,7 +44,7 @@ st.markdown("---")
 
 st.header("🚀 Get Started")
 st.write("Use the **sidebar navigation** to access any of the powerful features.")
-st.info("💡 **Tip:** You will be required to enter your Gemini API key in the sidebar to use AI features")
+st.info("💡 **Tip:** You may be required to enter your Gemini API key in the sidebar to use AI features")
 #st.sidebar.markdown("---")
 st.sidebar.header("Developer & Feedback")
 st.sidebar.info("Developed by [**Solomon Adenuga a.k.a Logeek**](https://github.com/TheLogeek).")
