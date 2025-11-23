@@ -58,7 +58,7 @@ def get_gemini_client():
                            "For uninterrupted, limit-free service, consider using your own API Key.")
 
     if not st.session_state.get('api_key'):
-        with st.sidebar:
+        with st.sidebar.expanded:
 
             user_key = st.text_input("Gemini API key", type="password")
 
