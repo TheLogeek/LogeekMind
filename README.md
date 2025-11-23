@@ -167,7 +167,7 @@ There's a major update for the Notes-to-Audio Converter!
 
 ## 🆕 What's New in v1.2.1
 
-* Users can now use LogeekMind's AI features without having to enter their own gemini api key however they will given 
+* Users can now use LogeekMind's AI features without having to enter their own gemini api key however they will be given 
 an option to enter theirs if they want to.
 * Handles Robust Rate Limiting
 
