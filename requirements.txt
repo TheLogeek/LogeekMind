@@ -8,3 +8,4 @@ gTTS
 Pillow
 fpdf
 requests
+supabase
