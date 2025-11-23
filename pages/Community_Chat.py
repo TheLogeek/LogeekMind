@@ -34,7 +34,7 @@ def display_messages(group_name, current_user):
 
 supabase = init_connection()
 
-st.header("LogeekMind Community Chat💬")
+st.title("LogeekMind Community Chat💬")
 
 with st.sidebar:
     st.write("### Chat Settings")
