@@ -1,7 +1,7 @@
 import streamlit as st
 import streamlit.components.v1 as components
 
-manifest_path = "/app/static/manifest.json"
+manifest_path = "/static/manifest.json"
 
 html_code = f"""
     <link rel="manifest" href="{manifest_path}">
