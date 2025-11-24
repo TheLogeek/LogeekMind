@@ -36,8 +36,8 @@ if not st.session_state.agreed_to_terms:
     st.markdown("To start using our AI Academic Assistant, please read and accept our legal terms")
     st.divider()
 
-    pp_link = st.page_link("pages/Privacy_Policy.py", label="Read Privacy Policy", icon="📄")
-    tos_link = st.page_link("pages/Terms_Of_Service.py",label="Read Terms of Service", icon="⚖️")
+    pp_link = st.page_link("pages/98_Privacy_Policy.py", label="Read Privacy Policy", icon="📄")
+    tos_link = st.page_link("pages/99_Terms_Of_Service.py",label="Read Terms of Service", icon="⚖️")
 
     agree = st.checkbox(
         f"I have read and agree to the Privacy Policy and Terms of Service."
