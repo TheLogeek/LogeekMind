@@ -1,4 +1,18 @@
 import streamlit as st
+import streamlit.components.v1 as components
+
+manifest_path = "/app/static/manifest.json"
+
+html_code = f"""
+    <link rel="manifest" href="{manifest_path}">
+    <style>
+        div[data-testid="stHtml]{{
+            display: none;
+        }}
+    <style>
+"""
+
+components.html(html_code, height=0, width=0)
 
 APP_VERSION = "1.2.1"
 
@@ -8,11 +22,6 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="expanded"
 )
-
-st.markdown("""
-<link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#1E90FF">
-""", unsafe_allow_html=True)
 
 st.title("🧠 LogeekMind: The AI Academic Assistant")
 st.markdown("""

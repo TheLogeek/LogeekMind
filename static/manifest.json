@@ -1,0 +1,21 @@
+{
+      "name": "LogeekMind: AI Academic Assistant",
+      "short_name": "LogeekMind",
+      "description": "Empowering Smarter Learning: Your all-in-one AI study platform.",
+      "start_url": ".",
+      "display": "standalone",
+      "background_color": "#ffffff",
+      "theme_color": "#0078FF",
+      "icons": [
+        {
+          "src": "/app/static/icon-192.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        },
+        {
+          "src": "/app/static/icon-512.png",
+          "sizes": "512x512",
+          "type": "image/png"
+        }
+      ]
+    }
