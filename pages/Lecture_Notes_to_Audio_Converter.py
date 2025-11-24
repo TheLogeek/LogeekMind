@@ -96,7 +96,7 @@ if lecture_text:
                     st.download_button(
                     label="Download Audio note",
                     data=audio_lecture.getvalue(),
-                    file_name="Study_notes_audio{time.strftime('%Y%m%d%H%M')}.mp3",
+                    file_name=f"Study_notes_audio{time.strftime('%Y%m%d%H%M')}.mp3",
                     mime="audio/mp3"
                 )
                 else:
