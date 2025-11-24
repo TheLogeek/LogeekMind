@@ -64,7 +64,7 @@ if uploaded_file is not None:
             if "429" in error_text or "RESOURCE_EXHAUSTED" in error_text.upper():
                 if "api_key" in st.session_state:
                     del st.session_state.api_key
-                st.error("🚨 **Quota Exceeded!** Your Gemini API key has hit it's limit")
+                st.error("🚨 **Quota Exceeded!** The Gemini API key has hit it's limit")
                 st.stop()
             elif "503" in error_text:
                 st.markdown("The Gemini AI model is currently experiencing high traffic. Please try again later. "

@@ -72,7 +72,7 @@ if prompt := st.chat_input("Ask your teacher a question..."):
                 if "api_key" in st.session_state:
                     del st.session_state.api_key
 
-                st.error("🚨 **Quota Exceeded!** Your Gemini API key has hit it's limit")
+                st.error("🚨 **Quota Exceeded!** The Gemini API key has hit it's limit")
 
                 st.stop()
 

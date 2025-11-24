@@ -1,6 +1,7 @@
 import streamlit as st
 from gtts import gTTS
 import io
+import time
 from pypdf import PdfReader
 from io import BytesIO
 from docx import Document
@@ -95,7 +96,7 @@ if lecture_text:
                     st.download_button(
                     label="Download Audio note",
                     data=audio_lecture.getvalue(),
-                    file_name="Study_notes_audio.mp3",
+                    file_name=f"Study_notes_audio_{time.strftime('%Y%m%d%H%M')}.mp3",
                     mime="audio/mp3"
                 )
                 else:
