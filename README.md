@@ -171,6 +171,12 @@ There's a major update for the Notes-to-Audio Converter!
 an option to enter theirs if they want to.
 * Handles Robust Rate Limiting
 
+---
+
+## 🆕 What's New in v1.2.2
+
+Updated privacy policy and terms of service
+
 
 ## 🤝 Developer & Feedback
 

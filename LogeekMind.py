@@ -14,7 +14,7 @@ html_code = f"""
 
 components.html(html_code, height=0, width=0)
 
-APP_VERSION = "1.2.1"
+APP_VERSION = "1.2.2"
 
 st.set_page_config(
     page_title="LogeekMind: Your AI Academic Assistant",
@@ -29,41 +29,61 @@ Welcome to **LogeekMind**, your all-in-one AI platform designed to simplify stud
 and maximize your academic success.
 """)
 
-GITHUB_REPO_URL = "https://github.com/TheLogeek/LogeekMind"
-st.markdown(f"""
+if 'agreed_to_terms' not in st.session_state:
+    st.session_state.agreed_to_terms = False
+
+if not st.session_state.agreed_to_terms:
+    st.markdown("To start using our AI Academic Assistant, please read and accept our legal terms")
+    st.divider()
+
+    pp_link = st.page_link("pages/Privacy_Policy.py", label="Read Privacy Policy", icon="📄")
+    tos_link = st.page_link("pages/Terms_Of_Service.py",label="Read Terms of Service", icon="⚖️")
+
+    agree = st.checkbox(
+        f"I have read and agree to the Privacy Policy and Terms of Service."
+    )
+
+    if st.button("I Accept & Start Using LogeekMind", disabled=not agree):
+        st.session_state.agreed_to_terms = True
+        st.rerun()
+
+else:
+
+    GITHUB_REPO_URL = "https://github.com/TheLogeek/LogeekMind"
+    st.markdown(f"""
 Need help getting started or setting up your **Gemini API Key**?
 [**View the complete LogeekMind README & Setup Guide here!**]({GITHUB_REPO_URL}#getting-started)
 """)
 
-col1, col2, col3 = st.columns(3)
+    col1, col2, col3 = st.columns(3)
 
-with col1:
-    st.header("💡 AI Learning")
-    st.info("Ask concepts, generate quizzes, and get instant feedback on any subject.")
+    with col1:
+        st.header("💡 AI Learning")
+        st.info("Ask concepts, generate quizzes, and get instant feedback on any subject.")
 
-with col2:
-    st.header("📝 Content Mastery")
-    st.info("Summarize long PDFs/notes, generate course outlines, and convert lectures audio to text and vice versa.")
+    with col2:
+        st.header("📝 Content Mastery")
+        st.info("Summarize long PDFs/notes, generate course outlines, and convert lectures audio to text and vice versa.")
 
-with col3:
-    st.header("🛠 Planning & Solving")
-    st.info("Solve homework problems from images, plan your study schedule and calculate your GPA.")
+    with col3:
+        st.header("🛠 Planning & Solving")
+        st.info("Solve homework problems from images, plan your study schedule and calculate your GPA.")
 
-st.markdown("---")
+    st.markdown("---")
 
-st.header("🚀 Get Started")
-st.write("Use the **sidebar navigation** to access any of the powerful features.")
-st.info("💡 **Tip:** You may be required to enter your Gemini API key in the sidebar to use AI features")
-#st.sidebar.markdown("---")
-st.sidebar.header("Developer & Feedback")
-st.sidebar.info("Developed by [**Solomon Adenuga a.k.a Logeek**](https://github.com/TheLogeek).")
+    st.header("🚀 Get Started")
+    st.write("Use the **sidebar navigation** to access any of the powerful features.")
+    st.info("💡 **Tip:** You may be required to enter your Gemini API key in the sidebar to use AI features")
+    #st.sidebar.markdown("---")
+    st.sidebar.header("Developer & Feedback")
+    st.sidebar.info("Developed by [**Solomon Adenuga a.k.a Logeek**](https://github.com/TheLogeek).")
 
-st.sidebar.markdown("""
+    st.sidebar.markdown("""
 If you encounter any issues, find a bug, or have a brilliant feature suggestion, your feedback is highly valued!
 *📧 **Email:** [solomonadenuga8@gmail.com](mailto:solomonadenuga8@gmail.com)
 *📱 **WhatsApp: [+2348023710562](https://wa.me/+2348023710562)**
 """)
 
-with st.sidebar:
-	st.markdown("---")
-	st.info(f"**LogeekMind Version:** **`v{APP_VERSION}`**")
+    with st.sidebar:
+        st.markdown("---")
+        st.info(f"**LogeekMind Version:** **`v{APP_VERSION}`**")
