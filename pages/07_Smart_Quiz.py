@@ -92,7 +92,7 @@ if st.session_state.quiz_data:
                 q['options'],
                 key=f"q_{idx}",
                 label_visibility="collapsed",
-                index=None  # No default selection
+                index=None
             )
             st.markdown("---")
 
