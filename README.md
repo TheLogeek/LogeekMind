@@ -181,8 +181,7 @@ Updated privacy policy and terms of service
 
 ## 🆕 What's New in v1.3.0
 
-Updated Smart Quiz Generator: Now interactive; users can select options for multiple choice questions and get 
-instantly graded and view explanations after submitting.
+Updated Smart Quiz Generator: Now interactive; users can select options and get instantly graded and view explanations after submitting.
 
 
 ## 🤝 Developer & Feedback
