@@ -99,7 +99,7 @@ LogeekMind combines nine distinct tools, accessible via the sidebar, to streamli
 
 ### 3. ❓ Smart Quiz Generator
 
-**Test Your Knowledge.** Quickly create custom, randomized quizzes based on any topic you input. You can specify the number of questions, the type (Multiple Choice, True/False, Short Answer), and the difficulty level (1-5). The quiz is generated with a hidden answer key and detailed explanations, perfect for self-assessment.
+**Test Your Knowledge.** Quickly create custom, randomized quizzes based on any topic you input. You can specify the number of questions, the type (Multiple Choice, True/False), and the difficulty level (1-5). The quiz is interactive and users get instantly graded after submitting and get detailed explanations, perfect for self-assessment.
 
 ![LogeekMind Smart Quiz Generator](screenshots/LogeekMind_Smart_Quiz_Generator.PNG)
 
