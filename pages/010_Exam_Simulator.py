@@ -54,7 +54,9 @@ def calculate_grade(score, total):
 
 
 # exam generator
-def generate_exam(course_name, topic, num_questions, model_name, client=get_gemini_client()):
+def generate_exam(course_name, topic, num_questions):
+		model_name = "gemini-2.5-flash"
+client = get_gemini_client()
 
     prompt = f"""
     You are a strict university professor setting a final exam.
