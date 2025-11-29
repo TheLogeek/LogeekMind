@@ -7,6 +7,9 @@ from streamlit_autorefresh import st_autorefresh
 from google.genai.errors import APIError
 from utils import get_gemini_client
 
+model_name = "gemini-2.5-flash"
+client = get_gemini_client()
+
 # configuration and state
 if 'exam_stage' not in st.session_state:
     st.session_state.exam_stage = "setup"  # Options: setup, active, finished
@@ -51,9 +54,7 @@ def calculate_grade(score, total):
 
 
 # exam generator
-def generate_exam(course_name, topic, num_questions):
-    model_name = "gemini-2.5-flash"
-    client = get_gemini_client()
+def generate_exam(course_name, topic, num_questions, model_name, client):
 
     prompt = f"""
     You are a strict university professor setting a final exam.
@@ -115,7 +116,7 @@ if st.session_state.exam_stage == "setup":
         else:
             with (st.spinner("Prof. LogeekMind is preparing your exam papers...")):
                 st.session_state.course_code = course_code
-                is_valid, result = generate_exam(course_code, topic, num_q)
+                is_valid, result = generate_exam(course_code, topic, num_q, model_name, client)
                 # 1. Generate Exam
                 if is_valid:
                     st.session_state.exam_data = result
