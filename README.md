@@ -77,7 +77,7 @@ After creating your API key, you will see it displayed on the screen in the 'Key
 
 ## ✨ Detailed Feature Showcase
 
-LogeekMind combines nine distinct tools, accessible via the sidebar, to streamline your academic journey.
+LogeekMind combines ten distinct tools, accessible via the sidebar, to streamline your academic journey.
 
 ![LogeekMind Homepage](screenshots/LogeekMind_Homepage.PNG)
 
@@ -141,9 +141,28 @@ LogeekMind combines nine distinct tools, accessible via the sidebar, to streamli
 
 ### 9. 🗣️ Text-to-Audio (Notes to Audio)
 
-**Create Audio Notes.** Convert any block of text—your summaries, flashcards, or key definitions—into a high-quality MP3 audio file, allowing you to study on the go.
+**Create Audio Notes.** Convert any block of text—your summaries, flashcards, or key definitions or uploaded
+document files—into a 
+high-quality MP3 audio file, allowing you to study on the go.
 
-![LogeekMind Lecture Notes to Audio Converter](screenshots/LogeekMnd_Lecture_Text_to_Audio_Converter.PNG)
+![LogeekMind Lecture Notes to Audio Converter](screenshots/LogeekMind_Lecture_Text_to_Audio_Converter.PNG)
+
+
+### 10. Exam Simulator
+
+The Exam Simulator transforms the preparation process from casual quizzing into a high-pressure, academic assessment environment. This feature is designed to accurately gauge a user's readiness for their final examinations by enforcing strict time limits and using formal grading metrics.
+
+Key Functional Features:
+
+Timed Assessment: Users set a fixed duration for the exam. A non-pausable, real-time countdown timer is displayed throughout the session to mimic actual exam conditions.
+
+Auto-Submission Engine: The system automatically submits and grades the user's progress the moment the timer reaches zero, enforcing discipline and replicating the finality of a real test.
+
+University-Standard Questioning: Leverages the Gemini API to generate challenging, application-based multiple-choice questions specific to the provided course code and topic.
+
+Formal Academic Grading: Results are translated into an official A, B, C, D, E, or F academic grade (based on percentage score), providing a clear and non-ambiguous metric of readiness.
+
+![LogeekMind Exam Simulator](screenshots/LogeekMind_Exam_Simulator.PNG)
 
 
 ---
