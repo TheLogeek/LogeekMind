@@ -9,3 +9,4 @@ Pillow
 fpdf
 requests
 supabase
+streamlit-autorefresh
