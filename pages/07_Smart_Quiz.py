@@ -72,7 +72,19 @@ if should_generate:
         except json.JSONDecodeError:
             st.error("Error: AI output invalid JSON. Please try again.")
         except APIError as e:
-            st.error(f"API Error: {e}")
+            error_text = str(e)
+            if "429" in error_text or "RESOURCE_EXHAUSTED" in error_text.upper():
+                if "api_key" in st.session_state:
+                    del st.session_state.api_key
+                st.error("🚨 **Quota Exceeded!** The Gemini API key has hit it's limit")
+                st.stop()
+            elif "503" in error_text:
+                st.markdown("The Gemini AI model is currently experiencing high traffic. Please try again later. "
+                            "Thank you for your patience!")
+                st.info(
+                    "In the meantime, you can try other non-AI features **(GPA Calculator, Study Scheduler, Lecture Note-to-Audio Converter, Lecture Audio-to-Text Converter)**")
+            else:
+                st.error(f"An API error occurred during generation: {e}")
         except Exception as e:
             st.error(f"Error: {e}")
 

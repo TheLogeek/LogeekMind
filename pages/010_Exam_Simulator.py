@@ -52,49 +52,8 @@ def calculate_grade(score, total):
         return "F", "Fail. You are not ready for this exam."
 
 
-# exam generator
-def generate_exam(course_name, topic, num_questions):
-    model_name = "gemini-2.5-flash"
-    client = get_gemini_client()
-
-    prompt = f"""
-    You are a strict university professor setting a final exam.
-    Course: {course_name}
-    Topic: {topic}
-
-    Generate {num_questions} HARD, examination-standard multiple-choice questions.
-    These should not be simple definitions. They should require critical thinking or application of concepts.
-
-    OUTPUT FORMAT:
-    Return ONLY a raw JSON list of dictionaries. Do NOT use Markdown code blocks (like ```json).
-    Each dictionary must have these keys:
-    - "question": complex scenario or problem statement
-    - "options": A list of strings (e.g., ["Option A", "Option B", "Option C", "Option D"])
-    - "answer": The exact string of the correct option
-    - "explanation": A short explanation of why it is correct
-    """
-
-    try:
-        response = client.models.generate_content(
-        model=model_name,
-        contents=[prompt]
-        )
-
-        cleaned_text = response.text.replace("```json", "").replace("```", "").strip()
-
-        #cleaned_text = cleaned_text.replace('\\\\n', '\\n')
-        time.sleep(2)
-        return True, json.loads(cleaned_text)
-
-    except json.JSONDecodeError:
-        return False, "Error: AI output invalid JSON. Please try again"
-
-    except APIError as e:
-        return False, f"API Error: {e}"
-
-    except Exception as e:
-        return False, f"Error: {e}"
-
+model_name = "gemini-2.5-flash"
+client = get_gemini_client()
 
 # APP LOGIC
 
@@ -117,12 +76,51 @@ if st.session_state.exam_stage == "setup":
         else:
             with (st.spinner("Prof. LogeekMind is preparing your exam papers...")):
                 st.session_state.course_code = course_code
-                is_valid, result = generate_exam(course_code, topic, num_q)
-                # 1. Generate Exam
-                if is_valid:
-                    st.session_state.exam_data = result
-                else:
-                    st.error(result)
+                prompt = f"""
+                    You are a strict university professor setting a final exam.
+                    Course: {course_code}
+                    Topic: {topic}
+
+                    Generate {num_q} HARD, examination-standard multiple-choice questions.
+                    These should not be simple definitions. They should require critical thinking or application of concepts.
+
+                    OUTPUT FORMAT:
+                    Return ONLY a raw JSON list of dictionaries. Do NOT use Markdown code blocks (like ```json).
+                    Each dictionary must have these keys:
+                    - "question": complex scenario or problem statement
+                    - "options": A list of strings (e.g., ["Option A", "Option B", "Option C", "Option D"])
+                    - "answer": The exact string of the correct option
+                    - "explanation": A short explanation of why it is correct
+                    """
+
+                try:
+                    response = client.models.generate_content(
+                        model=model_name,
+                        contents=[prompt]
+                    )
+
+                    cleaned_text = response.text.replace("```json", "").replace("```", "").strip()
+                    st.session_state.exam_data = json.loads(cleaned_text)
+
+                except json.JSONDecodeError as e:
+                    st.error(f"JSONDecodeError: The AI output was malformed. Details: {e}.")
+                    st.stop()
+
+                except APIError as e:
+                    error_text = str(e)
+                    if "429" in error_text or "RESOURCE_EXHAUSTED" in error_text.upper():
+                        if "api_key" in st.session_state:
+                            del st.session_state.api_key
+                        st.error("🚨 **Quota Exceeded!** The Gemini API key has hit its limit.")
+                    elif "503" in error_text:
+                        st.error(
+                            """The Gemini AI model is currently experiencing high traffic. Please try again later.""")
+                    else:
+                        st.error("An API error occurred during generation.")
+                    st.stop()
+
+                except Exception as e:
+                    st.error(f"Error: {e}")
                     st.stop()
                 # 2. Set Timers
                 st.session_state.duration_mins = duration
@@ -257,6 +255,7 @@ elif st.session_state.exam_stage == "finished":
 
         for idx, q in enumerate(st.session_state.exam_data):
             doc.add_heading(f"Q{idx + 1}: {q['question']}", level=2)
+            doc.add_paragraph(f"Options: {q['options']}")
             doc.add_paragraph(f"Correct Answer: {q['answer']}")
             doc.add_paragraph(f"Explanation: {q['explanation']}")
             doc.add_paragraph("-" * 20)

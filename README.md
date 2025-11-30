@@ -202,6 +202,14 @@ Updated privacy policy and terms of service
 
 Updated Smart Quiz Generator: Now interactive; users can select options and get instantly graded and view explanations after submitting.
 
+## 🆕 What's New in v1.4.0
+
+Major New feature introduced: Exam Simulator.
+
+## 🆕 What's New in v1.4.1
+
+Fixed major bugs in Exam Simulator.
+
 
 ## 🤝 Developer & Feedback
 
