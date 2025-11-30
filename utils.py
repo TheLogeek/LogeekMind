@@ -96,3 +96,17 @@ def get_gemini_client():
     except Exception as e:
         st.error(f"An unexpected error occurred during client initialization: {e}")
         st.stop()
+
+
+def premium_gate(feature_name):
+    """
+    Returns True if user is logged in.
+    """
+    if 'user' in st.session_state:
+        return True
+
+    st.warning(f"🔒 You must be logged in to **{feature_name}**.")
+    st.info("Creating an account is free and saves your progress!")
+    if st.button(f"Login to {feature_name}"):
+        st.switch_page("pages/00_Login.py")
+    return False

@@ -5,6 +5,7 @@ import time
 from pypdf import PdfReader
 from io import BytesIO
 from docx import Document
+from utils import premium_gate
 
 st.title("Lecture Notes-to-Audio Converter📢")
 st.markdown("Converts your notes into an MP3 file")
@@ -93,12 +94,15 @@ if lecture_text:
                 st.success("Audio generated successfully!")
                 st.audio(audio_lecture, format='audio/mp3')
                 if is_valid:
-                    st.download_button(
-                    label="Download Audio note",
-                    data=audio_lecture.getvalue(),
-                    file_name=f"Study_notes_audio_{time.strftime('%Y%m%d%H%M')}.mp3",
-                    mime="audio/mp3"
-                )
+                    if premium_gate("Download Transcript"):
+                        st.download_button(
+                        label="Download Audio note",
+                        data=audio_lecture.getvalue(),
+                        file_name=f"Study_notes_audio_{time.strftime('%Y%m%d%H%M')}.mp3",
+                        mime="audio/mp3"
+                    )
+                    else:
+                        st.button("Download Transcript (Login Required)", disabled=True)
                 else:
                     st.error(audio_lecture)
 #else:
