@@ -4,27 +4,7 @@ import time
 
 st.set_page_config(page_title="Login / Sign Up", page_icon="🔐", layout="wide")
 
-st.markdown("""
-    <style>
-    /* Center the card on the screen */
-    .stApp {
-        background-color: #f7f9fc;
-    }
-    .main-card {
-        max-width: 450px;
-        margin: 50px auto;
-        padding: 30px;
-        border-radius: 12px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-        background-color: white;
-    }
-    h1 {
-        text-align: center;
-        color: #1f2937;
-    }
-    </style>
-    <div class="main-card">
-    """, unsafe_allow_html=True)
+
 
 st.title("🔐 LogeekMind Access")
 
@@ -46,7 +26,7 @@ with tab1:
                 if success:
                     st.success(msg)
                     time.sleep(1)
-                    st.switch_page("LogeekMind_App.py")
+                    st.switch_page("LogeekMind.py")
                 else:
                     st.error(f"Error: {msg}")
 
@@ -81,4 +61,4 @@ with tab2:
                 else:
                     st.error(msg)
 
-st.markdown("</div>", unsafe_allow_html=True)
+#st.markdown("</div>", unsafe_allow_html=True)
