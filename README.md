@@ -10,7 +10,7 @@ LogeekMind is your all-in-one AI academic productivity platform and educational 
 
 ### 🔑 Essential: Get Your Gemini API Key
 
-To access **LogeekMind** AI features (AI Teacher, Homework Assistant, Course Outline Generator, Smart Quiz Generator and Notes Summarizer),you can use the app built-in shared key or enter your own key(having your own key ensures uninterrupted access to all AI features).
+To access **LogeekMind** AI features (AI Teacher, Homework Assistant, Course Outline Generator, Smart Quiz Generator, Notes Summarizer and Exam Simulator),you can use the app built-in shared key or enter your own key(having your own key ensures uninterrupted access to all AI features).
 
 1.  **Sign in to Google AI Studio:** 
 
