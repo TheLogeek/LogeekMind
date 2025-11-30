@@ -52,7 +52,7 @@ def render_auth_header():
             # Guest State
             st.markdown(f'<div style="text-align: right; margin-top: 10px;">Guest Mode</div>', unsafe_allow_html=True)
             if st.button("🔐 Login / Sign Up", type="primary", key="header_login_btn"):
-                st.switch_page("login.py")
+                st.switch_page("pages/00_login.py")
 
 
 # Render the header at the very top of the main page
