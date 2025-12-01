@@ -64,6 +64,8 @@ try:
             st.info(f"Successfully extracted {len(lecture_text):,} characters of text.")
 
             if st.button("Generate Summary"):
+                if not um.check_guest_limit("Summarizer", limit=1):
+                    st.stop()
                 with st.spinner("Generating key points..."):
                     summary = summarize_text(lecture_text)
 

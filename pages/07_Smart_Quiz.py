@@ -113,6 +113,8 @@ if st.session_state.quiz_data:
 
     #Grading and Results
     if submit_quiz:
+        if not um.check_guest_limit("Quiz Generator", limit=1):
+            st.stop()
         st.session_state.quiz_submitted = True
         score = 0
 

@@ -89,6 +89,8 @@ if lecture_text:
     st.info(f"Notes loaded. Character count: {len(lecture_text)}")
 
     if st.button("Generate Audio Lecture"):
+            if not um.check_guest_limit("Lecture Notes to Audio Converter", limit=1):
+                st.stop()
             with st.spinner("Synthesizing audio..."):
                 is_valid, audio_lecture = convert_to_audio(lecture_text)
                 st.success("Audio generated successfully!")

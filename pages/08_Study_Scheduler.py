@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import random
+import usage_manager as um
 
 st.title("📅Study Scheduler")
 st.markdown("Create a structured daily or weekly study plan by listing your subjects and estimated time needs.")
@@ -105,6 +106,8 @@ st.button("➕Add Subject", on_click=add_subject)
 st.divider()
 
 if st.button("Generate Study Schedule", type="primary"):
+    if not um.check_guest_limit("Study Scheduler", limit=5):
+        st.stop()
     schedule_df = generate_schedule()
     if schedule_df is not None:
         st.header("📅Your Weekly Study plan")

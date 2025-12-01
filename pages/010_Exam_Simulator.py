@@ -72,6 +72,8 @@ if st.session_state.exam_stage == "setup":
         num_q = st.slider("Number of Questions", 5, 50, 20)
 
     if st.button("Start Exam ⏱️", type="primary"):
+        if not um.check_guest_limit("Exam Simulator", limit=1):
+            st.stop()
         if not course_code:
             st.error("Please enter a Course Code.")
         else:

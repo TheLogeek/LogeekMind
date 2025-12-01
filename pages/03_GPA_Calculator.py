@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 from streamlit import session_state
+import usage_manager as um
 
 st.title("GPA Calculator")
 st.markdown("Enter your grades and credit units to calculate your term GPA")
@@ -48,6 +49,9 @@ for i, course in enumerate(st.session_state.courses):
                                              label_visibility="collapsed", key=f"units_{i}")
 
 st.button("➕ Add Another Course", on_click=add_course)
+
+if not um.check_guest_limit("GPA Calculator", limit=5):
+    st.stop()
 
 gpa_result = calculate_gpa()
 st.divider()

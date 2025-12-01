@@ -27,6 +27,8 @@ if uploaded_file is not None:
     )
 
     if st.button("Generate Solution", type="primary"):
+        if not um.check_guest_limit("Homework Assistant", limit=1):
+            st.stop()
         try:
 
             full_prompt = (f"""You are a rigorous academic solver. Based on the image and the user's instructions(if 

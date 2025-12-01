@@ -24,6 +24,8 @@ if submitted:
     if not course_full_name:
         st.error("Please enter the **Course Full Name** to generate an outline")
         st.stop()
+    if not um.check_guest_limit("Course Outline Generator", limit=1):
+        st.stop()
 
 #AI Prompt
     uni_context = f"taught at {university_name}." if university_name else "taught at a major Nigerian University."

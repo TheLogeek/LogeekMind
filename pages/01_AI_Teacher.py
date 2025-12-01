@@ -25,6 +25,8 @@ for message in st.session_state.messages:
         st.markdown(message["text"])
 
 if prompt := st.chat_input("Ask your teacher a question..."):
+    if not um.check_guest_limit("AI Teacher", limit=1):
+        st.stop()
     st.session_state.messages.append({"role": "user", "text": prompt})
     with st.chat_message("user"):
         st.markdown(prompt)

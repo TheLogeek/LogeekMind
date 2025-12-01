@@ -31,6 +31,8 @@ if audio_file is not None:
     st.audio(audio_file)
     
     if st.button("Convert and Generate File"):
+        if not um.check_guest_limit("Lecture Audio to Text Converter", limit=2):
+            st.stop()
         with st.spinner("Converting... this may take a few minutes for long lectures."):
             
             try:
