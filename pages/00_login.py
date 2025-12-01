@@ -10,7 +10,7 @@ st.title("🔐 LogeekMind Access")
 
 tab1, tab2 = st.tabs(["Login", "Sign Up"])
 
-# --- LOGIN ---
+# LOGIN
 with tab1:
     with st.form("login_form"):
         email = st.text_input("Email", key="login_email_root")
@@ -30,7 +30,7 @@ with tab1:
                 else:
                     st.error(f"Error: {msg}")
 
-# --- SIGN UP ---
+#SIGN UP
 with tab2:
     with st.form("signup_form"):
         st.caption("Create a free account to unlock unlimited access and downloads.")
@@ -39,7 +39,6 @@ with tab2:
                                      help="This will be visible in the Community Chat.")
         new_password = st.text_input("Password", type="password", key="signup_pass_root")
 
-        # Checkbox for Terms (Required)
 
         pp_link = st.page_link("pages/98_Privacy_Policy.py", label="Read Privacy Policy", icon="📄")
         tos_link = st.page_link("pages/99_Terms_Of_Service.py", label="Read Terms of Service", icon="⚖️")

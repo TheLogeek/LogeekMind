@@ -59,17 +59,14 @@ def sign_up_user(email, password, username, terms_accepted):
 
 
 def sign_in_user(email, password):
-    """Logs in the user and loads their profile data."""
+
     try:
         response = supabase.auth.sign_in_with_password({
             "email": email,
             "password": password
         })
-
-        # Store basic user session
         st.session_state.user = response.user
 
-        # Fetch the detailed profile (username, terms status)
         profile_response = supabase.table("profiles").select("*").eq("id", response.user.id).single().execute()
         if profile_response.data:
             st.session_state.user_profile = profile_response.data
@@ -81,7 +78,6 @@ def sign_in_user(email, password):
 
 def sign_out_user():
     supabase.auth.sign_out()
-    # Clear session state
     for key in ['user', 'user_profile', 'chat_history']:
         if key in st.session_state:
             del st.session_state[key]

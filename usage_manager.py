@@ -1,9 +1,7 @@
 import streamlit as st
 
 def premium_gate(feature_name):
-    """
-    Returns True if user is logged in.
-    """
+
     if 'user' in st.session_state:
         return True
 
