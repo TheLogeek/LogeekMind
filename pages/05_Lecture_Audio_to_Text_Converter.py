@@ -2,6 +2,7 @@ import streamlit as st
 import whisper
 import tempfile
 import os
+import usage_manager as um
 #from fpdf import FPDF
 #from io import BytesIO
 
@@ -42,13 +43,17 @@ if audio_file is not None:
                 with st.spinner("Generating file..."):
                     st.success("Transcription complete and file is ready!")
                     filename = os.path.splitext(audio_file.name)[0] + "transcription.txt"
-                    
-                    st.download_button(
-                        label="Download Transcription as .txt file",
-                        data=transcribed_text.encode('utf-8'),
-                        file_name=filename,
-                        mime="text/plain"
-                    )
+
+                    if um.premium_gate("Download Transcription"):
+                        st.download_button(
+                            label="Download Transcription as .txt file",
+                            data=transcribed_text.encode('utf-8'),
+                            file_name=filename,
+                            mime="text/plain"
+                        )
+                    else:
+                        st.button("Download Transcription (Login Required)", disabled=True)
+
             except Exception as e:
                 st.error(f"An error occurred during transcription: {e}")
             finally:

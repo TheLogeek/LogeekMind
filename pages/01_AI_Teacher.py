@@ -2,6 +2,7 @@ import streamlit as st
 from google.genai.errors import APIError
 from google.genai import types
 from utils import get_gemini_client
+import usage_manager as um
 
 model_name = "gemini-2.5-flash"
 System_instruction = (
@@ -54,12 +55,15 @@ if prompt := st.chat_input("Ask your teacher a question..."):
             with st.chat_message("assistant"):
                 st.markdown(response.text)
             st.session_state.messages.append({"role": "model", "text": response.text})
-            st.download_button(
-                label="Download Notes",
-                data=response.text.encode('utf-8'),
-                file_name=f"{prompt} lecture_notes.txt",
-                mime="text/plain"
-            )
+            if um.premium_gate("Download Lecture Notes"):
+                st.download_button(
+                    label="Download Notes",
+                    data=response.text.encode('utf-8'),
+                    file_name=f"{prompt} lecture_notes.txt",
+                    mime="text/plain"
+                )
+            else:
+                st.button("Download Lecture Notes (Login Required)", disabled=True)
 
 
 

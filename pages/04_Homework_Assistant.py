@@ -4,6 +4,7 @@ from google.genai.errors import APIError
 from utils import get_gemini_client
 from docx import Document
 import io, time
+import usage_manager as um
 
 model_name = "gemini-2.5-flash"
 
@@ -52,12 +53,15 @@ if uploaded_file is not None:
                 doc.save(doc_io)
                 doc_io.seek(0)
 
-                st.download_button(
-                    label="Download Solution as DOCX",
-                    data=doc_io,
-                    file_name=f"homework_solution_{time.strftime('%Y%m%d%H%M')}.docx",
-                    mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-                )
+                if um.premium_gate("Download Homework Solution"):
+                    st.download_button(
+                        label="Download Solution as DOCX",
+                        data=doc_io,
+                        file_name=f"homework_solution_{time.strftime('%Y%m%d%H%M')}.docx",
+                        mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                    )
+                else:
+                    st.button("Download Homework Solution (Login Required)", disabled=True)
 
         except APIError as e:
             error_text = str(e)

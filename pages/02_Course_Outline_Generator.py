@@ -3,6 +3,7 @@ from google.genai.errors import APIError
 from utils import get_gemini_client
 from docx import Document
 import io
+import usage_manager as um
 
 model_name = "gemini-2.5-flash"
 
@@ -61,12 +62,15 @@ if submitted:
             doc.save(doc_io)
             doc_io.seek(0)
 
-            st.download_button(
-                label="Download as DOCX",
-                data=doc_io,
-                file_name=f"{course_full_name.replace(' ', '_')}_Outline.docx",
-                mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-            )
+            if um.premium_gate("Download Course Outline"):
+                st.download_button(
+                    label="Download as DOCX",
+                    data=doc_io,
+                    file_name=f"{course_full_name.replace(' ', '_')}_Outline.docx",
+                    mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                )
+            else:
+                st.button("Download Course Outline (Login Required)", disabled=True)
 
         except APIError as e:
             error_text = str(e)

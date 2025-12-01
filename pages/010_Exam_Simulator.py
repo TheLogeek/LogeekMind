@@ -6,6 +6,7 @@ from docx import Document
 from streamlit_autorefresh import st_autorefresh
 from google.genai.errors import APIError
 from utils import get_gemini_client
+import usage_manager as um
 
 #push
 
@@ -264,15 +265,22 @@ elif st.session_state.exam_stage == "finished":
         doc.save(doc_io)
         doc_io.seek(0)
 
-        st.download_button(
-            label="Download Results as DOCX",
-            data=doc_io,
-            file_name=f"{course_code} Exam_Results.docx",
-            mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-        )
+        if um.premium_gate("Download Exam Results"):
+            st.download_button(
+                label="Download Results as DOCX",
+                data=doc_io,
+                file_name=f"{course_code} Exam_Results.docx",
+                mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+            )
+        else:
+            st.button("Download Exam Results (Login Required)", disabled=True)
+
 
     if st.button("Take Another Exam"):
-        st.session_state.exam_stage = "setup"
-        st.session_state.exam_answers = {}
-        st.session_state.exam_score = None
-        st.rerun()
+        if um.premium_gate("Take Another Exam"):
+            st.session_state.exam_stage = "setup"
+            st.session_state.exam_answers = {}
+            st.session_state.exam_score = None
+            st.rerun()
+        else:
+            st.button("Take Another Exam (Login Required)", disabled=True)

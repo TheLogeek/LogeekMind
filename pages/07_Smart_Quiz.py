@@ -4,6 +4,7 @@ from utils import get_gemini_client
 import io
 import json
 from docx import Document
+import usage_manager as um
 
 #Session State Initialization
 if 'quiz_data' not in st.session_state:
@@ -160,9 +161,12 @@ if st.session_state.quiz_data:
         doc.save(doc_io)
         doc_io.seek(0)
 
-        st.download_button(
-            label="Download Results as DOCX",
-            data=doc_io,
-            file_name="Quiz_Results.docx",
-            mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-        )
+        if um.premium_gate("Download Quiz Results"):
+            st.download_button(
+                label="Download Results as DOCX",
+                data=doc_io,
+                file_name="Quiz_Results.docx",
+                mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+            )
+        else:
+            st.button("Download Quiz Results (Login Required)", disabled=True)

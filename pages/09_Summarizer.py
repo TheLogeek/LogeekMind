@@ -4,6 +4,7 @@ from pypdf import PdfReader
 from io import BytesIO
 from docx import Document
 from utils import get_gemini_client
+import usage_manager as um
 
 model_name = "gemini-2.5-flash"
 
@@ -70,12 +71,17 @@ try:
                 st.markdown("---")
                 st.subheader("Key Takeaways")
                 st.markdown(summary)
-                st.download_button(
-                    label="Download Summary",
-                    data=summary.encode('utf-8'),
-                    file_name=f"{uploaded_file.name}lecture_summary.txt",
-                    mime="text/plain"
-                )
+
+                if um.premium_gate("Download Summary"):
+                    st.download_button(
+                        label="Download Summary",
+                        data=summary.encode('utf-8'),
+                        file_name=f"{uploaded_file.name}lecture_summary.txt",
+                        mime="text/plain"
+                    )
+                else:
+                    st.button("Download Summary (Login Required)", disabled=True)
+
 except APIError as e:
     error_text = str(e)
 
