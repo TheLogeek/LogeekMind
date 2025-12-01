@@ -7,7 +7,7 @@ def premium_gate(feature_name):
 
     st.warning(f"🔒 You must be logged in to **{feature_name}**.")
     st.info("""Creating an account is free and saves your progress!
-            Simply click on the sidebar in the top left corner (if it's not already open) and click the login 
+            Simply click on the >> button in the top left corner (if the sidebar is not already open) and click the login 
             section""")
     return False
 
