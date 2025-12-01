@@ -55,7 +55,6 @@ def render_auth_header():
                 st.switch_page("pages/00_login.py")
 
 
-# Render the header at the very top of the main page
 render_auth_header()
 
 st.divider()

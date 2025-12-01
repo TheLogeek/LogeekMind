@@ -6,7 +6,6 @@ def premium_gate(feature_name):
         return True
 
     st.warning(f"🔒 You must be logged in to **{feature_name}**.")
-    st.info("Creating an account is free and saves your progress!")
-    if st.button(f"Login to {feature_name}"):
-        st.switch_page("pages/00_login.py")
+    st.info("Creating an account is free and saves your progress!"
+            "Simply open the sidebar and click the login section")
     return False
