@@ -26,6 +26,7 @@ for message in st.session_state.messages:
 
 if prompt := st.chat_input("Ask your teacher a question..."):
     if not um.check_guest_limit("AI Teacher", limit=1):
+        login_link = st.page_link("pages/00_login.py", label="Login/Signup", icon="🔑")
         st.stop()
     st.session_state.messages.append({"role": "user", "text": prompt})
     with st.chat_message("user"):
@@ -65,7 +66,9 @@ if prompt := st.chat_input("Ask your teacher a question..."):
                     mime="text/plain"
                 )
             else:
-                st.button("Download Lecture Notes (Login Required)", disabled=True)
+                st.info("Creating an account is free and saves your progress!")
+                login_link = st.page_link("pages/00_login.py", label="Login/Signup", icon="🔑")
+
 
 
 
