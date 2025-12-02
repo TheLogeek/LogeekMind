@@ -37,7 +37,6 @@ THEME_CSS = """
 <style>
 /* page background and fonts */
 [data-testid="stAppViewContainer"] { background: linear-gradient(180deg,#061025 0%, #07152b 60%); }
-section[data-testid="stSidebar"] { background: linear-gradient(180deg,#061325 0%, #071a2f 60%); color: #dbe9ff; }
 
 /* message bubble */
 .logeek-msg {
