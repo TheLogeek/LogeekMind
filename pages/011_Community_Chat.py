@@ -183,7 +183,6 @@ def get_reactions_for_message(message_id: str):
     resp = supabase.table("message_reactions") \
         .select("emoji, count:count") \
         .eq("message_id", message_id) \
-        .group("emoji") \
         .execute()
     # Some Supabase clients/drivers don't support group in select like this;
     # fallback to fetching all and counting in Python:
