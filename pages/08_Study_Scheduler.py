@@ -107,6 +107,7 @@ st.divider()
 
 if st.button("Generate Study Schedule", type="primary"):
     if not um.check_guest_limit("Study Scheduler", limit=5):
+        login_link = st.page_link("pages/00_login.py", label="Login/Signup", icon="🔑")
         st.stop()
     schedule_df = generate_schedule()
     if schedule_df is not None:
