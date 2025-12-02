@@ -50,7 +50,7 @@ def sign_up_user(email, password, username, terms_accepted):
         })
 
         if response.user:
-            return True, "Account created! Please check your email to confirm."
+            return True, "Account created! Please proceed to login."
         else:
             return False, "Signup failed."
 
