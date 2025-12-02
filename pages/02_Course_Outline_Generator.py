@@ -25,6 +25,7 @@ if submitted:
         st.error("Please enter the **Course Full Name** to generate an outline")
         st.stop()
     if not um.check_guest_limit("Course Outline Generator", limit=1):
+        login_link = st.page_link("pages/00_login.py", label="Login/Signup", icon="🔑")
         st.stop()
 
 #AI Prompt
@@ -72,7 +73,9 @@ if submitted:
                     mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document"
                 )
             else:
-                st.button("Download Course Outline (Login Required)", disabled=True)
+                st.info("Creating an account is free and saves your progress!")
+                login_link = st.page_link("pages/00_login.py", label="Login/Signup", icon="🔑")
+
 
         except APIError as e:
             error_text = str(e)
