@@ -90,6 +90,7 @@ if lecture_text:
 
     if st.button("Generate Audio Lecture"):
             if not um.check_guest_limit("Lecture Notes to Audio Converter", limit=1):
+                login_link = st.page_link("pages/00_login.py", label="Login/Signup", icon="🔑")
                 st.stop()
             with st.spinner("Synthesizing audio..."):
                 is_valid, audio_lecture = convert_to_audio(lecture_text)
@@ -104,7 +105,8 @@ if lecture_text:
                         mime="audio/mp3"
                     )
                     else:
-                        st.button("Download Transcript (Login Required)", disabled=True)
+                        st.info("Creating an account is free and saves your progress!")
+                        login_link = st.page_link("pages/00_login.py", label="Login/Signup", icon="🔑")
                 else:
                     st.error(audio_lecture)
 #else:
