@@ -73,6 +73,7 @@ if st.session_state.exam_stage == "setup":
 
     if st.button("Start Exam ⏱️", type="primary"):
         if not um.check_guest_limit("Exam Simulator", limit=1):
+            login_link = st.page_link("pages/00_login.py", label="Login/Signup", icon="🔑")
             st.stop()
         if not course_code:
             st.error("Please enter a Course Code.")
@@ -139,7 +140,6 @@ if st.session_state.exam_stage == "setup":
 
 # STAGE 2: EXAM ACTIVE
 elif st.session_state.exam_stage == "active":
-
     elapsed_time = time.time() - st.session_state.start_time
     total_seconds = st.session_state.duration_mins * 60
     remaining_seconds = total_seconds - elapsed_time
@@ -275,7 +275,8 @@ elif st.session_state.exam_stage == "finished":
                 mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document"
             )
         else:
-            st.button("Download Exam Results (Login Required)", disabled=True)
+            st.info("Creating an account is free and saves your progress!")
+            login_link = st.page_link("pages/00_login.py", label="Login/Signup", icon="🔑")
 
 
     if st.button("Take Another Exam"):
@@ -285,4 +286,5 @@ elif st.session_state.exam_stage == "finished":
             st.session_state.exam_score = None
             st.rerun()
         else:
-            st.button("Take Another Exam (Login Required)", disabled=True)
+            st.info("Creating an account is free and saves your progress!")
+            login_link = st.page_link("pages/00_login.py", label="Login/Signup", icon="🔑")
