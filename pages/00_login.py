@@ -56,7 +56,7 @@ with tab2:
                 success, msg = auth.sign_up_user(new_email, new_password, new_username, terms_check)
                 if success:
                     st.success(msg)
-                    st.toast("Check your email to verify your account!", icon="📧")
+                    st.toast("You can now proceed to login!", icon="📧")
                 else:
                     st.error(msg)
 
