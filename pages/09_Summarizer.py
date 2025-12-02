@@ -65,6 +65,7 @@ try:
 
             if st.button("Generate Summary"):
                 if not um.check_guest_limit("Summarizer", limit=1):
+                    login_link = st.page_link("pages/00_login.py", label="Login/Signup", icon="🔑")
                     st.stop()
                 with st.spinner("Generating key points..."):
                     summary = summarize_text(lecture_text)
@@ -82,7 +83,8 @@ try:
                         mime="text/plain"
                     )
                 else:
-                    st.button("Download Summary (Login Required)", disabled=True)
+                    st.info("Creating an account is free and saves your progress!")
+                    login_link = st.page_link("pages/00_login.py", label="Login/Signup", icon="🔑")
 
 except APIError as e:
     error_text = str(e)
