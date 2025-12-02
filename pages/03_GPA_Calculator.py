@@ -51,9 +51,13 @@ for i, course in enumerate(st.session_state.courses):
 st.button("➕ Add Another Course", on_click=add_course)
 
 if not um.check_guest_limit("GPA Calculator", limit=5):
+    login_link = st.page_link("pages/00_login.py", label="Login/Signup", icon="🔑")
     st.stop()
 
 gpa_result = calculate_gpa()
 st.divider()
 st.metric(label="Calculated Term GPA", value=f"{gpa_result:.2f}", delta=f"Total Units: {sum(c['units'] for c in 
                                                                                               st.session_state.courses)}")
+
+if st.button("Refresh"):
+    st.rerun()
