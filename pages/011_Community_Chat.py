@@ -1,13 +1,9 @@
-# chat.py
 import streamlit as st
 from supabase import create_client
 import datetime
 import time
 from typing import Optional
 
-# ---------------------------
-# CONFIG / CONNECTION
-# ---------------------------
 @st.cache_resource
 def init_connection():
     url = st.secrets["SUPABASE_URL"]
@@ -16,9 +12,6 @@ def init_connection():
 
 supabase = init_connection()
 
-# ---------------------------
-# HELPERS: session / user
-# ---------------------------
 def get_current_username() -> Optional[str]:
     """
     Reads username from the session structure used at sign-in:
@@ -29,9 +22,7 @@ def get_current_username() -> Optional[str]:
         return st.session_state.user_profile.get("username")
     return None
 
-# ---------------------------
-# UI THEME (neon / blue)
-# ---------------------------
+# ui theme
 THEME_CSS = """
 <style>
 [data-testid="stAppViewContainer"] { background: linear-gradient(180deg,#061025 0%, #07152b 60%); }
@@ -79,9 +70,6 @@ THEME_CSS = """
 """
 st.markdown(THEME_CSS, unsafe_allow_html=True)
 
-# ---------------------------
-# PRESENCE / TYPING HELPERS
-# ---------------------------
 def now_iso():
     return datetime.datetime.utcnow().replace(microsecond=0).isoformat() + "Z"
 
@@ -140,9 +128,7 @@ def get_typing_users(group_name: str, exclude_username: Optional[str] = None):
             continue
     return list(set(out))
 
-# ---------------------------
-# DISPLAY: Online users (sidebar)
-# ---------------------------
+# Online users (sidebar)
 @st.fragment(run_every=5)
 def show_online_users_component():
     online = get_online_users()
@@ -153,9 +139,7 @@ def show_online_users_component():
     else:
         st.write("No one is online right now.")
 
-# ---------------------------
-# DISPLAY: Typing indicator
-# ---------------------------
+# Typing indicator
 @st.fragment(run_every=2)
 def show_typing_indicator_component(group_name: str, current_username: Optional[str]):
     typing = get_typing_users(group_name, exclude_username=current_username)
@@ -163,9 +147,7 @@ def show_typing_indicator_component(group_name: str, current_username: Optional[
         text = "💬 " + ", ".join(typing) + " typing..."
         st.markdown(f"<div class='typing-ribbon'>{text}</div>", unsafe_allow_html=True)
 
-# ---------------------------
-# DISPLAY MESSAGES (no reactions)
-# ---------------------------
+
 @st.fragment(run_every=3)
 def display_messages(group_name: str, current_user: Optional[str]):
     try:
@@ -205,7 +187,6 @@ def display_messages(group_name: str, current_user: Optional[str]):
                     unsafe_allow_html=True
                 )
 
-                # Only show delete button for owner
                 if is_me:
                     if st.button("🗑 Delete", key=f"del_{msg_id}"):
                         supabase.table("chat_messages").delete().eq("id", msg_id).execute()
@@ -214,9 +195,7 @@ def display_messages(group_name: str, current_user: Optional[str]):
     except Exception as err:
         st.error(f"Error connecting to chat: {err}")
 
-# ---------------------------
-# APP LAYOUT / SIDEBAR
-# ---------------------------
+# layout
 st.title("LogeekMind Community Chat 💬")
 
 with st.sidebar:
@@ -237,9 +216,7 @@ if "current_group" not in st.session_state:
 else:
     st.session_state.current_group = group
 
-# ---------------------------
-# PRESENCE
-# ---------------------------
+
 if is_logged_in:
     upsert_presence(current_username)
 
@@ -250,16 +227,11 @@ def presence_ping_fragment(username):
 
 presence_ping_fragment(current_username)
 
-# ---------------------------
-# MESSAGE DISPLAY
-# ---------------------------
+
 display_messages(st.session_state.current_group, current_username)
 
 show_typing_indicator_component(st.session_state.current_group, current_username)
 
-# ---------------------------
-# MESSAGE INPUT
-# ---------------------------
 if is_logged_in:
     set_typing_status(current_username, st.session_state.current_group, True)
 
@@ -281,6 +253,5 @@ if is_logged_in:
 else:
     st.chat_input("Sign in to join the conversation.", disabled=True)
 
-# Manual refresh (optional)
 if st.button("Refresh Chat"):
     st.rerun()
