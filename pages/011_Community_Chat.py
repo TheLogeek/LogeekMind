@@ -189,7 +189,7 @@ def display_messages(group_name: str, current_user: Optional[str]):
                     unsafe_allow_html=True
                 )
 
-                
+
                 if is_me:
                     if st.button("🗑 Delete", key=f"del_{msg_id}"):
                         supabase.table("chat_messages").delete().eq("id", msg_id).execute()
@@ -257,6 +257,7 @@ if is_logged_in:
             st.error(f"Could not send message: {e}")
 else:
     st.chat_input("Sign in to join the conversation.", disabled=True)
+    login_link = st.page_link("pages/00_login.py", label="Login/Signup", icon="🔑")
 
 
 if st.button("Refresh Chat"):
