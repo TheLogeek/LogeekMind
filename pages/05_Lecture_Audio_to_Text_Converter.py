@@ -32,6 +32,7 @@ if audio_file is not None:
     
     if st.button("Convert and Generate File"):
         if not um.check_guest_limit("Lecture Audio to Text Converter", limit=2):
+            login_link = st.page_link("pages/00_login.py", label="Login/Signup", icon="🔑")
             st.stop()
         with st.spinner("Converting... this may take a few minutes for long lectures."):
             
@@ -46,7 +47,7 @@ if audio_file is not None:
                     st.success("Transcription complete and file is ready!")
                     filename = os.path.splitext(audio_file.name)[0] + "transcription.txt"
 
-                    if um.premium_gate("Download Transcription"):
+                    if um.premium_gate("Download Transcript"):
                         st.download_button(
                             label="Download Transcription as .txt file",
                             data=transcribed_text.encode('utf-8'),
@@ -54,7 +55,8 @@ if audio_file is not None:
                             mime="text/plain"
                         )
                     else:
-                        st.button("Download Transcription (Login Required)", disabled=True)
+                        st.info("Creating an account is free and saves your progress!")
+                        login_link = st.page_link("pages/00_login.py", label="Login/Signup", icon="🔑")
 
             except Exception as e:
                 st.error(f"An error occurred during transcription: {e}")
