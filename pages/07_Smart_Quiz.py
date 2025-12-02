@@ -58,6 +58,9 @@ if should_generate:
     """
 
     with st.spinner(f"Generating a {num_questions} question quiz on {quiz_topic}"):
+        if not um.check_guest_limit("Quiz Generator", limit=1):
+            login_link = st.page_link("pages/00_login.py", label="Login/Signup", icon="🔑")
+            st.stop()
         try:
             response = client.models.generate_content(
                 model=model_name,
@@ -113,8 +116,6 @@ if st.session_state.quiz_data:
 
     #Grading and Results
     if submit_quiz:
-        if not um.check_guest_limit("Quiz Generator", limit=1):
-            st.stop()
         st.session_state.quiz_submitted = True
         score = 0
 
@@ -171,4 +172,5 @@ if st.session_state.quiz_data:
                 mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document"
             )
         else:
-            st.button("Download Quiz Results (Login Required)", disabled=True)
+            st.info("Creating an account is free and saves your progress!")
+            login_link = st.page_link("pages/00_login.py", label="Login/Signup", icon="🔑")
