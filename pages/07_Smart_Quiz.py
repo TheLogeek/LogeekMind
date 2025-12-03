@@ -152,7 +152,7 @@ if st.session_state.quiz_data:
         doc.add_paragraph(f"Final Score: {st.session_state.quiz_score}/{total}\n")
         for idx, q in enumerate(st.session_state.quiz_data):
             doc.add_heading(f"Q{idx + 1}: {q['question']}", level=2)
-            doc.add_paragraph(f"Options:{q['options']}")
+            doc.add_paragraph(f"Options: {q['options']}")
             doc.add_paragraph(f"Correct Answer: {q['answer']}")
             doc.add_paragraph(f"Explanation: {q['explanation']}")
             doc.add_paragraph("-" * 20)
@@ -165,7 +165,7 @@ if st.session_state.quiz_data:
             download_clicked = st.download_button(
                 label="Download Results as DOCX",
                 data=doc_io,
-                file_name="Quiz_Results.docx",
+                file_name=f"{quiz_topic} Quiz_Results.docx",
                 mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document"
             )
             if download_clicked:
