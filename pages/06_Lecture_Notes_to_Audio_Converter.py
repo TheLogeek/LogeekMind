@@ -174,7 +174,7 @@ if st.session_state.lecture_text:
         else:
             if st.button("Save Audio to Library"):
                 try:
-                    user_id = st.session_state.user.id
+                    user_id = user_id = st.session_state.user['uuid']
                     audio_bytes = st.session_state.audio_data if isinstance(st.session_state.audio_data, (
                     bytes, bytearray)) else st.session_state.audio_data.getvalue()
                     filename = st.session_state.audio_filename or f"notes_audio_{time.strftime('%Y%m%d%H%M')}.mp3"
