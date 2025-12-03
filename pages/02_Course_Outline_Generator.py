@@ -110,7 +110,6 @@ if submitted:
             filename = f"{course_full_name.replace(' ', '_')}_Outline.docx"
             st.session_state.course_outline_filename = filename
 
-            # Display
             st.subheader("✔ Generated Course Outline")
             st.markdown(outline_text)
 
