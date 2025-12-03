@@ -55,6 +55,39 @@ def convert_to_audio(text):
         return False, f"An error occurred during audio generation: {e}"
 
 
+if st.session_state.audio_data:
+    st.success("📌 A previously generated audio lecture was found.")
+
+    st.audio(st.session_state.audio_data, format="audio/mp3")
+
+    if um.premium_gate("Download Transcript"):
+        download_clicked = st.download_button(
+            label="⬇ Download Previous Audio Lecture",
+            data=st.session_state.audio_data,
+            file_name=st.session_state.audio_filename,
+            mime="audio/mp3",
+            key="download_previous_audio",
+        )
+
+        if download_clicked:
+            del st.session_state.audio_data
+            del st.session_state.audio_filename
+            st.success("✔ Previous audio cleared after download.")
+            st.rerun()
+    else:
+        st.info("Create an account to download your previously generated audio.")
+        st.page_link("pages/00_login.py", label="Login/Signup", icon="🔑")
+
+    st.markdown("---")
+
+    if st.button("🆕 Generate New Audio Lecture"):
+        del st.session_state.audio_data
+        del st.session_state.audio_filename
+        del st.session_state.lecture_text
+        st.rerun()
+
+    st.stop()
+
 
 col1, col2 = st.columns(2)
 with col1:
