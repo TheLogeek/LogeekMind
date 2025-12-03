@@ -10,3 +10,4 @@ fpdf
 requests
 supabase
 streamlit-autorefresh
+matplotlib
