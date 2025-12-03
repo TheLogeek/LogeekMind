@@ -12,17 +12,13 @@ st.markdown("Instantly generate a detailed, university-level course syllabus and
 
 client = get_gemini_client()
 
-# ----------------------------
-# SESSION STATE INITIALIZATION
-# ----------------------------
+
 if "course_outline" not in st.session_state:
     st.session_state.course_outline = None
 if "course_outline_filename" not in st.session_state:
     st.session_state.course_outline_filename = None
 
-# ---------------------------------------------------------
-# IF PREVIOUSLY GENERATED OUTLINE EXISTS, SHOW RETRIEVAL UI
-# ---------------------------------------------------------
+
 if st.session_state.course_outline:
 
     st.success("📌 A previously generated course outline was found.")
