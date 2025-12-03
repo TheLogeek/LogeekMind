@@ -13,9 +13,18 @@ st.markdown("Upload your document and instantly receive a summary of its key poi
 
 client = get_gemini_client()
 
+if "lecture_text" not in st.session_state:
+    st.session_state.lecture_text = None
+if "summary" not in st.session_state:
+    st.session_state.summary = None
+if "uploaded_file_name" not in st.session_state:
+    st.session_state.uploaded_file_name = None
+
+
 def extract_text_from_uploaded_file(file):
     """Extracts text from a streamlit uploaded file based on its extension."""
     file_name = file.name
+    st.session_state.uploaded_file_name = file_name
 
     if file_name.endswith('.pdf'):
         pdf_reader = PdfReader(BytesIO(file.read()))
@@ -46,65 +55,72 @@ def summarize_text(lecture_text):
         "and follow it with a one-paragraph summary overview. Use professional academic language. "
         f"\n\n--- NOTES ---\n\n{lecture_text}"
     )
-
     response = client.models.generate_content(
         model=model_name,
         contents=[prompt]
     )
     return response.text
 
-try:
-    uploaded_file = st.file_uploader("Choose a PDF or TXT file", type=["pdf", "txt", "docx"])
 
-    if uploaded_file is not None:
-        with st.spinner("Extracting text from file..."):
-            lecture_text = extract_text_from_uploaded_file(uploaded_file)
+uploaded_file = st.file_uploader("Choose a PDF, TXT or DOCX file", type=["pdf", "txt", "docx"])
+if uploaded_file is not None:
+    st.session_state.lecture_text = extract_text_from_uploaded_file(uploaded_file)
 
-        if lecture_text:
-            st.info(f"Successfully extracted {len(lecture_text):,} characters of text.")
+if st.session_state.lecture_text:
+    st.info(f"Successfully extracted {len(st.session_state.lecture_text):,} characters of text.")
 
-            if st.button("Generate Summary"):
-                if not um.check_guest_limit("Summarizer", limit=1):
-                    login_link = st.page_link("pages/00_login.py", label="Login/Signup", icon="🔑")
-                    st.stop()
-                with st.spinner("Generating key points..."):
-                    summary = summarize_text(lecture_text)
+    if st.button("Generate Summary"):
+        if not um.check_guest_limit("Summarizer", limit=1):
+            st.page_link("pages/00_login.py", label="Login/Signup", icon="🔑")
+            st.stop()
 
+        with st.spinner("Generating key points..."):
+            try:
+                st.session_state.summary = summarize_text(st.session_state.lecture_text)
                 st.success("Summary Complete!")
-                st.markdown("---")
-                st.subheader("Key Takeaways")
-                st.markdown(summary)
 
-                if um.premium_gate("Download Summary"):
-                    st.download_button(
-                        label="Download Summary",
-                        data=summary.encode('utf-8'),
-                        file_name=f"{uploaded_file.name}lecture_summary.txt",
-                        mime="text/plain"
-                    )
+            except APIError as e:
+                error_text = str(e)
+                if "429" in error_text or "RESOURCE_EXHAUSTED" in error_text.upper():
+                    if "api_key" in st.session_state:
+                        del st.session_state.api_key
+                    st.error("🚨 **Quota Exceeded!** The Gemini API key has hit its limit")
+                    st.stop()
+                elif "503" in error_text:
+                    st.markdown("The Gemini AI model is currently experiencing high traffic. Please try again later.")
+                    st.info("Meanwhile, try other non-AI features like GPA Calculator, Study Scheduler, etc.")
                 else:
-                    st.info("Creating an account is free and saves your progress!")
-                    login_link = st.page_link("pages/00_login.py", label="Login/Signup", icon="🔑")
+                    st.error(f"An API Error occurred: {e}")
+            except Exception as e:
+                st.error(f"An Error occurred: {e}")
 
-except APIError as e:
-    error_text = str(e)
 
-    if "429" in error_text or "RESOURCE_EXHAUSTED" in error_text.upper():
+if st.session_state.summary:
+    st.markdown("---")
+    st.subheader("Key Takeaways")
+    st.markdown(st.session_state.summary)
 
-        if "api_key" in st.session_state:
-            del st.session_state.api_key
+    col1, col2 = st.columns(2)
 
-        st.error("🚨 **Quota Exceeded!** The Gemini API key has hit it's limit")
-        st.stop()
+    with col1:
+        if um.premium_gate("Download Summary"):
+            download_clicked = st.download_button(
+                label="Download Summary",
+                data=st.session_state.summary.encode("utf-8"),
+                file_name=f"{st.session_state.uploaded_file_name}_lecture_summary.txt",
+                mime="text/plain"
+            )
+            if download_clicked:
+                st.session_state.summary = None
+                st.session_state.lecture_text = None
+                st.session_state.uploaded_file_name = None
+        else:
+            st.info("Creating an account is free and saves your progress!")
+            st.page_link("pages/00_login.py", label="Login/Signup", icon="🔑")
 
-    elif "503" in error_text:
-        st.markdown("The Gemini AI model is currently experiencing high traffic. Please try again later. "
-                    "Thank you for your patience!")
-        st.info(
-            "In the meantime, you can try other non-AI features **(GPA Calculator, Study Scheduler, Lecture Note-to-Audio Converter, Lecture Audio-to-Text Converter)**")
-
-    else:
-        st.error(f"An API Error occurred: {e}")
-
-except Exception as e:
-    st.error(f"An Error occurred: {e}")
+    with col2:
+        if st.button("Generate New Summary"):
+            st.session_state.summary = None
+            st.session_state.lecture_text = None
+            st.session_state.uploaded_file_name = None
+            st.rerun()

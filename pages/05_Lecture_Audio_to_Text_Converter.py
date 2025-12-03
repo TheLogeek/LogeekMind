@@ -3,62 +3,112 @@ import whisper
 import tempfile
 import os
 import usage_manager as um
-#from fpdf import FPDF
-#from io import BytesIO
 
+# --------------------------
+# LOAD WHISPER MODEL (CACHED)
+# --------------------------
 @st.cache_resource
 def load_whisper_model():
     return whisper.load_model("base")
 
-
-st.title("🎧Lecture Audio-to-text Converter & Document Generator")
+st.title("🎧 Lecture Audio-to-Text Converter & Document Generator")
 st.markdown("Upload a lecture audio file to transcribe it and download the text as a .txt.")
 
 model = load_whisper_model()
 st.success("STT model loaded successfully! Ready for audio")
 
-audio_file = st.file_uploader(
+# --------------------------
+# SESSION STATE VARIABLES
+# --------------------------
+if "audio_file" not in st.session_state:
+    st.session_state.audio_file = None
+
+if "audio_path" not in st.session_state:
+    st.session_state.audio_path = None
+
+if "transcribed_text" not in st.session_state:
+    st.session_state.transcribed_text = None
+
+# --------------------------
+# FILE UPLOADER
+# --------------------------
+uploaded_file = st.file_uploader(
     "Upload a lecture audio file (MP3, WAV, M4A, OGG)",
-    type=["mp3","wav","m4a","ogg"]
+    type=["mp3", "wav", "m4a", "ogg"]
 )
 
-if audio_file is not None:
-    
-    with tempfile.NamedTemporaryFile(delete=False, suffix=f".{audio_file.name.split('.'[-1])}") as tmp_file:
-        tmp_file.write(audio_file.read())
-        audio_path = tmp_file.name
-        
-    st.audio(audio_file)
-    
-    if st.button("Convert and Generate File"):
-        if not um.check_guest_limit("Lecture Audio to Text Converter", limit=2):
-            login_link = st.page_link("pages/00_login.py", label="Login/Signup", icon="🔑")
-            st.stop()
+if uploaded_file is not None:
+    st.session_state.audio_file = uploaded_file
+
+    # Save temporary file
+    with tempfile.NamedTemporaryFile(delete=False,
+                                     suffix=f".{uploaded_file.name.split('.')[-1]}") as tmp:
+        tmp.write(uploaded_file.read())
+        st.session_state.audio_path = tmp.name
+
+# --------------------------
+# AUDIO PLAYER
+# --------------------------
+if st.session_state.audio_file:
+    st.audio(st.session_state.audio_file)
+
+# --------------------------
+# TRANSCRIBE FUNCTION
+# --------------------------
+def transcribe_audio():
+    if not um.check_guest_limit("Lecture Audio to Text Converter", limit=2):
+        st.page_link("pages/00_login.py", label="Login/Signup", icon="🔑")
+        st.stop()
+
+    try:
         with st.spinner("Converting... this may take a few minutes for long lectures."):
-            
-            try:
-                result = model.transcribe(audio_path)
-                transcribed_text = result["text"]
-                
-                st.subheader("Transcription")
-                st.code(transcribed_text)
-                
-                with st.spinner("Generating file..."):
-                    st.success("Transcription complete and file is ready!")
-                    filename = os.path.splitext(audio_file.name)[0] + "transcription.txt"
+            result = model.transcribe(st.session_state.audio_path)
+            st.session_state.transcribed_text = result["text"]
 
-                    if um.premium_gate("Download Transcript"):
-                        st.download_button(
-                            label="Download Transcription as .txt file",
-                            data=transcribed_text.encode('utf-8'),
-                            file_name=filename,
-                            mime="text/plain"
-                        )
-                    else:
-                        st.info("Creating an account is free and saves your progress!")
-                        login_link = st.page_link("pages/00_login.py", label="Login/Signup", icon="🔑")
+    except Exception as e:
+        st.error(f"An error occurred during transcription: {e}")
 
-            except Exception as e:
-                st.error(f"An error occurred during transcription: {e}")
-            finally:
-                os.remove(audio_path)
+# --------------------------
+# BUTTONS
+# --------------------------
+col1, col2 = st.columns(2)
+
+with col1:
+    if st.button("Convert and Generate File", type="primary"):
+        if st.session_state.audio_path is None:
+            st.warning("Please upload an audio file first.")
+        else:
+            transcribe_audio()
+
+with col2:
+    if st.button("Generate New"):
+        # Clear all session data
+        st.session_state.audio_file = None
+        st.session_state.audio_path = None
+        st.session_state.transcribed_text = None
+        st.rerun()  # refresh page to show fresh state
+
+# --------------------------
+# SHOW TRANSCRIPTION + DOWNLOAD
+# --------------------------
+if st.session_state.transcribed_text:
+    st.subheader("Transcription")
+    st.code(st.session_state.transcribed_text)
+
+    filename = os.path.splitext(st.session_state.audio_file.name)[0] + "_transcription.txt"
+
+    if um.premium_gate("Download Transcript"):
+        download_clicked = st.download_button(
+            label="Download Transcript (.txt)",
+            data=st.session_state.transcribed_text.encode("utf-8"),
+            file_name=filename,
+            mime="text/plain",
+        )
+
+        if download_clicked:
+            # Delete transcript immediately after download
+            st.session_state.transcribed_text = None
+
+    else:
+        st.info("Create a free account to download and save your transcripts.")
+        st.page_link("pages/00_login.py", label="Login/Signup", icon="🔑")

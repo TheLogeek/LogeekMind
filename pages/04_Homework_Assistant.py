@@ -13,73 +13,114 @@ st.markdown("Upload a picture of your homework problem and get a step-by-step, d
 
 client = get_gemini_client()
 
-uploaded_file = st.file_uploader("Upload Image of Homework Problem", type=["jpg", "jpeg", "png"])
+
+if "hw_image" not in st.session_state:
+    st.session_state.hw_image = None
+if "hw_context" not in st.session_state:
+    st.session_state.hw_context = ""
+if "hw_solution" not in st.session_state:
+    st.session_state.hw_solution = None
+if "hw_doc" not in st.session_state:
+    st.session_state.hw_doc = None
+
+
+uploaded_file = st.file_uploader(
+    "Upload Image of Homework Problem",
+    type=["jpg", "jpeg", "png"]
+)
 
 if uploaded_file is not None:
-    problem_image = Image.open(uploaded_file)
+    st.session_state.hw_image = Image.open(uploaded_file)
 
-    st.image(problem_image, caption="Uploaded homework problem", use_column_width=True)
+if st.session_state.hw_image is not None:
+    st.image(st.session_state.hw_image, caption="Uploaded homework problem", use_column_width=True)
 
-    user_prompt = st.text_area(
-        "Add Context (Optional)",
-        placeholder="e.g., This is a kinematics problem or I'm stuck on Step 3.",
-        help="Give the AI any extra information to help it solve the problem."
-    )
 
-    if st.button("Generate Solution", type="primary"):
-        if not um.check_guest_limit("Homework Assistant", limit=1):
-            login_link = st.page_link("pages/00_login.py", label="Login/Signup", icon="🔑")
-            st.stop()
-        try:
+st.session_state.hw_context = st.text_area(
+    "Add Context (Optional)",
+    value=st.session_state.hw_context,
+    placeholder="e.g., This is a kinematics problem or I'm stuck on Step 3.",
+    help="Give the AI any extra information to help it solve the problem."
+)
 
-            full_prompt = (f"""You are a rigorous academic solver. Based on the image and the user's instructions(if 
-            any),provide a complete and accurate solution. The output must be in a clean, professional, and easily 
-            readable **Markdown format**. Instructions: 
-            {user_prompt if user_prompt else "The user provided no instructions"}""")
+def generate_solution():
+    if not um.check_guest_limit("Homework Assistant", limit=1):
+        st.page_link("pages/00_login.py", label="Login/Signup", icon="🔑")
+        st.stop()
 
-            with st.spinner("Generating Solution...."):
-                response = client.models.generate_content(
+    try:
+        full_prompt = f"""
+        You are a rigorous academic solver. Based on the image and the user's instructions (if any),
+        provide a complete and accurate solution. The output must be in a clean, professional, and easily 
+        readable **Markdown format**.
+
+        Instructions:
+        {st.session_state.hw_context if st.session_state.hw_context else "The user provided no instructions"}
+        """
+
+        with st.spinner("Generating Solution..."):
+            response = client.models.generate_content(
                 model=model_name,
-                contents=[problem_image, full_prompt]
+                contents=[st.session_state.hw_image, full_prompt]
             )
 
-                st.subheader("Generated Solution (Preview)")
-                solution_text = response.text
-                st.markdown(solution_text)
+        st.session_state.hw_solution = response.text
 
-                doc = Document()
-                doc.add_heading('Homework Solution', 0)
-                doc.add_heading(f"Instructions: {user_prompt}", 1)
-                doc.add_paragraph(solution_text)
+        # Build DOCX
+        doc = Document()
+        doc.add_heading("Homework Solution", 0)
+        doc.add_heading(f"Instructions: {st.session_state.hw_context}", 1)
+        doc.add_paragraph(response.text)
 
-                doc_io = io.BytesIO()
-                doc.save(doc_io)
-                doc_io.seek(0)
+        doc_io = io.BytesIO()
+        doc.save(doc_io)
+        doc_io.seek(0)
+        st.session_state.hw_doc = doc_io
 
-                if um.premium_gate("Download Homework Solution"):
-                    st.download_button(
-                        label="Download Solution as DOCX",
-                        data=doc_io,
-                        file_name=f"homework_solution_{time.strftime('%Y%m%d%H%M')}.docx",
-                        mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-                    )
-                else:
-                    st.info("Creating an account is free and saves your progress!")
-                    login_link = st.page_link("pages/00_login.py", label="Login/Signup", icon="🔑")
+    except APIError as e:
+        error_text = str(e)
+        if "429" in error_text or "RESOURCE_EXHAUSTED" in error_text.upper():
+            if "api_key" in st.session_state:
+                del st.session_state.api_key
+            st.error("🚨 **Quota Exceeded!** The Gemini API key has hit its limit")
+            st.stop()
+        elif "503" in error_text:
+            st.warning("Gemini is experiencing heavy traffic. Try again shortly.")
+            st.info("Meanwhile, explore other non-AI tools like GPA Calculator or Study Scheduler.")
+        else:
+            st.error(f"API Error: {e}")
+    except Exception as e:
+        st.error(f"Unexpected Error: {e}")
 
-        except APIError as e:
-            error_text = str(e)
-            if "429" in error_text or "RESOURCE_EXHAUSTED" in error_text.upper():
-                if "api_key" in st.session_state:
-                    del st.session_state.api_key
-                st.error("🚨 **Quota Exceeded!** The Gemini API key has hit it's limit")
-                st.stop()
-            elif "503" in error_text:
-                st.markdown("The Gemini AI model is currently experiencing high traffic. Please try again later. "
-                            "Thank you for your patience!")
-                st.info("In the meantime, you can try other non-AI features **(GPA Calculator, Study Scheduler, Lecture Note-to-Audio Converter, Lecture Audio-to-Text Converter)**")
-            else:
-                st.error(f"An API error occurred during generation: {e}")
+col1, col2 = st.columns(2)
 
-        except Exception as e:
-            st.error(f"An unexpected error occurred: {e}")
+with col1:
+    if st.button("Generate Solution", type="primary"):
+        if st.session_state.hw_image is None:
+            st.warning("Please upload an image first.")
+        else:
+            generate_solution()
+
+with col2:
+    if st.session_state.hw_solution:
+        if st.button("Generate New"):
+            st.session_state.hw_solution = None
+            st.session_state.hw_doc = None
+
+if st.session_state.hw_solution:
+    st.subheader("Generated Solution (Preview)")
+    st.markdown(st.session_state.hw_solution)
+
+    if um.premium_gate("Download Homework Solution"):
+        st.download_button(
+            label="Download Solution as DOCX",
+            data=st.session_state.hw_doc,
+            file_name=f"homework_solution_{time.strftime('%Y%m%d%H%M')}.docx",
+            mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+            on_click=lambda: (
+                st.session_state.update({"hw_solution": None, "hw_doc": None})
+            )
+        )
+    else:
+        st.info("Create a free account to download and save your generated solutions.")
+        st.page_link("pages/00_login.py", label="Login/Signup", icon="🔑")
