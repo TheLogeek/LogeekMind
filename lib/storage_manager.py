@@ -14,9 +14,30 @@ supabase = init_connection()
 
 
 # ----------------------------------------
+# SAFE EXECUTION WRAPPER
+# ----------------------------------------
+def safe_try(func):
+    """Decorator for wrapping all DB/storage ops in try/except."""
+    def wrapper(*args, **kwargs):
+        try:
+            result = func(*args, **kwargs)
+
+            # treat None return as error
+            if result is None:
+                raise Exception("Operation returned None")
+
+            return result
+
+        except Exception as e:
+            raise Exception(f"{func.__name__} failed: {str(e)}")
+    return wrapper
+
+
+# ----------------------------------------
 # UPLOAD FILE
 # ----------------------------------------
-def upload_file_to_bucket(bucket: str, user_id: str, file_bytes: bytes, filename: str) -> str:
+@safe_try
+def upload_file_to_bucket(bucket: str, user_id: str, file_bytes: bytes, filename: str):
     ts = int(time.time())
     safe_filename = filename.replace(" ", "_")
     path = f"{user_id}/{ts}_{safe_filename}"
@@ -27,7 +48,7 @@ def upload_file_to_bucket(bucket: str, user_id: str, file_bytes: bytes, filename
         {"cacheControl": "3600", "upsert": False}
     )
 
-    # Storage errors come as dict: {"error": {...}}
+    # Supabase storage returns dict, errors are in result["error"]
     if isinstance(res, dict) and res.get("error"):
         raise Exception(res["error"])
 
@@ -37,6 +58,7 @@ def upload_file_to_bucket(bucket: str, user_id: str, file_bytes: bytes, filename
 # ----------------------------------------
 # CREATE DB RECORD
 # ----------------------------------------
+@safe_try
 def create_content_record(
     user_id: str,
     title: str,
@@ -59,9 +81,12 @@ def create_content_record(
 
     res = supabase.table("user_contents").insert(payload).select("*").execute()
 
-    # NEW CLIENT: check status_code, not res.error
-    if res.status_code >= 400:
-        raise Exception(f"Insert error: {res.status_code}")
+    # NEW CLIENT: res.status_code might NOT exist
+    if not hasattr(res, "data") or not isinstance(res.data, list):
+        raise Exception("Insert returned invalid structure")
+
+    if len(res.data) == 0:
+        raise Exception("Insert returned empty result")
 
     return res.data[0]
 
@@ -69,6 +94,7 @@ def create_content_record(
 # ----------------------------------------
 # LIST USER CONTENT
 # ----------------------------------------
+@safe_try
 def list_user_contents(user_id: str, limit: int = 100) -> list:
     res = (
         supabase.table("user_contents")
@@ -79,8 +105,8 @@ def list_user_contents(user_id: str, limit: int = 100) -> list:
         .execute()
     )
 
-    if res.status_code >= 400:
-        raise Exception("Failed to fetch library")
+    if not hasattr(res, "data"):
+        raise Exception("Invalid response structure")
 
     return res.data or []
 
@@ -88,6 +114,7 @@ def list_user_contents(user_id: str, limit: int = 100) -> list:
 # ----------------------------------------
 # GET CONTENT ITEM
 # ----------------------------------------
+@safe_try
 def get_content_item(item_id: str, user_id: str) -> Optional[dict]:
     res = (
         supabase.table("user_contents")
@@ -98,10 +125,7 @@ def get_content_item(item_id: str, user_id: str) -> Optional[dict]:
         .execute()
     )
 
-    if res.status_code == 406:  # no rows
-        return None
-
-    if res.status_code >= 400:
+    if not hasattr(res, "data"):
         return None
 
     return res.data
@@ -110,24 +134,26 @@ def get_content_item(item_id: str, user_id: str) -> Optional[dict]:
 # ----------------------------------------
 # DELETE CONTENT
 # ----------------------------------------
+@safe_try
 def delete_content_item(item_id: str, user_id: str, bucket: Optional[str] = None) -> bool:
     item = get_content_item(item_id, user_id)
     if not item:
-        raise Exception("Item not found or unauthorized")
+        raise Exception("Item not found")
 
     storage_path = item.get("storage_path")
 
     res = supabase.table("user_contents").delete().eq("id", item_id).execute()
 
-    if res.status_code >= 400:
-        raise Exception("Failed to delete record")
+    # we do not check status_code, assume failures throw exceptions internally
+    if not hasattr(res, "data"):
+        raise Exception("Deletion returned invalid structure")
 
     # delete file if exists
     if storage_path and bucket:
         del_res = supabase.storage.from_(bucket).remove([storage_path])
 
-        # remove() returns a dict too
         if isinstance(del_res, dict) and del_res.get("error"):
+            # We do NOT treat this as fatal; only warn
             print("Warning: file deletion error:", del_res["error"])
 
     return True
@@ -136,13 +162,13 @@ def delete_content_item(item_id: str, user_id: str, bucket: Optional[str] = None
 # ----------------------------------------
 # SIGNED URL
 # ----------------------------------------
+@safe_try
 def get_public_url_for_path(bucket: str, storage_path: str, expires_in_seconds: int = 3600) -> str:
     signed = supabase.storage.from_(bucket).create_signed_url(storage_path, expires_in_seconds)
 
     if isinstance(signed, dict) and signed.get("signedURL"):
         return signed["signedURL"]
 
-    # fallback
     public = supabase.storage.from_(bucket).get_public_url(storage_path)
     if isinstance(public, dict):
         return public.get("publicURL", "")
