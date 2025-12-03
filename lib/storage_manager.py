@@ -13,22 +13,27 @@ def init_connection():
 supabase = init_connection()
 
 
+def log(msg: str):
+    print(f"[STORAGE_MANAGER] {msg}")
+
+
 # ----------------------------------------
-# SAFE EXECUTION WRAPPER
+# SAFE WRAPPER
 # ----------------------------------------
 def safe_try(func):
-    """Decorator for wrapping all DB/storage ops in try/except."""
     def wrapper(*args, **kwargs):
         try:
+            log(f"Calling {func.__name__}()")
             result = func(*args, **kwargs)
 
-            # treat None return as error
             if result is None:
-                raise Exception("Operation returned None")
+                raise Exception(f"{func.__name__} returned None")
 
+            log(f"{func.__name__} SUCCESS → {result}")
             return result
 
         except Exception as e:
+            log(f"{func.__name__} ERROR → {e}")
             raise Exception(f"{func.__name__} failed: {str(e)}")
     return wrapper
 
@@ -42,21 +47,23 @@ def upload_file_to_bucket(bucket: str, user_id: str, file_bytes: bytes, filename
     safe_filename = filename.replace(" ", "_")
     path = f"{user_id}/{ts}_{safe_filename}"
 
+    log(f"Uploading to bucket={bucket}, path={path}")
+
     res = supabase.storage.from_(bucket).upload(
         path,
         io.BytesIO(file_bytes),
         {"cacheControl": "3600", "upsert": False}
     )
 
-    # Supabase storage returns dict, errors are in result["error"]
     if isinstance(res, dict) and res.get("error"):
         raise Exception(res["error"])
 
+    log(f"Upload successful → {path}")
     return path
 
 
 # ----------------------------------------
-# CREATE DB RECORD
+# CREATE RECORD
 # ----------------------------------------
 @safe_try
 def create_content_record(
@@ -79,23 +86,27 @@ def create_content_record(
         "size_bytes": size_bytes
     }
 
+    log(f"INSERT PAYLOAD → {payload}")
+
     res = supabase.table("user_contents").insert(payload).select("*").execute()
 
-    # NEW CLIENT: res.status_code might NOT exist
     if not hasattr(res, "data") or not isinstance(res.data, list):
-        raise Exception("Insert returned invalid structure")
+        raise Exception("Invalid insert response")
 
     if len(res.data) == 0:
-        raise Exception("Insert returned empty result")
+        raise Exception("Insert returned empty data list")
 
+    log("DB insert successful")
     return res.data[0]
 
 
 # ----------------------------------------
-# LIST USER CONTENT
+# LIST ITEMS
 # ----------------------------------------
 @safe_try
 def list_user_contents(user_id: str, limit: int = 100) -> list:
+    log(f"Fetching items for user={user_id}")
+
     res = (
         supabase.table("user_contents")
         .select("*")
@@ -112,7 +123,7 @@ def list_user_contents(user_id: str, limit: int = 100) -> list:
 
 
 # ----------------------------------------
-# GET CONTENT ITEM
+# GET ITEM
 # ----------------------------------------
 @safe_try
 def get_content_item(item_id: str, user_id: str) -> Optional[dict]:
@@ -132,7 +143,7 @@ def get_content_item(item_id: str, user_id: str) -> Optional[dict]:
 
 
 # ----------------------------------------
-# DELETE CONTENT
+# DELETE ITEM
 # ----------------------------------------
 @safe_try
 def delete_content_item(item_id: str, user_id: str, bucket: Optional[str] = None) -> bool:
@@ -144,16 +155,14 @@ def delete_content_item(item_id: str, user_id: str, bucket: Optional[str] = None
 
     res = supabase.table("user_contents").delete().eq("id", item_id).execute()
 
-    # we do not check status_code, assume failures throw exceptions internally
     if not hasattr(res, "data"):
-        raise Exception("Deletion returned invalid structure")
+        raise Exception("Delete response malformed")
 
-    # delete file if exists
     if storage_path and bucket:
+        log(f"Deleting file from bucket={bucket}, path={storage_path}")
         del_res = supabase.storage.from_(bucket).remove([storage_path])
 
         if isinstance(del_res, dict) and del_res.get("error"):
-            # We do NOT treat this as fatal; only warn
             print("Warning: file deletion error:", del_res["error"])
 
     return True
