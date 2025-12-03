@@ -7,7 +7,7 @@ st.set_page_config(page_title="Login / Sign Up", page_icon="🔐", layout="wide"
 
 
 st.title("🔐 LogeekMind Access")
-#
+
 
 tab1, tab2 = st.tabs(["Login", "Sign Up"])
 

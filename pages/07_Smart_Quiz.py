@@ -6,9 +6,7 @@ import json
 from docx import Document
 import usage_manager as um
 
-# --------------------------
-# SESSION STATE INITIALIZATION
-# --------------------------
+
 if 'quiz_data' not in st.session_state:
     st.session_state.quiz_data = None
 if 'quiz_submitted' not in st.session_state:
@@ -22,9 +20,6 @@ client = get_gemini_client()
 st.title("❓ Smart Quiz Generator")
 st.markdown("Generate interactive quizzes with instant grading and explanations.")
 
-# --------------------------
-# INPUT FORM
-# --------------------------
 with st.form("quiz_generator_form"):
     quiz_topic = st.text_input("Topic to Quiz on", placeholder="e.g., Newton's Laws of Motion")
     num_questions = st.selectbox("Number of Questions", options=[5, 10, 15], index=0)
@@ -33,9 +28,7 @@ with st.form("quiz_generator_form"):
 
     generate_quiz_clicked = st.form_submit_button("Generate Quiz", type="primary")
 
-# --------------------------
-# GENERATE QUIZ
-# --------------------------
+
 if generate_quiz_clicked:
     # Reset previous quiz state
     st.session_state.quiz_data = None
@@ -94,9 +87,7 @@ if generate_quiz_clicked:
         except Exception as e:
             st.error(f"Error: {e}")
 
-# --------------------------
-# GENERATE NEW QUIZ BUTTON
-# --------------------------
+
 if st.session_state.quiz_data:
     if st.button("Generate New Quiz"):
         st.session_state.quiz_data = None
@@ -104,9 +95,7 @@ if st.session_state.quiz_data:
         st.session_state.quiz_score = 0
         st.rerun()
 
-# --------------------------
-# QUIZ INTERFACE
-# --------------------------
+
 if st.session_state.quiz_data:
     st.divider()
     st.subheader(f"📝 Quiz: {quiz_topic if quiz_topic else 'Generated Quiz'}")
@@ -118,6 +107,7 @@ if st.session_state.quiz_data:
             user_answers[idx] = st.radio(
                 "Select Answer:",
                 q['options'],
+                index=None,
                 key=f"q_{idx}",
                 label_visibility="collapsed"
             )
@@ -125,9 +115,6 @@ if st.session_state.quiz_data:
 
         submit_quiz = st.form_submit_button("Submit & Grade")
 
-    # --------------------------
-    # GRADING AND RESULTS
-    # --------------------------
     if submit_quiz:
         st.session_state.quiz_submitted = True
         score = 0
@@ -159,9 +146,7 @@ if st.session_state.quiz_data:
                     st.info(f"✅ Correct Answer: {q['answer']}")
                 st.markdown(f"**Explanation:** {q['explanation']}")
 
-        # --------------------------
-        # GENERATE DOCX AND DOWNLOAD
-        # --------------------------
+
         doc = Document()
         doc.add_heading(f"Quiz Results: {quiz_topic}", 0)
         doc.add_paragraph(f"Final Score: {st.session_state.quiz_score}/{total}\n")
