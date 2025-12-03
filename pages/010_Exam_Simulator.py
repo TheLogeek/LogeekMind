@@ -155,6 +155,7 @@ elif st.session_state.exam_stage == "active":
                 q['options'],
                 key=f"q_{idx}",
                 label_visibility="collapsed",
+                index=None,
                 on_change=_save_radio_answer,
                 args=(idx,)
             )

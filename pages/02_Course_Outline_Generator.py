@@ -19,50 +19,6 @@ if "course_outline_filename" not in st.session_state:
     st.session_state.course_outline_filename = None
 
 
-if st.session_state.course_outline:
-
-    st.success("📌 A previously generated course outline was found.")
-
-    st.markdown("### ▶ Download Previously Generated Outline")
-
-    if um.premium_gate("Download Course Outline"):
-
-        # Prepare DOCX again from stored text
-        doc = Document()
-        doc.add_heading(st.session_state.course_outline_filename.replace("_", " ").replace(".docx", ""), 0)
-        doc.add_paragraph(st.session_state.course_outline)
-
-        doc_io = io.BytesIO()
-        doc.save(doc_io)
-        doc_io.seek(0)
-
-        download_clicked = st.download_button(
-            label="⬇ Download Course Outline (DOCX)",
-            data=doc_io,
-            file_name=st.session_state.course_outline_filename,
-            mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-            key="download_previous"
-        )
-
-        if download_clicked:
-            del st.session_state.course_outline
-            del st.session_state.course_outline_filename
-            st.success("✔ Previous content cleared after download.")
-            st.rerun()
-
-    else:
-        st.info("Create an account to download your previously generated outline.")
-        st.page_link("pages/00_login.py", label="Login/Signup", icon="🔑")
-
-    st.markdown("---")
-    if st.button("🆕 Generate New Course Outline"):
-        del st.session_state.course_outline
-        del st.session_state.course_outline_filename
-        st.rerun()
-
-    st.stop()
-
-
 with st.form("course_outline_form"):
     course_full_name = st.text_input("Course Full Name", placeholder="e.g. Introduction to Computer Science")
     course_code = st.text_input("Course Code (Optional)", placeholder="e.g., CSC 101")

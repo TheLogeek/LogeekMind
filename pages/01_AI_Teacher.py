@@ -27,38 +27,6 @@ if "last_prompt" not in st.session_state:
     st.session_state.last_prompt = None
 
 
-if st.session_state.saved_notes:
-    st.success("📘 Previously generated lecture notes found!")
-
-    st.text_area("Lecture Notes", st.session_state.saved_notes, height=300)
-
-    if um.premium_gate("Download Lecture Notes"):
-        downloaded = st.download_button(
-            "⬇ Download Previous Notes",
-            data=st.session_state.saved_notes.encode("utf-8"),
-            file_name=f"{st.session_state.last_prompt}_lecture_notes.txt",
-            mime="text/plain",
-        )
-
-        if downloaded:
-            st.session_state.saved_notes = None
-            st.session_state.last_prompt = None
-            st.session_state.messages = []
-            st.success("✔ Notes cleared after download.")
-            st.rerun()
-
-    else:
-        st.info("Create an account to download your notes.")
-        st.page_link("pages/00_login.py", icon="🔑", label="Login/Signup")
-
-    st.markdown("---")
-    if st.button("🆕 Start New Teaching Session"):
-        st.session_state.saved_notes = None
-        st.session_state.last_prompt = None
-        st.session_state.messages = []
-        st.rerun()
-
-    st.stop()
 
 
 for message in st.session_state.messages:
