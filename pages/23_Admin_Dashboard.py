@@ -50,7 +50,7 @@ def get_active_users():
     return 0
 
 def get_feature_usage():
-    response = supabase.table("log_usage").select("feature").execute()
+    response = supabase.table("usage_log").select("feature").execute()
     if response.data:
         df = pd.DataFrame(response.data)
         df = df.groupby("feature").size().reset_index(name="Usage")
@@ -58,7 +58,7 @@ def get_feature_usage():
     return pd.DataFrame(columns=["feature", "Usage"])
 
 def get_top_users(n=5):
-    response = supabase.table("log_usage").select("user_id").execute()
+    response = supabase.table("usage_log").select("user_id").execute()
     if response.data:
         df = pd.DataFrame(response.data)
         df = df.groupby("user_id").size().reset_index(name="usage_count").sort_values("usage_count", ascending=False)
@@ -66,7 +66,7 @@ def get_top_users(n=5):
     return pd.DataFrame(columns=["user_id", "usage_count"])
 
 def get_daily_activity(days=7):
-    response = supabase.table("log_usage").select("created_at").execute()
+    response = supabase.table("usage_log").select("created_at").execute()
     if response.data:
         df = pd.DataFrame(response.data)
         df['created_at'] = pd.to_datetime(df['created_at']).dt.date
@@ -133,7 +133,7 @@ else:
 
 # --- SEARCHABLE USAGE TABLE ---
 st.subheader("All User Activity")
-all_usage_resp = supabase.table("log_usage").select("*").execute()
+all_usage_resp = supabase.table("usage_log").select("*").execute()
 if all_usage_resp.data:
     all_usage_df = pd.DataFrame(all_usage_resp.data)
     all_usage_df['created_at'] = pd.to_datetime(all_usage_df['created_at'])
