@@ -212,9 +212,11 @@ Fixed major bugs in Exam Simulator.
 
 ## 🆕 What's New in v1.5.0
 
-Implementation of Authentication for users (Login and Signup).
+- Implementation of Authentication for users (Login and Signup).
 
-User Dashboard for performance metrics now available.
+- User Dashboard for performance metrics now available.
+
+- New Community Chat user interface and improved user experience
 
 
 ## 🤝 Developer & Feedback
