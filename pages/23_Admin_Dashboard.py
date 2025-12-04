@@ -37,7 +37,7 @@ st_autorefresh(interval=5000, key="admin_refresh")  # refresh every 5 seconds
 
 # --- FETCH DATA FROM SUPABASE ---
 def get_total_users():
-    response = supabase.table("users").select("*").execute()
+    response = supabase.table("profiles").select("*").execute()
     return len(response.data) if response.data else 0
 
 def get_active_users():
