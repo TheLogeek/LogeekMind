@@ -192,49 +192,6 @@ if st.session_state.lecture_text:
             st.info("Create an account to download.")
             st.page_link("pages/00_login.py", label="Login/Signup", icon="🔑")
 
-        # -------------------------------------------------------
-        # Save to Library (NEW — uses correct Supabase upload)
-        # -------------------------------------------------------
-        if "user" in st.session_state and st.session_state.user:
-            if st.button("Save Audio to My Library"):
-                try:
-                    user_id = st.session_state.user['uuid']
-                    filename = st.session_state.audio_filename
-
-                    # 1️⃣ Write audio bytes to a temporary file
-                    temp_dir = tempfile.gettempdir()
-                    local_file_path = os.path.join(temp_dir, filename)
-                    with open(local_file_path, "wb") as f:
-                        f.write(st.session_state.audio_data)
-
-                    # 2️⃣ Upload using storage_manager (local_file_path required)
-                    path, _ = upload_file_to_bucket(
-                        user_id=user_id,
-                        local_file_path=local_file_path
-                    )
-
-                    # 3️⃣ Create record in DB
-                    create_content_record(
-                        user_id=user_id,
-                        title="Lecture Audio",
-                        content_type="audio/mp3",
-                        storage_path=path,
-                        filename=filename,
-                        size_bytes=os.path.getsize(local_file_path),
-                        content_json={
-                            "source": "Lecture Notes to Audio",
-                            "char_count": len(st.session_state.lecture_text or "")
-                        }
-                    )
-
-                    st.success("Audio saved to My Library! ✅")
-
-                    # Optional: remove temp file after upload
-                    os.remove(local_file_path)
-
-                except Exception as e:
-                    st.error(f"Failed to save audio: {e}")
-
         st.stop()
 
 
