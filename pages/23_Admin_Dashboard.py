@@ -136,7 +136,7 @@ st.subheader("All User Activity")
 all_usage_resp = supabase.table("usage_log").select("*").execute()
 if all_usage_resp.data:
     all_usage_df = pd.DataFrame(all_usage_resp.data)
-    all_usage_df['created_at'] = pd.to_datetime(all_usage_df['created_at'])
+    all_usage_df['created_at'] = pd.to_datetime(all_usage_df['created_at']).dt.tz_convert(None)
 
     # Filters
     search_user = st.text_input("Search by User ID")
