@@ -69,7 +69,7 @@ col3, col4, col5 = st.columns(3)
 
 with col3:
         st.header("💡 AI Learning")
-        st.info("Ask concepts, generate quizzes,simulate real exam pressure and get instant feedback on any subject.")
+        st.info("Ask concepts, generate quizzes, simulate real exam pressure and get instant feedback on any subject.")
 
 with col4:
         st.header("📝 Content Mastery")
