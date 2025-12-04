@@ -28,7 +28,7 @@ df = pd.DataFrame(data)
 # Ensure correct types
 df["score"] = pd.to_numeric(df.get("score", 0), errors="coerce")
 df["total"] = pd.to_numeric(df.get("total_questions", 0), errors="coerce")
-df["percentage"] = pd.to_numeric(df.get("percentage", 0), errors="coerce")
+df["percentage"] = pd.to_numeric((df.get("score", 0) / (df.get("total_questions", 0)) * 100), errors="coerce")
 df["created_at"] = pd.to_datetime(df.get("created_at"), errors="coerce")
 df = df.dropna(subset=["score", "total", "percentage", "created_at"])
 
