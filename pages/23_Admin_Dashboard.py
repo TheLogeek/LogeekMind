@@ -99,13 +99,13 @@ if not feature_df.empty:
     st.subheader("Feature Usage (Interactive)")
 
     # Bar Chart
-    bar_fig = px.bar(feature_df, x="feature", y="Usage", text="Usage")
+    bar_fig = px.bar(feature_df, x="feature_name", y="Usage", text="Usage")
     bar_fig.update_traces(marker_color='skyblue')
     bar_fig.update_layout(clickmode='event+select', title="Click a bar to filter table below")
     bar_clicked = st.plotly_chart(bar_fig, use_container_width=True)
 
     # Pie Chart
-    pie_fig = px.pie(feature_df, values="Usage", names="feature", title="Feature Usage Pie Chart")
+    pie_fig = px.pie(feature_df, values="Usage", names="feature_name", title="Feature Usage Pie Chart")
     pie_fig.update_traces(textinfo='percent+label')
     pie_clicked = st.plotly_chart(pie_fig, use_container_width=True)
 
@@ -146,7 +146,7 @@ if all_usage_resp.data:
     if search_user:
         filtered_df = filtered_df[filtered_df['user_id'].str.contains(search_user)]
     if search_feature:
-        filtered_df = filtered_df[filtered_df['feature'].str.contains(search_feature)]
+        filtered_df = filtered_df[filtered_df['feature_name'].str.contains(search_feature)]
 
     st.dataframe(filtered_df)
 else:
