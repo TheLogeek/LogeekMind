@@ -197,7 +197,7 @@ if st.session_state.lecture_text:
         if "user" in st.session_state and st.session_state.user:
             if st.button("Save Audio to My Library"):
                 try:
-                    user_id = st.session_state.user.id
+                    user_id = st.session_state.user['uuid']
 
                     audio_bytes = (
                         st.session_state.audio_data
