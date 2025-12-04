@@ -1,8 +1,9 @@
-import time
+import json
 import io
-import streamlit as st
+from datetime import datetime
 from supabase import create_client
-from typing import Optional, Dict
+import streamlit as st
+
 
 @st.cache_resource
 def init_connection():
@@ -10,176 +11,128 @@ def init_connection():
     key = st.secrets["SUPABASE_KEY"]
     return create_client(url, key)
 
+
 supabase = init_connection()
 
 
-def log(msg: str):
-    print(f"[STORAGE_MANAGER] {msg}")
+BUCKET_NAME = "user-files"
+
+import datetime
+
+def now_iso():
+    """Return current UTC timestamp in ISO format with Z suffix."""
+    return datetime.datetime.utcnow().replace(microsecond=0).isoformat() + "Z"
 
 
-# ----------------------------------------
-# SAFE WRAPPER
-# ----------------------------------------
-def safe_try(func):
-    def wrapper(*args, **kwargs):
-        try:
-            log(f"Calling {func.__name__}()")
-            result = func(*args, **kwargs)
 
-            if result is None:
-                raise Exception(f"{func.__name__} returned None")
-
-            log(f"{func.__name__} SUCCESS → {result}")
-            return result
-
-        except Exception as e:
-            log(f"{func.__name__} ERROR → {e}")
-            raise Exception(f"{func.__name__} failed: {str(e)}")
-    return wrapper
+def _generate_path(username: str, filetype: str, ext: str):
+    """Creates a unique path such as: solomon/exam_2025-01-20_10-22.json"""
+    timestamp = datetime.utcnow().strftime("%Y-%m-%d_%H-%M-%S")
+    return f"{username}/{filetype}_{timestamp}.{ext}"
 
 
-# ----------------------------------------
-# UPLOAD FILE
-# ----------------------------------------
-@safe_try
-def upload_file_to_bucket(bucket: str, user_id: str, file_bytes: bytes, filename: str):
-    ts = int(time.time())
-    safe_filename = filename.replace(" ", "_")
-    path = f"{user_id}/{ts}_{safe_filename}"
+def save_text(username: str, content: str, filetype: str = "note"):
+    """Save plain text files to Supabase."""
+    path = _generate_path(username, filetype, "txt")
+    file_data = io.BytesIO(content.encode("utf-8"))
 
-    log(f"Uploading to bucket={bucket}, path={path}")
-
-    res = supabase.storage.from_(bucket).upload(
-        path,
-        io.BytesIO(file_bytes),
-        {"cacheControl": "3600", "upsert": False}
+    response = supabase.storage.from_(BUCKET_NAME).upload(
+        file=file_data,
+        path=path,
+        file_options={"content-type": "text/plain", "upsert": "false"}
     )
-
-    if isinstance(res, dict) and res.get("error"):
-        raise Exception(res["error"])
-
-    log(f"Upload successful → {path}")
-    return path
+    return response, path
 
 
-# ----------------------------------------
-# CREATE RECORD
-# ----------------------------------------
-@safe_try
-def create_content_record(
-    user_id: str,
-    title: str,
-    content_type: str,
-    storage_path: Optional[str] = None,
-    filename: Optional[str] = None,
-    content_json: Optional[Dict] = None,
-    size_bytes: Optional[int] = None,
-) -> Dict:
+def save_json(username: str, obj: dict, filetype: str = "data"):
+    """Save JSON or complex exam simulator data."""
+    path = _generate_path(username, filetype, "json")
+    file_data = io.BytesIO(json.dumps(obj).encode("utf-8"))
 
-    payload = {
+    response = supabase.storage.from_(BUCKET_NAME).upload(
+        file=file_data,
+        path=path,
+        file_options={"content-type": "application/json", "upsert": "false"}
+    )
+    return response, path
+
+
+def save_bytes(username: str, data: bytes, ext: str, filetype: str):
+    """Generic function to save raw byte data (audio, images, PDFs, etc.)."""
+    path = _generate_path(username, filetype, ext)
+    file_data = io.BytesIO(data)
+
+    mimetypes = {
+        "png": "image/png",
+        "jpg": "image/jpeg",
+        "jpeg": "image/jpeg",
+        "mp3": "audio/mpeg",
+        "wav": "audio/wav",
+        "pdf": "application/pdf",
+        "txt": "text/plain",
+    }
+    mimetype = mimetypes.get(ext.lower(), "application/octet-stream")
+
+    response = supabase.storage.from_(BUCKET_NAME).upload(
+        file=file_data,
+        path=path,
+        file_options={"content-type": mimetype, "upsert": "false"}
+    )
+    return response, path
+
+
+def list_user_files(username: str):
+    """List all files belonging to the user."""
+    try:
+        response = supabase.storage.from_(BUCKET_NAME).list(path=username)
+        return response
+    except Exception:
+        return []
+
+
+def get_download_url(path: str):
+    """Generate a downloadable public URL."""
+    return supabase.storage.from_(BUCKET_NAME).get_public_url(path)
+
+
+def delete_file(path: str):
+    """Delete a file from the bucket."""
+    return supabase.storage.from_(BUCKET_NAME).remove(path)
+
+# -----------------------------
+# Helpers for "My Library" page
+# -----------------------------
+def upload_file_to_bucket(user_id: str, file_bytes: bytes, filename: str):
+    """
+    Wrapper to save a file to the user's folder in the bucket.
+    Returns the storage path for DB reference.
+    """
+    path = f"{user_id}/{filename}"
+    return save_bytes(user_id, file_bytes, ext=filename.split(".")[-1], filetype=filename.rsplit(".",1)[0])[1]
+    # Returns the path (second item from save_bytes) for creating a content record
+
+
+
+def create_content_record(user_id: str, title: str, content_type: str, storage_path: str,
+                          filename: str, size_bytes: int, content_json: dict):
+    """
+    Creates a DB record for the file in your 'user_library' table.
+    Adjust table/columns according to your Supabase schema.
+    """
+    data = {
         "user_id": user_id,
         "title": title,
         "content_type": content_type,
         "storage_path": storage_path,
         "filename": filename,
-        "content": content_json,
-        "size_bytes": size_bytes
+        "size_bytes": size_bytes,
+        "content_json": content_json,
+        "created_at": now_iso()
     }
+    try:
+        supabase.table("user_library").insert(data).execute()
+        return True
+    except Exception as e:
+        st.error(f"Failed to create library record: {e}")
+        return False
 
-    log(f"INSERT PAYLOAD → {payload}")
-
-    res = supabase.table("user_contents").insert(payload).select("*").execute()
-
-    if not hasattr(res, "data") or not isinstance(res.data, list):
-        raise Exception("Invalid insert response")
-
-    if len(res.data) == 0:
-        raise Exception("Insert returned empty data list")
-
-    log("DB insert successful")
-    return res.data[0]
-
-
-# ----------------------------------------
-# LIST ITEMS
-# ----------------------------------------
-@safe_try
-def list_user_contents(user_id: str, limit: int = 100) -> list:
-    log(f"Fetching items for user={user_id}")
-
-    res = (
-        supabase.table("user_contents")
-        .select("*")
-        .eq("user_id", user_id)
-        .order("created_at", desc=True)
-        .limit(limit)
-        .execute()
-    )
-
-    if not hasattr(res, "data"):
-        raise Exception("Invalid response structure")
-
-    return res.data or []
-
-
-# ----------------------------------------
-# GET ITEM
-# ----------------------------------------
-@safe_try
-def get_content_item(item_id: str, user_id: str) -> Optional[dict]:
-    res = (
-        supabase.table("user_contents")
-        .select("*")
-        .eq("id", item_id)
-        .eq("user_id", user_id)
-        .single()
-        .execute()
-    )
-
-    if not hasattr(res, "data"):
-        return None
-
-    return res.data
-
-
-# ----------------------------------------
-# DELETE ITEM
-# ----------------------------------------
-@safe_try
-def delete_content_item(item_id: str, user_id: str, bucket: Optional[str] = None) -> bool:
-    item = get_content_item(item_id, user_id)
-    if not item:
-        raise Exception("Item not found")
-
-    storage_path = item.get("storage_path")
-
-    res = supabase.table("user_contents").delete().eq("id", item_id).execute()
-
-    if not hasattr(res, "data"):
-        raise Exception("Delete response malformed")
-
-    if storage_path and bucket:
-        log(f"Deleting file from bucket={bucket}, path={storage_path}")
-        del_res = supabase.storage.from_(bucket).remove([storage_path])
-
-        if isinstance(del_res, dict) and del_res.get("error"):
-            print("Warning: file deletion error:", del_res["error"])
-
-    return True
-
-
-# ----------------------------------------
-# SIGNED URL
-# ----------------------------------------
-@safe_try
-def get_public_url_for_path(bucket: str, storage_path: str, expires_in_seconds: int = 3600) -> str:
-    signed = supabase.storage.from_(bucket).create_signed_url(storage_path, expires_in_seconds)
-
-    if isinstance(signed, dict) and signed.get("signedURL"):
-        return signed["signedURL"]
-
-    public = supabase.storage.from_(bucket).get_public_url(storage_path)
-    if isinstance(public, dict):
-        return public.get("publicURL", "")
-
-    return ""
