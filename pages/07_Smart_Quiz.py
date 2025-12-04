@@ -124,10 +124,11 @@ if st.session_state.quiz_data:
                 score += 1
         st.session_state.quiz_score = score
 
+        user_id = st.session_state.user.id
     # --- Log performance ---
         if "user" in st.session_state:
             um.log_performance(
-                user_id=st.session_state.user.id,
+                user_id=user_id,
                 feature="Quiz Generator",
                 score=score,
                 total_questions=len(st.session_state.quiz_data),
