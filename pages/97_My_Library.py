@@ -24,7 +24,7 @@ if 'user' not in st.session_state or st.session_state.user is None:
     st.page_link("pages/00_login.py", label="Login/Signup", icon="🔑")
     st.stop()
 
-username = st.session_state.user.username
+username = st.session_state.user_profile.get("username")
 
 # ---------------------------
 # Fetch user files
