@@ -197,7 +197,7 @@ if st.session_state.lecture_text:
         if "user" in st.session_state and st.session_state.user:
             if st.button("Save Audio to My Library"):
                 try:
-                    user_id = st.session_state.user["uuid"]
+                    user_id = st.session_state.user.id
 
                     audio_bytes = (
                         st.session_state.audio_data
@@ -209,7 +209,6 @@ if st.session_state.lecture_text:
 
                     # Upload using new correct pattern
                     path = upload_file_to_bucket(
-                        bucket_name="user-files",
                         user_id=user_id,
                         file_bytes=audio_bytes,
                         filename=filename
