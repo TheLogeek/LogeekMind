@@ -20,6 +20,11 @@ if not data:
 
 df = pd.DataFrame(data)
 
+df["score"] = pd.to_numeric(df.get("score", 0), errors="coerce")
+df["total"] = pd.to_numeric(df.get("total", 0), errors="coerce")
+df["percentage"] = pd.to_numeric(df.get("percentage", 0), errors="coerce")
+df["created_at"] = pd.to_datetime(df.get("created_at"), errors="coerce")
+
 # Percentage chart
 chart = alt.Chart(df).mark_line(point=True).encode(
     x="created_at:T",
