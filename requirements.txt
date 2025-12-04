@@ -11,3 +11,5 @@ requests
 supabase
 streamlit-autorefresh
 plotly
+matplotlib
+seaborn
