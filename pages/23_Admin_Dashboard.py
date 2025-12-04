@@ -53,9 +53,9 @@ def get_feature_usage():
     response = supabase.table("usage_log").select("feature_name").execute()
     if response.data:
         df = pd.DataFrame(response.data)
-        df = df.groupby("feature").size().reset_index(name="Usage")
+        df = df.groupby("feature_name").size().reset_index(name="Usage")
         return df
-    return pd.DataFrame(columns=["feature", "Usage"])
+    return pd.DataFrame(columns=["feature_name", "Usage"])
 
 def get_top_users(n=5):
     response = supabase.table("usage_log").select("user_id").execute()
