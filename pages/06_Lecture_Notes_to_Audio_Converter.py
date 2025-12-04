@@ -6,6 +6,7 @@ from pypdf import PdfReader
 from io import BytesIO
 from docx import Document
 import usage_manager as um
+import tempfile, os
 from lib.storage_manager import upload_file_to_bucket, create_content_record
 
 
@@ -198,30 +199,28 @@ if st.session_state.lecture_text:
             if st.button("Save Audio to My Library"):
                 try:
                     user_id = st.session_state.user['uuid']
-
-                    audio_bytes = (
-                        st.session_state.audio_data
-                        if isinstance(st.session_state.audio_data, (bytes, bytearray))
-                        else st.session_state.audio_data.getvalue()
-                    )
-
                     filename = st.session_state.audio_filename
 
-                    # Upload using new correct pattern
-                    path = upload_file_to_bucket(
+                    # 1️⃣ Write audio bytes to a temporary file
+                    temp_dir = tempfile.gettempdir()
+                    local_file_path = os.path.join(temp_dir, filename)
+                    with open(local_file_path, "wb") as f:
+                        f.write(st.session_state.audio_data)
+
+                    # 2️⃣ Upload using storage_manager (local_file_path required)
+                    path, _ = upload_file_to_bucket(
                         user_id=user_id,
-                        file_bytes=audio_bytes,
-                        filename=filename
+                        local_file_path=local_file_path
                     )
 
-                    # Create record in DB
+                    # 3️⃣ Create record in DB
                     create_content_record(
                         user_id=user_id,
                         title="Lecture Audio",
                         content_type="audio/mp3",
                         storage_path=path,
                         filename=filename,
-                        size_bytes=len(audio_bytes),
+                        size_bytes=os.path.getsize(local_file_path),
                         content_json={
                             "source": "Lecture Notes to Audio",
                             "char_count": len(st.session_state.lecture_text or "")
@@ -229,6 +228,9 @@ if st.session_state.lecture_text:
                     )
 
                     st.success("Audio saved to My Library! ✅")
+
+                    # Optional: remove temp file after upload
+                    os.remove(local_file_path)
 
                 except Exception as e:
                     st.error(f"Failed to save audio: {e}")

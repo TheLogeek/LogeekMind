@@ -1,9 +1,8 @@
 import json
-import io
 from datetime import datetime
 from supabase import create_client
 import streamlit as st
-
+import os
 
 @st.cache_resource
 def init_connection():
@@ -11,97 +10,75 @@ def init_connection():
     key = st.secrets["SUPABASE_KEY"]
     return create_client(url, key)
 
-
 supabase = init_connection()
-
-
 BUCKET_NAME = "user-files"
 
-import datetime
 
 def now_iso():
     """Return current UTC timestamp in ISO format with Z suffix."""
-    return datetime.datetime.utcnow().replace(microsecond=0).isoformat() + "Z"
-
+    return datetime.utcnow().replace(microsecond=0).isoformat() + "Z"
 
 
 def _generate_path(username: str, filetype: str, ext: str):
-    """Creates a unique path such as: solomon/exam_2025-01-20_10-22.json"""
+    """Generate unique path like: username/filetype_2025-12-03_10-22.ext"""
     timestamp = datetime.utcnow().strftime("%Y-%m-%d_%H-%M-%S")
     return f"{username}/{filetype}_{timestamp}.{ext}"
 
 
-def save_text(username: str, content: str, filetype: str = "note"):
-    """Save plain text files to Supabase."""
-    path = _generate_path(username, filetype, "txt")
-    file_data = io.BytesIO(content.encode("utf-8"))
+def save_bytes(username: str, local_file_path: str, filetype: str = "file"):
+    """
+    Upload a local file to Supabase.
+    - local_file_path: path to the file on disk
+    Returns (response, storage_path)
+    """
+    if not os.path.exists(local_file_path):
+        raise FileNotFoundError(f"{local_file_path} does not exist")
 
-    response = supabase.storage.from_(BUCKET_NAME).upload(
-        file=file_data,
-        path=path,
-        file_options={"content-type": "text/plain", "upsert": "false"}
-    )
-    return response, path
-
-
-def save_json(username: str, obj: dict, filetype: str = "data"):
-    """Save JSON or complex exam simulator data."""
-    path = _generate_path(username, filetype, "json")
-    file_data = io.BytesIO(json.dumps(obj).encode("utf-8"))
-
-    response = supabase.storage.from_(BUCKET_NAME).upload(
-        file=file_data,
-        path=path,
-        file_options={"content-type": "application/json", "upsert": "false"}
-    )
-    return response, path
-
-
-def save_bytes(username: str, data: bytes, ext: str, filetype: str):
-    """Generic function to save raw byte data (audio, images, PDFs, etc.)."""
+    ext = local_file_path.split(".")[-1]
     path = _generate_path(username, filetype, ext)
-    file_data = io.BytesIO(data)
 
-    mimetypes = {
-        "png": "image/png",
-        "jpg": "image/jpeg",
-        "jpeg": "image/jpeg",
-        "mp3": "audio/mpeg",
-        "wav": "audio/wav",
-        "pdf": "application/pdf",
-        "txt": "text/plain",
-    }
-    mimetype = mimetypes.get(ext.lower(), "application/octet-stream")
+    try:
+        with open(local_file_path, "rb") as f:
+            response = supabase.storage.from_(BUCKET_NAME).upload(
+                file=f,
+                path=path,
+                file_options={"content-type": "application/octet-stream", "upsert": "false"}
+            )
+        return response, path
+    except Exception as e:
+        st.error(f"Upload failed: {e}")
+        return None, None
 
-    response = supabase.storage.from_(BUCKET_NAME).upload(
-        file=file_data,
-        path=path,
-        file_options={"content-type": mimetype, "upsert": "false"}
-    )
-    return response, path
+
+def save_text(username: str, local_file_path: str, filetype: str = "note"):
+    """Upload a local text file"""
+    return save_bytes(username, local_file_path, filetype=filetype)
+
+
+def save_json(username: str, local_file_path: str, filetype: str = "data"):
+    """Upload a local JSON file"""
+    return save_bytes(username, local_file_path, filetype=filetype)
 
 
 def list_user_files(username: str):
-    """List all files belonging to the user."""
+    """List all files belonging to the user"""
     try:
-        response = supabase.storage.from_(BUCKET_NAME).list(path=username)
-        return response
+        resp = supabase.storage.from_(BUCKET_NAME).list(path=username)
+        return resp
     except Exception:
         return []
 
 
 def get_download_url(path: str):
-    """Generate a downloadable public URL."""
+    """Generate a downloadable public URL"""
     return supabase.storage.from_(BUCKET_NAME).get_public_url(path)
 
 
 def delete_file(path: str):
-    """Delete a file from the bucket."""
+    """Delete a file from the bucket"""
     return supabase.storage.from_(BUCKET_NAME).remove(path)
 
-# -----------------------------
-# Helpers for "My Library" page
-# -----------------------------
+
 def upload_file_to_bucket(user_id: str, file_bytes: bytes, filename: str):
     """
     Wrapper to save a file to the user's folder in the bucket.
@@ -135,4 +112,3 @@ def create_content_record(user_id: str, title: str, content_type: str, storage_p
     except Exception as e:
         st.error(f"Failed to create library record: {e}")
         return False
-
