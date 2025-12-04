@@ -6,6 +6,8 @@ from pypdf import PdfReader
 from io import BytesIO
 from docx import Document
 import usage_manager as um
+from lib.storage_manager import upload_file_to_bucket, create_content_record
+
 
 st.title("Lecture Notes-to-Audio Converter 📢")
 st.markdown("Converts your notes into an MP3 file")
@@ -164,6 +166,32 @@ if st.session_state.lecture_text:
         else:
             st.error(audio_lecture)
 
+        # after successful generation and you have audio_io (BytesIO) or audio bytes:
+        # You set st.session_state.audio_data = audio_lecture.getvalue()
+
+        if 'user' not in st.session_state or st.session_state.user is None:
+            pass
+        else:
+            if st.button("Save Audio to Library"):
+                try:
+                    user_id = st.session_state.user.id
+                    audio_bytes = st.session_state.audio_data if isinstance(st.session_state.audio_data, (
+                    bytes, bytearray)) else st.session_state.audio_data.getvalue()
+                    filename = st.session_state.audio_filename or f"notes_audio_{time.strftime('%Y%m%d%H%M')}.mp3"
+                    path = upload_file_to_bucket("user-files", user_id, audio_bytes, filename)
+                    rec = create_content_record(
+                        user_id=user_id,
+                        title="Lecture Audio",
+                        content_type="audio/mp3",
+                        storage_path=path,
+                        filename=filename,
+                        size_bytes=len(audio_bytes),
+                        content_json={"source": "Lecture Notes to Audio",
+                                      "char_count": len(st.session_state.lecture_text or "")}
+                    )
+                    st.success("Audio saved to My Library ✅")
+                except Exception as e:
+                    st.error(f"Failed to save audio: {e}")
 
 st.markdown("---")
 if st.button("🆕 Generate New Audio Lecture"):
