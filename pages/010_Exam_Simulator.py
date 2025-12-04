@@ -1,14 +1,14 @@
 import streamlit as st
-import time
 import json
-import io
+import io, time
 from docx import Document
 from streamlit_autorefresh import st_autorefresh
 from google.genai.errors import APIError
 from utils import get_gemini_client
 import usage_manager as um
 
-
+if "performance_log" not in st.session_state:
+    st.session_state.performance_log = []
 if 'exam_stage' not in st.session_state:
     st.session_state.exam_stage = "setup"  # Options: setup, active, finished
 if 'exam_data' not in st.session_state:
@@ -75,6 +75,7 @@ if st.session_state.exam_stage == "setup":
         else:
             with st.spinner("Prof. LogeekMind is preparing your exam papers..."):
                 st.session_state.course_code = course_code
+                st.session_state.exam_topic = topic
                 prompt = f"""
                     You are a strict university professor setting a final exam.
                     Course: {course_code}
@@ -187,6 +188,16 @@ elif st.session_state.exam_stage == "finished":
     total = len(st.session_state.exam_data)
     grade, remark = calculate_grade(score, total)
 
+    # --- Log performance ---
+    if "user" in st.session_state:  # ensure user is logged in
+        um.log_performance(
+            user_id=st.session_state.user["id"],
+            feature="Exam Simulator",
+            score=score,
+            total_questions=total,
+            correct_answers=score
+        )
+
     st.markdown(f"""
         <div style="padding: 20px; background-color: #f0f2f6; border-radius: 10px; border-left: 10px solid {'#4CAF50' if grade in ['A','B'] else '#FF5722'};">
             <h2>Grade: {grade}</h2>
@@ -196,6 +207,21 @@ elif st.session_state.exam_stage == "finished":
     """, unsafe_allow_html=True)
     if grade in ["A", "B"]:
         st.balloons()
+
+    st.session_state.performance_log.append({
+        "type": "exam",
+        "course": st.session_state.get("course_code", "course"),
+        "topic": st.session_state.get("exam_topic", "topic"),
+        "total": total,
+        "score": score,
+        "grade": grade,
+        "duration": st.session_state.duration_mins,
+        "timestamp": time.time()
+    })
+
+    auth_user_id = st.session_state.user.id
+    um.log_usage(auth_user_id, "Exam Simulator", "submitted_exam",
+                 {"course": st.session_state.get("course_code", "course")})
 
     # Review answers
     with st.expander("View Corrections"):

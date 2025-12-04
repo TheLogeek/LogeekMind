@@ -10,4 +10,4 @@ fpdf
 requests
 supabase
 streamlit-autorefresh
-colorama
+plotly

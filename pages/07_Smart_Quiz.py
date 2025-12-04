@@ -1,12 +1,13 @@
 import streamlit as st
 from google.genai.errors import APIError
 from utils import get_gemini_client
-import io
+import io, time
 import json
 from docx import Document
 import usage_manager as um
 
-
+if "performance_log" not in st.session_state:
+    st.session_state.performance_log = []
 if 'quiz_data' not in st.session_state:
     st.session_state.quiz_data = None
 if 'quiz_submitted' not in st.session_state:
@@ -123,9 +124,34 @@ if st.session_state.quiz_data:
                 score += 1
         st.session_state.quiz_score = score
 
+    # --- Log performance ---
+        if "user" in st.session_state:  # make sure user is logged in
+            um.log_performance(
+                user_id=st.session_state.user["id"],  # adjust if your user info is stored differently
+                feature="Quiz Generator",
+                score=score,
+                total_questions=len(st.session_state.quiz_data),
+                correct_answers=score
+            )
+
+
     if st.session_state.quiz_submitted:
         total = len(st.session_state.quiz_data)
         pct = (st.session_state.quiz_score / total) * 100
+
+        st.session_state.performance_log.append({
+            "type": "quiz",
+            "topic": quiz_topic,
+            "total": total,
+            "score": st.session_state.quiz_score,
+            "percentage": pct,
+            "difficulty": difficulty,
+            "questions": num_questions,
+            "timestamp": time.time()
+        })
+
+        auth_user_id = st.session_state.user.id
+        um.log_usage(auth_user_id, "Quiz Generator", "generated", {"topic": quiz_topic})
 
         if pct >= 80:
             st.balloons()
@@ -160,6 +186,7 @@ if st.session_state.quiz_data:
         doc_io = io.BytesIO()
         doc.save(doc_io)
         doc_io.seek(0)
+
 
         if um.premium_gate("Download Quiz Results"):
             download_clicked = st.download_button(
