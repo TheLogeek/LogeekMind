@@ -125,9 +125,9 @@ if st.session_state.quiz_data:
         st.session_state.quiz_score = score
 
     # --- Log performance ---
-        if "user" in st.session_state:  # make sure user is logged in
+        if "user" in st.session_state:
             um.log_performance(
-                user_id=st.session_state.user["id"],  # adjust if your user info is stored differently
+                user_id=st.session_state.user.id,
                 feature="Quiz Generator",
                 score=score,
                 total_questions=len(st.session_state.quiz_data),

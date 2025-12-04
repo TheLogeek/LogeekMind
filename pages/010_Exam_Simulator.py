@@ -189,9 +189,9 @@ elif st.session_state.exam_stage == "finished":
     grade, remark = calculate_grade(score, total)
 
     # --- Log performance ---
-    if "user" in st.session_state:  # ensure user is logged in
+    if "user" in st.session_state:
         um.log_performance(
-            user_id=st.session_state.user["id"],
+            user_id=st.session_state.user.id,
             feature="Exam Simulator",
             score=score,
             total_questions=total,

@@ -5,7 +5,7 @@ import usage_manager as um
 
 st.title("📊 Your Performance Dashboard")
 
-if "user" in st.session_state:
+if 'user' in st.session_state:
     user_id = st.session_state.user.id
 else:
     st.warning("Please log in to view your dashboard.")
