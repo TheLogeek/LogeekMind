@@ -5,10 +5,11 @@ import usage_manager as um
 
 st.title("📊 Your Performance Dashboard")
 
-user_id = st.session_state.user.id
-
-if not user_id:
+if "user" in st.session_state:
+    user_id = st.session_state.user.id
+else:
     st.warning("Please log in to view your dashboard.")
+    st.page_link("pages/00_login.py", label="Login/Signup", icon="🔑")
     st.stop()
 
 data = um.get_user_performance(user_id)

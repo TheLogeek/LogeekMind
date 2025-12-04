@@ -18,7 +18,7 @@ def init_supabase():
 supabase = init_supabase()
 
 # --- CHECK ADMIN ACCESS ---
-user_id = st.session_state.user.id
+user_id = st.session_state.user.id if 'user' in st.session_state else st.warning("Log in to view this dashboard")
 if user_id != ADMIN_ID:
     st.error("❌ You are not authorised to access this page.")
     st.stop()
