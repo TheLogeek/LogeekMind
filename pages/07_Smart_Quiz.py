@@ -131,7 +131,7 @@ if st.session_state.quiz_data:
                 user_id=user_id,
                 feature="Quiz Generator",
                 score=score,
-                total_questions=len(st.session_state.quiz_data),
+                total_questions=num_questions,
                 correct_answers=score
             )
 
@@ -143,7 +143,7 @@ if st.session_state.quiz_data:
         st.session_state.performance_log.append({
             "type": "quiz",
             "topic": quiz_topic,
-            "total": total,
+            "total": num_questions,
             "score": st.session_state.quiz_score,
             "percentage": pct,
             "difficulty": difficulty,
