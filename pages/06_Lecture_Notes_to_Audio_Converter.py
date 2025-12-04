@@ -6,20 +6,11 @@ from pypdf import PdfReader
 from io import BytesIO
 from docx import Document
 import usage_manager as um
-import tempfile, os
-from lib.storage_manager import upload_file_to_bucket, create_content_record
 
 
-# -------------------------------------------------------
-# Page Title
-# -------------------------------------------------------
 st.title("Lecture Notes-to-Audio Converter 📢")
 st.markdown("Convert your notes into an MP3 lecture instantly!")
 
-
-# -------------------------------------------------------
-# Session State Setup
-# -------------------------------------------------------
 if "audio_data" not in st.session_state:
     st.session_state.audio_data = None
 if "audio_filename" not in st.session_state:
@@ -30,9 +21,6 @@ if "input_mode" not in st.session_state:
     st.session_state.input_mode = "paste"
 
 
-# -------------------------------------------------------
-# Extract Text from Uploaded File
-# -------------------------------------------------------
 def extract_text_from_uploaded_file(file):
     filename = file.name.lower()
 
@@ -56,9 +44,6 @@ def extract_text_from_uploaded_file(file):
     return False, None
 
 
-# -------------------------------------------------------
-# Convert Text to Audio
-# -------------------------------------------------------
 def convert_to_audio(text):
     try:
         tts = gTTS(text=text, lang="en")
@@ -72,9 +57,6 @@ def convert_to_audio(text):
         return False, f"Error during audio generation: {e}"
 
 
-# -------------------------------------------------------
-# Resume Previous Generation
-# -------------------------------------------------------
 if st.session_state.audio_data:
     st.success("📌 A previously generated audio lecture is ready")
 
@@ -107,9 +89,6 @@ if st.session_state.audio_data:
     st.stop()
 
 
-# -------------------------------------------------------
-# Input Mode Selection
-# -------------------------------------------------------
 col1, col2 = st.columns(2)
 with col1:
     if st.button("Paste Text", use_container_width=True):
@@ -123,16 +102,10 @@ st.markdown("---")
 
 lecture_text = None
 
-# -------------------------------------------------------
-# Text Input Mode
-# -------------------------------------------------------
 if st.session_state.input_mode == "paste":
     st.subheader("Text Input")
     lecture_text = st.text_area("Paste your lecture notes:", height=200)
 
-# -------------------------------------------------------
-# File Upload Mode
-# -------------------------------------------------------
 elif st.session_state.input_mode == "upload":
     st.subheader("File Uploader")
     uploaded_file = st.file_uploader("Choose a file", type=["pdf", "txt", "docx"])
@@ -144,15 +117,11 @@ elif st.session_state.input_mode == "upload":
                 st.error("Unsupported file format.")
                 st.stop()
 
-# Save text to state if present
 if lecture_text:
     st.session_state.lecture_text = lecture_text
     st.info(f"Notes loaded. Characters: {len(lecture_text)}")
 
 
-# -------------------------------------------------------
-# Generate Audio Button
-# -------------------------------------------------------
 if st.session_state.lecture_text:
     if st.button("Generate Audio Lecture"):
         if not um.check_guest_limit("Lecture Notes to Audio Converter", limit=1):
@@ -173,9 +142,6 @@ if st.session_state.lecture_text:
         st.session_state.audio_filename = filename
         st.session_state.audio_data = audio_buffer.getvalue()
 
-        # -------------------------------------------------------
-        # Allow download (premium)
-        # -------------------------------------------------------
         if um.premium_gate("Download Transcript"):
             download_clicked = st.download_button(
                 label="⬇ Download Audio Lecture",
@@ -195,9 +161,6 @@ if st.session_state.lecture_text:
         st.stop()
 
 
-# -------------------------------------------------------
-# Reset Button
-# -------------------------------------------------------
 st.markdown("---")
 if st.button("🆕 New Audio Lecture"):
     st.session_state.audio_data = None
