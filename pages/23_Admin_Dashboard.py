@@ -41,7 +41,7 @@ def get_total_users():
     return len(response.data) if response.data else 0
 
 def get_active_users():
-    response = supabase.table("log_usage").select("user_id, created_at").execute()
+    response = supabase.table("usage_log").select("user_id, created_at").execute()
     if response.data:
         df = pd.DataFrame(response.data)
         df['created_at'] = pd.to_datetime(df['created_at'])
