@@ -50,7 +50,7 @@ def get_active_users():
     return 0
 
 def get_feature_usage():
-    response = supabase.table("usage_log").select("feature").execute()
+    response = supabase.table("usage_log").select("feature_name").execute()
     if response.data:
         df = pd.DataFrame(response.data)
         df = df.groupby("feature").size().reset_index(name="Usage")
