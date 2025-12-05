@@ -32,10 +32,10 @@ if user_id != ADMIN_ID:
 st.set_page_config(page_title="Admin Dashboard", layout="wide")
 st.title("🛡️ LogeekMind Admin Dashboard")
 
-# --- AUTO REFRESH ---
-st_autorefresh(interval=5000, key="admin_refresh")  # refresh every 5 seconds
+# AUTO REFRESH
+st_autorefresh(interval=60000, key="admin_refresh")  # refresh every 60 seconds
 
-# --- FETCH DATA FROM SUPABASE ---
+# FETCH DATA FROM SUPABASE
 def get_total_users():
     response = supabase.table("profiles").select("*").execute()
     return len(response.data) if response.data else 0
