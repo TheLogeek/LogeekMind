@@ -41,12 +41,12 @@ def get_total_users():
     return len(response.data) if response.data else 0
 
 def get_active_users():
-    response = supabase.table("usage_log").select("user_name, created_at").execute()
+    response = supabase.table("usage_log").select("username, created_at").execute()
     if response.data:
         df = pd.DataFrame(response.data)
         df['created_at'] = pd.to_datetime(df['created_at']).dt.tz_convert(None)
         last_24h = pd.Timestamp.now() - pd.Timedelta(days=1)
-        return df[df['created_at'] >= last_24h]['user_name'].nunique()
+        return df[df['created_at'] >= last_24h]['username'].nunique()
     return 0
 
 def get_feature_usage():
@@ -58,12 +58,12 @@ def get_feature_usage():
     return pd.DataFrame(columns=["feature_name", "Usage"])
 
 def get_top_users(n=5):
-    response = supabase.table("usage_log").select("user_name").execute()
+    response = supabase.table("usage_log").select("username").execute()
     if response.data:
         df = pd.DataFrame(response.data)
-        df = df.groupby("user_name").size().reset_index(name="usage_count").sort_values("usage_count", ascending=False)
+        df = df.groupby("username").size().reset_index(name="usage_count").sort_values("usage_count", ascending=False)
         return df.head(n)
-    return pd.DataFrame(columns=["user_name", "usage_count"])
+    return pd.DataFrame(columns=["username", "usage_count"])
 
 def get_daily_activity(days=7):
     response = supabase.table("usage_log").select("created_at").execute()
@@ -80,7 +80,7 @@ def get_daily_activity(days=7):
 total_users = get_total_users()
 active_users = get_active_users()
 top_user_df = get_top_users(1)
-top_user = top_user_df.iloc[0]['user_name'] if not top_user_df.empty else "N/A"
+top_user = top_user_df.iloc[0]['username'] if not top_user_df.empty else "N/A"
 
 col1, col2, col3 = st.columns(3)
 col1.metric("Total Users", total_users)
@@ -144,7 +144,7 @@ if all_usage_resp.data:
 
     filtered_df = all_usage_df.copy()
     if search_user:
-        filtered_df = filtered_df[filtered_df['user_name'].str.contains(search_user)]
+        filtered_df = filtered_df[filtered_df['username'].str.contains(search_user)]
     if search_feature:
         filtered_df = filtered_df[filtered_df['feature_name'].str.contains(search_feature)]
 

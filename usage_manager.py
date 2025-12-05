@@ -44,7 +44,7 @@ def log_usage(user_id, user_name, feature_name, action, metadata=None):
 
     return supabase.table("usage_log").insert({
         "user_id": user_id,
-        "user_name": user_name,
+        "username": user_name,
         "feature_name": feature_name,
         "action": action,
         "metadata": metadata
