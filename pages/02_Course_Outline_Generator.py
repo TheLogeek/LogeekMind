@@ -115,8 +115,8 @@ if submitted:
 
             if "user" in st.session_state:
                 auth_user_id = st.session_state.user.id
-                user_name = st.session_state.user_profile.username
-                um.log_usage(auth_user_id, user_name, "Course Outline Generator", "generated", {"course":
+                username = st.session_state.user_profile.get("username", "Scholar")
+                um.log_usage(auth_user_id, username, "Course Outline Generator", "generated", {"course":
                                                                                                  course_full_name})
 
             # Prepare DOCX for download

@@ -210,6 +210,12 @@ Major New feature introduced: Exam Simulator.
 
 Fixed major bugs in Exam Simulator.
 
+## 🆕 What's New in v1.5.0
+
+Implementation of Authentication for users (Login and Signup).
+
+User Dashboard for performance metrics now available.
+
 
 ## 🤝 Developer & Feedback
 

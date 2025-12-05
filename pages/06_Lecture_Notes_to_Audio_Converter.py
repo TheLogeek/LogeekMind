@@ -140,8 +140,8 @@ if st.session_state.lecture_text:
 
         if "user" in st.session_state:
             auth_user_id = st.session_state.user.id
-            user_name = st.session_state.user_profile.username
-            um.log_usage(auth_user_id, user_name, "Lecture Notes to Audio Converter", "generated", {"topic": 'N/A'})
+            username = st.session_state.user_profile.get("username", "Scholar")
+            um.log_usage(auth_user_id, username, "Lecture Notes to Audio Converter", "generated", {"topic": 'N/A'})
 
         filename = f"Study_notes_audio_{time.strftime('%Y%m%d%H%M')}.mp3"
         st.session_state.audio_filename = filename

@@ -60,8 +60,8 @@ st.metric(label="Calculated Term GPA", value=f"{gpa_result:.2f}", delta=f"Total 
                                                                                               st.session_state.courses)}")
 if "user" in st.session_state:
     auth_user_id = st.session_state.user.id
-    user_name = st.session_state.user_profile.username
-    um.log_usage(auth_user_id, user_name, "GPA Calculator", "generated", {"topic": 'N/A'})
+    username = st.session_state.user_profile.get("username", "Scholar")
+    um.log_usage(auth_user_id, username, "GPA Calculator", "generated", {"topic": 'N/A'})
 
 if st.button("Refresh"):
     st.rerun()

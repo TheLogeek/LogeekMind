@@ -153,8 +153,8 @@ if st.session_state.quiz_data:
 
         if "user" in st.session_state:
             auth_user_id = st.session_state.user.id
-            user_name = st.session_state.user_profile.username
-            um.log_usage(auth_user_id, user_name, "Quiz Generator", "generated", {"topic": quiz_topic})
+            username = st.session_state.user_profile.get("username", "Scholar")
+            um.log_usage(auth_user_id, username, "Quiz Generator", "generated", {"topic": quiz_topic})
 
         if pct >= 80:
             st.balloons()
