@@ -24,11 +24,11 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-ADMIN_ID = st.secrets["ADMIN_ID"]
+#ADMIN_ID = st.secrets["ADMIN_ID"]
 
-if 'user' in st.session_state:
-    if st.session_state.user.id == ADMIN_ID:
-        st.sidebar.page_link("pages/_admin_dashboard.py", label="Admin Dashboard")
+#if 'user' in st.session_state:
+    #if st.session_state.user.id == ADMIN_ID:
+        #st.sidebar.page_link("pages/_admin_dashboard.py", label="Admin Dashboard")
 
 def render_auth_header():
     """Renders the login/logout status in the main app body."""
