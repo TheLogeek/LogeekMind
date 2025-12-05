@@ -113,6 +113,12 @@ if submitted:
             st.subheader("✔ Generated Course Outline")
             st.markdown(outline_text)
 
+            if "user" in st.session_state:
+                auth_user_id = st.session_state.user.id
+                user_name = st.session_state.user_profile.username
+                um.log_usage(auth_user_id, user_name, "Course Outline Generator", "generated", {"course":
+                                                                                                 course_full_name})
+
             # Prepare DOCX for download
             doc = Document()
             doc.add_heading(f"Course Outline: {course_full_name}", 0)
@@ -133,7 +139,6 @@ if submitted:
                 if download_clicked:
                     del st.session_state.course_outline
                     del st.session_state.course_outline_filename
-                    st.success("✔ Content cleared after download.")
                     st.rerun()
             else:
                 st.info("Creating an account is free and saves your progress!")

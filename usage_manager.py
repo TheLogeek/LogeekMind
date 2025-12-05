@@ -38,12 +38,13 @@ def check_guest_limit(feature_name, limit=1):
     st.session_state[usage_key] += 1
     return True
 
-def log_usage(user_id, feature_name, action, metadata=None):
+def log_usage(user_id, user_name, feature_name, action, metadata=None):
     if metadata is None:
         metadata = {}
 
     return supabase.table("usage_log").insert({
         "user_id": user_id,
+        "user_name": user_name,
         "feature_name": feature_name,
         "action": action,
         "metadata": metadata

@@ -138,6 +138,11 @@ if st.session_state.lecture_text:
         st.success("✔ Audio generated!")
         st.audio(audio_buffer, format="audio/mp3")
 
+        if "user" in st.session_state:
+            auth_user_id = st.session_state.user.id
+            user_name = st.session_state.user_profile.username
+            um.log_usage(auth_user_id, user_name, "Lecture Notes to Audio Converter", "generated", {"topic": 'N/A'})
+
         filename = f"Study_notes_audio_{time.strftime('%Y%m%d%H%M')}.mp3"
         st.session_state.audio_filename = filename
         st.session_state.audio_data = audio_buffer.getvalue()

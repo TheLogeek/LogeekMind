@@ -114,3 +114,7 @@ if st.button("Generate Study Schedule", type="primary"):
         st.header("📅Your Weekly Study plan")
         st.dataframe(schedule_df, width='stretch', hide_index=True)
         st.success("Your schedule has been generated! Rememeber, this is a suggestion, feel free to adjust.")
+        if "user" in st.session_state:
+            auth_user_id = st.session_state.user.id
+            user_name = st.session_state.user_profile.username
+            um.log_usage(auth_user_id, user_name, "Study Scheduler", "generated", {"topic": 'N/A'})

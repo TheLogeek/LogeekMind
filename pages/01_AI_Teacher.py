@@ -102,6 +102,11 @@ if prompt := st.chat_input("Ask your teacher a question..."):
 
             st.session_state.saved_notes = ai_text
 
+            if "user" in st.session_state:
+                auth_user_id = st.session_state.user.id
+                user_name = st.session_state.user_profile.username
+                um.log_usage(auth_user_id, user_name, "AI Teacher", "generated", {"topic": prompt})
+
             if um.premium_gate("Download Lecture Notes"):
                 downloaded = st.download_button(
                     label="⬇ Download Notes",

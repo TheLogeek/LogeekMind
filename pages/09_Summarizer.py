@@ -100,6 +100,11 @@ if st.session_state.summary:
     st.subheader("Key Takeaways")
     st.markdown(st.session_state.summary)
 
+    if "user" in st.session_state:
+        auth_user_id = st.session_state.user.id
+        user_name = st.session_state.user_profile.username
+        um.log_usage(auth_user_id, user_name, "Summarizer", "generated", {"topic": 'N/A'})
+
     col1, col2 = st.columns(2)
 
     with col1:

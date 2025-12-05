@@ -86,14 +86,17 @@ with col2:
         st.session_state.audio_file = None
         st.session_state.audio_path = None
         st.session_state.transcribed_text = None
-        st.rerun()  # refresh page to show fresh state
+        st.rerun()
 
-# --------------------------
 # SHOW TRANSCRIPTION + DOWNLOAD
-# --------------------------
 if st.session_state.transcribed_text:
     st.subheader("Transcription")
     st.code(st.session_state.transcribed_text)
+
+    if "user" in st.session_state:
+        auth_user_id = st.session_state.user.id
+        user_name = st.session_state.user_profile.username
+        um.log_usage(auth_user_id, user_name, "Lecture Audio to Text Converter", "generated", {"topic": 'N/A'})
 
     filename = os.path.splitext(st.session_state.audio_file.name)[0] + "_transcription.txt"
 

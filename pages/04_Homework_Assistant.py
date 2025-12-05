@@ -111,6 +111,11 @@ if st.session_state.hw_solution:
     st.subheader("Generated Solution (Preview)")
     st.markdown(st.session_state.hw_solution)
 
+    if "user" in st.session_state:
+        auth_user_id = st.session_state.user.id
+        user_name = st.session_state.user_profile.username
+        um.log_usage(auth_user_id, user_name, "Homework Assistant", "generated", {"topic": 'N/A'})
+
     if um.premium_gate("Download Homework Solution"):
         st.download_button(
             label="Download Solution as DOCX",

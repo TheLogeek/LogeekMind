@@ -219,8 +219,10 @@ elif st.session_state.exam_stage == "finished":
         "timestamp": time.time()
     })
 
-    auth_user_id = st.session_state.user.id
-    um.log_usage(auth_user_id, "Exam Simulator", "submitted_exam",
+    if "user" in st.session_state:
+        auth_user_id = st.session_state.user.id
+        user_name = st.session_state.user_profile.username
+        um.log_usage(auth_user_id, user_name, "Exam Simulator", "submitted_exam",
                  {"course": st.session_state.get("course_code", "course")})
 
     # Review answers
