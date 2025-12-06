@@ -2,7 +2,13 @@ import streamlit as st
 import streamlit.components.v1 as components
 from auth_manager import sign_out_user
 
-manifest_path = "/static/manifest.json"
+st.set_page_config(
+    page_title="LogeekMind: Your AI Academic Assistant",
+    page_icon="favicon.ico",
+    layout="wide",
+    initial_sidebar_state="expanded"
+)
+
 
 css = """
 <link rel="manifest" href='/static/manifest.json'>
@@ -22,9 +28,17 @@ css = """
         padding: 60px 30px;
         border-radius: 20px;
         background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+        background-size: 200% 200%;
+        animation: gradientMove 6s ease infinite;
         color: white;
         box-shadow: 0px 8px 20px rgba(0,0,0,0.15);
         margin-bottom: 30px;
+    }
+
+    @keyframes gradientMove {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
     }
 
     .hero h1 {
@@ -39,51 +53,60 @@ css = """
     }
 
     /* FEATURE CARDS — BLUE GRADIENT THEME */
-.feature-card {
-    background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
-    border-radius: 16px;
-    padding: 25px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.18);
-    border: none;
-    transition: 0.25s;
-    color: white;
-}
+    .feature-card {
+        background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+        background-size: 200% 200%;
+        animation: gradientMove 10s ease infinite;
+        border-radius: 16px;
+        padding: 25px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.18);
+        transition: 0.25s ease;
+        color: white;
+        cursor: pointer;
+    }
 
-.feature-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 8px 20px rgba(0,0,0,0.25);
-}
+    .feature-card:hover {
+        transform: translateY(-6px) scale(1.02);
+        box-shadow: 0 10px 25px rgba(0,0,0,0.28);
+    }
 
-.feature-card h4 {
-    color: white !important;
-}
+    .feature-card h4 {
+        color: white !important;
+    }
 
-.feature-card p {
-    color: rgba(255,255,255,0.9) !important;
-}
+    .feature-card p {
+        color: rgba(255,255,255,0.9) !important;
+    }
 
-.feature-icon {
-    font-size: 32px;
-    margin-bottom: 10px;
-    color: white !important;
-}
+    .feature-icon {
+        font-size: 32px;
+        margin-bottom: 10px;
+        color: white !important;
+    }
 
+    /* Feedback box */
+    .feedback-box {
+        background: white;
+        border-radius: 16px;
+        padding: 20px;
+        border: 1px solid #ececec;
+        box-shadow: 0px 3px 10px rgba(0,0,0,0.08);
+        margin-top: 20px;
+    }
+
+    .feedback-box strong {
+        color: #6a11cb;
+    }
 </style>
 """
 
 st.markdown(css, unsafe_allow_html=True)
 
+
+
 APP_VERSION = "1.5.1"
 
-st.set_page_config(
-    page_title="LogeekMind: Your AI Academic Assistant",
-    page_icon="favicon.ico",
-    layout="wide",
-    initial_sidebar_state="expanded"
-)
-
-
-
+# header 
 def render_auth_header():
     col1, col2 = st.columns([4, 1])
 
@@ -99,7 +122,6 @@ def render_auth_header():
             unsafe_allow_html=True
         )
 
-    # Auth controls
     with col2:
         if "user" in st.session_state and st.session_state.user:
             username = st.session_state.user_profile.get("username", "Scholar")
@@ -121,13 +143,15 @@ def render_auth_header():
 render_auth_header()
 
 
-# Feature Section
+
 st.markdown("### ✨ What You Can Do With LogeekMind")
 st.write("Explore powerful tools designed to supercharge your learning.")
 
 feature_col1, feature_col2, feature_col3 = st.columns(3)
 
+# Feature Card 1
 with feature_col1:
+    st.button(" ", key="feature1_btn", help="Open AI Learning")
     st.markdown(
         """
         <div class="feature-card">
@@ -139,41 +163,60 @@ with feature_col1:
         unsafe_allow_html=True
     )
 
+# Feature Card 2
 with feature_col2:
+    st.button(" ", key="feature2_btn", help="Open Content Mastery")
     st.markdown(
         """
         <div class="feature-card">
             <div class="feature-icon">📝</div>
             <h4>Content Mastery</h4>
-            <p>Summaries, course outlines, PDF analysis, lecture transcription and more.</p>
+            <p>Summaries, PDF analysis, course outlines & lecture transcription.</p>
         </div>
         """,
         unsafe_allow_html=True
     )
 
+# Feature Card 3
 with feature_col3:
+    st.button(" ", key="feature3_btn", help="Open Planning & Solving")
     st.markdown(
         """
         <div class="feature-card">
             <div class="feature-icon">⚙️</div>
             <h4>Planning & Solving</h4>
-            <p>Solve homework, calculate GPA, plan your study schedule efficiently.</p>
+            <p>Solve homework, calculate GPA & plan your study schedule efficiently.</p>
         </div>
         """,
         unsafe_allow_html=True
     )
 
+
 st.markdown("---")
 
 
-# Get started
+# Get Started
 st.header("🚀 Get Started")
 st.write("Use the **sidebar** to navigate all tools and features.")
-st.info("💡**Tip:** You may be required to enter your Gemini API key in the sidebar to use AI features")
+st.info("💡 **Tip:** You may be required to enter your Gemini API key in the sidebar to use AI features.")
 
 
-# sidebar
+
+# Sidebar
 st.sidebar.header("Developer & Feedback")
+
+st.sidebar.markdown(
+    """
+    <div class="feedback-box">
+        <p>
+        If you encounter any issue, find a bug, or have a brilliant feature idea,
+        your feedback is <strong>highly valued</strong> and helps improve LogeekMind.
+        </p>
+    </div>
+    """,
+    unsafe_allow_html=True
+)
+
 st.sidebar.info(
     "Developed by **Solomon Adenuga (Logeek)**.\n\n"
     "📧 Email: solomonadenuga8@gmail.com\n"
