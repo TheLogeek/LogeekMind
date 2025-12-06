@@ -32,9 +32,7 @@ df["percentage"] = pd.to_numeric((df.get("score", 0) / (df.get("total_questions"
 df["created_at"] = pd.to_datetime(df.get("created_at"), errors="coerce")
 df = df.dropna(subset=["score", "total", "percentage", "created_at"])
 
-# ------------------------
 # Line chart: Performance over time
-# ------------------------
 st.subheader("📈 Performance Over Time")
 
 plt.figure(figsize=(12, 5))
@@ -48,9 +46,7 @@ plt.tight_layout()
 st.pyplot(plt.gcf())
 plt.clf()  # Clear figure for next chart
 
-# ------------------------
 # Bar chart: Average performance per feature
-# ------------------------
 st.subheader("📊 Average Performance by Feature")
 avg_df = df.groupby("feature")["percentage"].mean().reset_index()
 
@@ -65,18 +61,14 @@ plt.tight_layout()
 st.pyplot(plt.gcf())
 plt.clf()
 
-# ------------------------
 # Table: Recent Attempts
-# ------------------------
 st.subheader("📝 Recent Attempts")
 recent_df = df.sort_values("created_at", ascending=False).head(10)
 recent_df_display = recent_df[["created_at", "feature", "score", "total", "percentage"]].copy()
 recent_df_display["created_at"] = recent_df_display["created_at"].dt.strftime("%Y-%m-%d %H:%M")
 st.table(recent_df_display)
 
-# ------------------------
 # KPI metrics
-# ------------------------
 st.subheader("📌 Summary Metrics")
 col1, col2, col3 = st.columns(3)
 
