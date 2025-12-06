@@ -38,29 +38,39 @@ css = """
         opacity: 0.95;
     }
 
-    /* FEATURE CARDS */
-    .feature-card {
-        background: #ffffff;
-        border-radius: 16px;
-        padding: 25px;
-        box-shadow: 0 4px 10px rgba(0,0,0,0.08);
-        border: 1px solid #edf0f7;
-        transition: 0.2s;
-    }
+    /* FEATURE CARDS — BLUE GRADIENT THEME */
+.feature-card {
+    background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+    border-radius: 16px;
+    padding: 25px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.18);
+    border: none;
+    transition: 0.25s;
+    color: white;
+}
 
-    .feature-card:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 6px 18px rgba(0,0,0,0.12);
-    }
+.feature-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+}
 
-    .feature-icon {
-        font-size: 32px;
-        margin-bottom: 10px;
-    }
+.feature-card h4 {
+    color: white !important;
+}
+
+.feature-card p {
+    color: rgba(255,255,255,0.9) !important;
+}
+
+.feature-icon {
+    font-size: 32px;
+    margin-bottom: 10px;
+    color: white !important;
+}
+
 </style>
 """
 
-# Inject CSS safely
 st.markdown(css, unsafe_allow_html=True)
 
 APP_VERSION = "1.5.1"
@@ -72,9 +82,8 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# -----------------------------------------------------------------
-# AUTH HEADER (FUNCTIONALITY UNTOUCHED)
-# -----------------------------------------------------------------
+
+
 def render_auth_header():
     col1, col2 = st.columns([4, 1])
 
@@ -111,9 +120,8 @@ def render_auth_header():
 
 render_auth_header()
 
-# -----------------------------------------------------------------
-# FEATURE SECTION
-# -----------------------------------------------------------------
+
+# Feature Section
 st.markdown("### ✨ What You Can Do With LogeekMind")
 st.write("Explore powerful tools designed to supercharge your learning.")
 
@@ -157,16 +165,14 @@ with feature_col3:
 
 st.markdown("---")
 
-# -----------------------------------------------------------------
-# GET STARTED
-# -----------------------------------------------------------------
+
+# Get started
 st.header("🚀 Get Started")
 st.write("Use the **sidebar** to navigate all tools and features.")
 st.info("💡 Enter your Gemini API key in the sidebar to activate all AI tools.")
 
-# -----------------------------------------------------------------
-# SIDEBAR (FUNCTIONALITY UNTOUCHED)
-# -----------------------------------------------------------------
+
+# sidebar
 st.sidebar.header("Developer & Feedback")
 st.sidebar.info(
     "Developed by **Solomon Adenuga (Logeek)**.\n\n"
