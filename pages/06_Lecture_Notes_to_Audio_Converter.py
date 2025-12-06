@@ -57,38 +57,6 @@ def convert_to_audio(text):
         return False, f"Error during audio generation: {e}"
 
 
-if st.session_state.audio_data:
-    st.success("📌 A previously generated audio lecture is ready")
-
-    st.audio(st.session_state.audio_data, format="audio/mp3")
-
-    if um.premium_gate("Download Transcript"):
-        download_clicked = st.download_button(
-            label="⬇ Download Previous Audio Lecture",
-            data=st.session_state.audio_data,
-            file_name=st.session_state.audio_filename,
-            mime="audio/mp3",
-        )
-        if download_clicked:
-            del st.session_state.audio_data
-            del st.session_state.audio_filename
-            st.success("✔ Removed previous lecture from memory")
-            st.rerun()
-    else:
-        st.info("Login to download.")
-        st.page_link("pages/00_login.py", label="Login / Signup", icon="🔑")
-
-    st.markdown("---")
-
-    if st.button("🆕 New Audio Lecture"):
-        st.session_state.audio_data = None
-        st.session_state.audio_filename = None
-        st.session_state.lecture_text = None
-        st.rerun()
-
-    st.stop()
-
-
 col1, col2 = st.columns(2)
 with col1:
     if st.button("Paste Text", use_container_width=True):
@@ -122,48 +90,50 @@ if lecture_text:
     st.info(f"Notes loaded. Characters: {len(lecture_text)}")
 
 
-if st.session_state.lecture_text:
-    if st.button("Generate Audio Lecture"):
+if st.button("Generate Audio Lecture"):
+    if st.session_state.lecture_text:
         if not um.check_guest_limit("Lecture Notes to Audio Converter", limit=1):
             st.page_link("pages/00_login.py", label="Login/Signup", icon="🔑")
             st.stop()
+    else:
+        st.warning("Provide your lecture text or file!")
+        st.stop()
 
-        with st.spinner("Generating audio…"):
-            ok, audio_buffer = convert_to_audio(st.session_state.lecture_text)
+    with st.spinner("Generating audio… this may take a few minutes for long notes."):
+        ok, audio_buffer = convert_to_audio(st.session_state.lecture_text)
 
-        if not ok:
+    if not ok:
             st.error(audio_buffer)
             st.stop()
 
-        st.success("✔ Audio generated!")
-        st.audio(audio_buffer, format="audio/mp3")
+    st.success("✔ Audio generated!")
+    st.audio(audio_buffer, format="audio/mp3")
 
-        if "user" in st.session_state:
+    if "user" in st.session_state:
             auth_user_id = st.session_state.user.id
             username = st.session_state.user_profile.get("username", "Scholar")
             um.log_usage(auth_user_id, username, "Lecture Notes to Audio Converter", "generated", {"topic": 'N/A'})
 
-        filename = f"Study_notes_audio_{time.strftime('%Y%m%d%H%M')}.mp3"
-        st.session_state.audio_filename = filename
-        st.session_state.audio_data = audio_buffer.getvalue()
+    filename = f"Study_notes_audio_{time.strftime('%Y%m%d%H%M')}.mp3"
+    st.session_state.audio_filename = filename
+    st.session_state.audio_data = audio_buffer.getvalue()
 
-        if um.premium_gate("Download Transcript"):
-            download_clicked = st.download_button(
+    if um.premium_gate("Download Transcript"):
+        download_clicked = st.download_button(
                 label="⬇ Download Audio Lecture",
                 data=st.session_state.audio_data,
-                file_name=filename,
-                mime="audio/mp3",
-            )
-            if download_clicked:
+                file_name=st.session_state.audio_filename,
+                mime="audio/mp3"
+        )
+        if download_clicked:
                 del st.session_state.audio_data
                 del st.session_state.audio_filename
                 del st.session_state.lecture_text
                 st.rerun()
-        else:
+    else:
             st.info("Create an account to download.")
             st.page_link("pages/00_login.py", label="Login/Signup", icon="🔑")
-
-        st.stop()
+            st.stop()
 
 
 st.markdown("---")

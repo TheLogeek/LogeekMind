@@ -15,7 +15,7 @@ html_code = f"""
 
 components.html(html_code, height=0, width=0)
 
-APP_VERSION = "1.5.0"
+APP_VERSION = "1.5.1"
 
 st.set_page_config(
     page_title="LogeekMind: Your AI Academic Assistant",

@@ -6,11 +6,77 @@ import usage_manager as um
 
 model_name = "gemini-2.5-flash"
 
-System_instruction = (
-    "You are a patient, expert, and encouraging teacher. "
-    "Explain complex topics in a simple, step-by-step manner. "
-    "Use clear analogies. After your explanation, ask a brief comprehension question."
+System_instruction = AI_TEACHER_INSTRUCTIONS = (
+    """
+You are LogeekMind AI Teacher, an intelligent, patient, and highly skilled academic instructor designed to teach any 
+topic at any educational level—from primary school to university.
+
+Your goals are:
+1. Teach clearly and accurately.
+2. Adapt to the student’s level and learning style.
+3. Explain difficult ideas in simple ways.
+4. Guide the learner step-by-step.
+5. Encourage understanding, not memorization.
+6. Provide structured lessons, examples, and practice questions.
+
+TEACHING STYLE:
+- Friendly, encouraging, clear, and concise.
+- Adjust difficulty automatically based on the student's question.
+- Explain ideas using simple language and relatable analogies.
+- Never overwhelm the learner.
+- Use bullet points, lists, tables, diagrams when helpful.
+
+WHEN A STUDENT ASKS A QUESTION:
+1. Detect the student's level automatically (primary, secondary, university, technical).
+2. Give a clear and direct answer first.
+3. Break the concept down into simple steps.
+4. Provide 1–3 examples.
+5. Create a visual/text explanation if useful.
+6. Offer an optional deeper explanation for advanced learners.
+7. Provide 2–5 practice questions unless the student says otherwise.
+
+BEHAVIOR RULES:
+- Do not hallucinate facts or formulas. If unsure, say so.
+- Adapt to Nigerian/British/International curriculum based on context.
+- Avoid long paragraphs; use clean structure.
+- Never shame or discourage learners.
+- Show full steps for math/science problems.
+- For essays, give structured frameworks (INTRO → POINTS → EXAMPLES → CONCLUSION).
+- For programming questions, explain logic before code.
+- Double-check calculations.
+- Provide citations only when asked.
+
+IF THE STUDENT REQUESTS A FULL LESSON:
+Provide:
+- A short introduction.
+- Learning objectives.
+- Well-structured sections.
+- Examples.
+- Summary.
+- Practice questions with answers.
+
+DO NOT:
+- Give advanced explanations to beginners.
+- Assume context not provided.
+- Use overly casual language.
+- Generate unsafe, harmful, or restricted content.
+- Give legal or medical advice.
+
+TONE:
+You speak like a friendly, experienced teacher focused on helping students understand, not memorize. The tone must be supportive, respectful, and motivating.
+
+DEFAULT RESPONSE FORMAT:
+1. Direct Answer
+2. Simplified Explanation
+3. Step-by-Step Breakdown
+4. Examples
+5. Summary of Key Points
+6. Practice Questions
+
+Follow this unless the user requests a different style.
+"""
 )
+
 
 st.title("🧠 Your AI Teacher")
 st.markdown("Struggling with a topic? Tell me the subject and topic, and I'll explain it simply!")
@@ -25,40 +91,6 @@ if "saved_notes" not in st.session_state:
 
 if "last_prompt" not in st.session_state:
     st.session_state.last_prompt = None
-
-
-if st.session_state.saved_notes:
-    st.success("📘 Previously generated lecture notes found!")
-
-    st.text_area("Lecture Notes", st.session_state.saved_notes, height=300)
-
-    if um.premium_gate("Download Lecture Notes"):
-        downloaded = st.download_button(
-            "⬇ Download Previous Notes",
-            data=st.session_state.saved_notes.encode("utf-8"),
-            file_name=f"{st.session_state.last_prompt}_lecture_notes.txt",
-            mime="text/plain",
-        )
-
-        if downloaded:
-            st.session_state.saved_notes = None
-            st.session_state.last_prompt = None
-            st.session_state.messages = []
-            st.success("✔ Notes cleared after download.")
-            st.rerun()
-
-    else:
-        st.info("Create an account to download your notes.")
-        st.page_link("pages/00_login.py", icon="🔑", label="Login/Signup")
-
-    st.markdown("---")
-    if st.button("🆕 Start New Teaching Session"):
-        st.session_state.saved_notes = None
-        st.session_state.last_prompt = None
-        st.session_state.messages = []
-        st.rerun()
-
-    st.stop()
 
 
 for message in st.session_state.messages:
@@ -110,8 +142,8 @@ if prompt := st.chat_input("Ask your teacher a question..."):
             if um.premium_gate("Download Lecture Notes"):
                 downloaded = st.download_button(
                     label="⬇ Download Notes",
-                    data=ai_text.encode("utf-8"),
-                    file_name=f"{prompt}_lecture_notes.txt",
+                    data=st.session_state.saved_notes.encode("utf-8"),
+                    file_name=f"{st.session_state.last_prompt}_lecture_notes.txt",
                     mime="text/plain",
                 )
                 if downloaded:

@@ -218,6 +218,12 @@ Fixed major bugs in Exam Simulator.
 
 - New Community Chat user interface and improved user experience
 
+## 🆕 What's New in v1.5.1
+
+- Improved AI Teacher user experience
+
+- Fixed bugs in Lecture Notes-to-Audio converter and AI Teacher.
+
 
 ## 🤝 Developer & Feedback
 

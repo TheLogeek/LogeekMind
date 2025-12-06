@@ -4,9 +4,7 @@ import tempfile
 import os
 import usage_manager as um
 
-# --------------------------
-# LOAD WHISPER MODEL (CACHED)
-# --------------------------
+
 @st.cache_resource
 def load_whisper_model():
     return whisper.load_model("base")
@@ -17,9 +15,7 @@ st.markdown("Upload a lecture audio file to transcribe it and download the text 
 model = load_whisper_model()
 st.success("STT model loaded successfully! Ready for audio")
 
-# --------------------------
-# SESSION STATE VARIABLES
-# --------------------------
+
 if "audio_file" not in st.session_state:
     st.session_state.audio_file = None
 
@@ -29,9 +25,6 @@ if "audio_path" not in st.session_state:
 if "transcribed_text" not in st.session_state:
     st.session_state.transcribed_text = None
 
-# --------------------------
-# FILE UPLOADER
-# --------------------------
 uploaded_file = st.file_uploader(
     "Upload a lecture audio file (MP3, WAV, M4A, OGG)",
     type=["mp3", "wav", "m4a", "ogg"]
@@ -46,15 +39,10 @@ if uploaded_file is not None:
         tmp.write(uploaded_file.read())
         st.session_state.audio_path = tmp.name
 
-# --------------------------
-# AUDIO PLAYER
-# --------------------------
+
 if st.session_state.audio_file:
     st.audio(st.session_state.audio_file)
 
-# --------------------------
-# TRANSCRIBE FUNCTION
-# --------------------------
 def transcribe_audio():
     if not um.check_guest_limit("Lecture Audio to Text Converter", limit=2):
         st.page_link("pages/00_login.py", label="Login/Signup", icon="🔑")
@@ -68,9 +56,7 @@ def transcribe_audio():
     except Exception as e:
         st.error(f"An error occurred during transcription: {e}")
 
-# --------------------------
-# BUTTONS
-# --------------------------
+
 col1, col2 = st.columns(2)
 
 with col1:
