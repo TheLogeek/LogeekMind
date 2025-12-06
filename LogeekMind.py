@@ -144,8 +144,7 @@ render_auth_header()
 
 
 
-st.markdown("### ✨ What You Can Do With LogeekMind")
-st.write("Explore powerful tools designed to supercharge your learning.")
+st.markdown("### ✨ Explore powerful tools designed to supercharge your learning")
 
 feature_col1, feature_col2, feature_col3 = st.columns(3)
 
