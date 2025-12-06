@@ -205,6 +205,12 @@ st.info("💡 **Tip:** You may be required to enter your Gemini API key in the s
 # Sidebar
 st.sidebar.header("Developer & Feedback")
 
+st.sidebar.info(
+    "Developed by **Solomon Adenuga (Logeek)**.\n\n"
+    "📧 Email: solomonadenuga8@gmail.com\n"
+    "📱 WhatsApp: +2348023710562"
+)
+
 st.sidebar.markdown(
     """
     <div class="feedback-box">
@@ -215,12 +221,6 @@ st.sidebar.markdown(
     </div>
     """,
     unsafe_allow_html=True
-)
-
-st.sidebar.info(
-    "Developed by **Solomon Adenuga (Logeek)**.\n\n"
-    "📧 Email: solomonadenuga8@gmail.com\n"
-    "📱 WhatsApp: +2348023710562"
 )
 
 st.sidebar.markdown("---")
