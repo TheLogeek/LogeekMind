@@ -4,62 +4,64 @@ from auth_manager import sign_out_user
 
 manifest_path = "/static/manifest.json"
 
-# Hide HTML placeholder injected by manifest
-html_code = f"""
-<link rel="manifest" href="{manifest_path}">
+css = """
+<link rel="manifest" href='/static/manifest.json'>
+
 <style>
-    div[data-testid="stHtml"] {{
+    div[data-testid="stHtml"] {
         display: none;
-    }}
+    }
 
-    /* ----------- GLOBAL FONT + SMOOTH UI ----------- */
-    html, body, [class*="css"] {{
+    /* GLOBAL FONT */
+    html, body, [class*="css"] {
         font-family: 'Inter', sans-serif !important;
-    }}
+    }
 
-    /* ----------- HERO SECTION ----------- */
-    .hero {{
+    /* HERO SECTION */
+    .hero {
         padding: 60px 30px;
         border-radius: 20px;
         background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
         color: white;
         box-shadow: 0px 8px 20px rgba(0,0,0,0.15);
         margin-bottom: 30px;
-    }}
+    }
 
-    .hero h1 {{
+    .hero h1 {
         font-size: 40px;
         font-weight: 800;
         margin-bottom: 10px;
-    }}
+    }
 
-    .hero p {{
+    .hero p {
         font-size: 18px;
         opacity: 0.95;
-    }}
+    }
 
-    /* ----------- FEATURE CARDS ----------- */
-    .feature-card {{
+    /* FEATURE CARDS */
+    .feature-card {
         background: #ffffff;
         border-radius: 16px;
         padding: 25px;
         box-shadow: 0 4px 10px rgba(0,0,0,0.08);
         border: 1px solid #edf0f7;
         transition: 0.2s;
-    }}
+    }
 
-    .feature-card:hover {{
+    .feature-card:hover {
         transform: translateY(-4px);
         box-shadow: 0 6px 18px rgba(0,0,0,0.12);
-    }}
+    }
 
-    .feature-icon {{
+    .feature-icon {
         font-size: 32px;
         margin-bottom: 10px;
-    }}
+    }
 </style>
 """
-components.html(html_code, height=0, width=0)
+
+# Inject CSS safely
+st.markdown(css, unsafe_allow_html=True)
 
 APP_VERSION = "1.5.1"
 
@@ -71,7 +73,7 @@ st.set_page_config(
 )
 
 # -----------------------------------------------------------------
-# AUTH HEADER (FUNCTIONALITY UNTOUCHED — ONLY TEXT/UI IMPROVED)
+# AUTH HEADER (FUNCTIONALITY UNTOUCHED)
 # -----------------------------------------------------------------
 def render_auth_header():
     col1, col2 = st.columns([4, 1])
