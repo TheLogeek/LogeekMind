@@ -151,7 +151,7 @@ feature_col1, feature_col2, feature_col3 = st.columns(3)
 
 # Feature Card 1
 with feature_col1:
-    #st.button(" ", key="feature1_btn", help="Open AI Learning")
+    st.button(" ", key="feature1_btn", help="Open AI Learning")
     st.markdown(
         """
         <div class="feature-card">
@@ -165,7 +165,7 @@ with feature_col1:
 
 # Feature Card 2
 with feature_col2:
-    #st.button(" ", key="feature2_btn", help="Open Content Mastery")
+    st.button(" ", key="feature2_btn", help="Open Content Mastery")
     st.markdown(
         """
         <div class="feature-card">
@@ -179,7 +179,7 @@ with feature_col2:
 
 # Feature Card 3
 with feature_col3:
-    #st.button(" ", key="feature3_btn", help="Open Planning & Solving")
+    st.button(" ", key="feature3_btn", help="Open Planning & Solving")
     st.markdown(
         """
         <div class="feature-card">
