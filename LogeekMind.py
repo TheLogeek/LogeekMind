@@ -169,7 +169,7 @@ st.markdown("---")
 # Get started
 st.header("🚀 Get Started")
 st.write("Use the **sidebar** to navigate all tools and features.")
-st.info("💡 Enter your Gemini API key in the sidebar to activate all AI tools.")
+st.info("💡**Tip:** You may be required to enter your Gemini API key in the sidebar to use AI features")
 
 
 # sidebar
