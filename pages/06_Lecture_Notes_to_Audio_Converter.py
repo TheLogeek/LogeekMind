@@ -106,9 +106,6 @@ if st.button("Generate Audio Lecture"):
             st.error(audio_buffer)
             st.stop()
 
-    st.success("✔ Audio generated!")
-    st.audio(audio_buffer, format="audio/mp3")
-
     if "user" in st.session_state:
             auth_user_id = st.session_state.user.id
             username = st.session_state.user_profile.get("username", "Scholar")
@@ -119,6 +116,8 @@ if st.button("Generate Audio Lecture"):
     st.session_state.audio_data = audio_buffer.getvalue()
 
 if st.session_state.audio_data is not None:
+    st.success("✔ Audio generated!")
+    st.audio(st.session_state.audio_data, format="audio/mp3")
     if um.premium_gate("Download Transcript"):
             download_clicked = st.download_button(
                 label="⬇ Download Audio Lecture",
