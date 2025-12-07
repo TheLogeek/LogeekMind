@@ -111,14 +111,13 @@ if submitted:
             st.session_state.course_outline_filename = filename
 
             st.subheader("✔ Generated Course Outline")
-            st.markdown(outline_text)
+            st.markdown(st.session_state.course_outline)
 
             if "user" in st.session_state:
                 auth_user_id = st.session_state.user.id
                 username = st.session_state.user_profile.get("username", "Scholar")
                 um.log_usage(auth_user_id, username, "Course Outline Generator", "generated", {"course":
                                                                                                  course_full_name})
-
             # Prepare DOCX for download
             doc = Document()
             doc.add_heading(f"Course Outline: {course_full_name}", 0)

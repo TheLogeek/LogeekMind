@@ -139,6 +139,23 @@ if prompt := st.chat_input("Ask your teacher a question..."):
                 username = st.session_state.user_profile.get("username", "Scholar")
                 um.log_usage(auth_user_id, username, "AI Teacher", "generated", {"topic": prompt})
 
+            if st.session_state.saved_notes is not None:
+                if um.premium_gate("Download Lecture Notes"):
+                    downloaded = st.download_button(
+                        label="⬇ Download Notes",
+                        data=st.session_state.saved_notes.encode("utf-8"),
+                        file_name=f"{st.session_state.last_prompt}_lecture_notes.txt",
+                        mime="text/plain",
+                    )
+                    if downloaded:
+                        st.session_state.saved_notes = None
+                        st.session_state.last_prompt = None
+                        st.session_state.messages = []
+                        st.rerun()
+                else:
+                    st.info("Creating an account is free and saves your progress!")
+                    st.page_link("pages/00_login.py", icon="🔑", label="Login/Signup")
+
         except APIError as e:
             error = str(e)
 
@@ -159,23 +176,6 @@ if prompt := st.chat_input("Ask your teacher a question..."):
 
         except Exception as e:
             st.error(f"Unexpected error: {e}")
-
-if st.session_state.saved_notes is not None:
-    if um.premium_gate("Download Lecture Notes"):
-                    downloaded = st.download_button(
-                        label="⬇ Download Notes",
-                        data=st.session_state.saved_notes.encode("utf-8"),
-                        file_name=f"{st.session_state.last_prompt}_lecture_notes.txt",
-                        mime="text/plain",
-                    )
-                    if downloaded:
-                        st.session_state.saved_notes = None
-                        st.session_state.last_prompt = None
-                        st.session_state.messages = []
-                        st.rerun()
-    else:
-                st.info("Creating an account is free and saves your progress!")
-                st.page_link("pages/00_login.py", icon="🔑", label="Login/Signup")
 
 
 st.markdown("---")
