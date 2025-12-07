@@ -119,13 +119,14 @@ if st.button("Generate Audio Lecture"):
     st.session_state.audio_data = audio_buffer.getvalue()
 
     if um.premium_gate("Download Transcript"):
-        download_clicked = st.download_button(
+        if st.session_state.audio_data:
+            download_clicked = st.download_button(
                 label="⬇ Download Audio Lecture",
                 data=st.session_state.audio_data,
                 file_name=st.session_state.audio_filename,
                 mime="audio/mp3"
-        )
-        if download_clicked:
+            )
+            if download_clicked:
                 del st.session_state.audio_data
                 del st.session_state.audio_filename
                 del st.session_state.lecture_text

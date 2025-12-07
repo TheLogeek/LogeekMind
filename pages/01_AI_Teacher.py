@@ -140,17 +140,18 @@ if prompt := st.chat_input("Ask your teacher a question..."):
                 um.log_usage(auth_user_id, username, "AI Teacher", "generated", {"topic": prompt})
 
             if um.premium_gate("Download Lecture Notes"):
-                downloaded = st.download_button(
-                    label="⬇ Download Notes",
-                    data=st.session_state.saved_notes.encode("utf-8"),
-                    file_name=f"{st.session_state.last_prompt}_lecture_notes.txt",
-                    mime="text/plain",
-                )
-                if downloaded:
-                    st.session_state.saved_notes = None
-                    st.session_state.last_prompt = None
-                    st.session_state.messages = []
-                    st.rerun()
+                if st.session_state.saved_notes:
+                    downloaded = st.download_button(
+                        label="⬇ Download Notes",
+                        data=st.session_state.saved_notes.encode("utf-8"),
+                        file_name=f"{st.session_state.last_prompt}_lecture_notes.txt",
+                        mime="text/plain",
+                    )
+                    if downloaded:
+                        st.session_state.saved_notes = None
+                        st.session_state.last_prompt = None
+                        st.session_state.messages = []
+                        st.rerun()
             else:
                 st.info("Creating an account is free and saves your progress!")
                 st.page_link("pages/00_login.py", icon="🔑", label="Login/Signup")
