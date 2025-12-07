@@ -118,7 +118,7 @@ if st.button("Generate Audio Lecture"):
     st.session_state.audio_filename = filename
     st.session_state.audio_data = audio_buffer.getvalue()
 
-    if um.premium_gate("Download Transcript"):
+if um.premium_gate("Download Transcript"):
         if st.session_state.audio_data:
             download_clicked = st.download_button(
                 label="⬇ Download Audio Lecture",
@@ -131,7 +131,7 @@ if st.button("Generate Audio Lecture"):
                 del st.session_state.audio_filename
                 del st.session_state.lecture_text
                 st.rerun()
-    else:
+else:
             st.info("Create an account to download.")
             st.page_link("pages/00_login.py", label="Login/Signup", icon="🔑")
             st.stop()
