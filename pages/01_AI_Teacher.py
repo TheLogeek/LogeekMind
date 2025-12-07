@@ -140,7 +140,7 @@ if prompt := st.chat_input("Ask your teacher a question..."):
                 um.log_usage(auth_user_id, username, "AI Teacher", "generated", {"topic": prompt})
 
             if um.premium_gate("Download Lecture Notes"):
-                if st.session_state.saved_notes:
+                if st.session_state.saved_notes is not None:
                     downloaded = st.download_button(
                         label="⬇ Download Notes",
                         data=st.session_state.saved_notes.encode("utf-8"),
