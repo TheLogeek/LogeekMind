@@ -108,9 +108,21 @@ APP_VERSION = "1.5.1"
 
 # header 
 def render_auth_header():
-    col1, col2 = st.columns([1, 4])
+    col1, col2 = st.columns([4, 1])
 
     with col1:
+        st.markdown(
+            """
+            <div class="hero">
+                <h1>🧠 LogeekMind</h1>
+                <p>Your all-in-one AI-powered learning assistant.  
+                Understand faster, study smarter, achieve better.</p>
+            </div>
+            """,
+            unsafe_allow_html=True
+        )
+
+    with col2:
         if "user" in st.session_state and st.session_state.user:
             username = st.session_state.user_profile.get("username", "Scholar")
 
@@ -127,19 +139,6 @@ def render_auth_header():
             st.markdown("<div style='text-align:right;'>Guest Mode</div>", unsafe_allow_html=True)
             if st.button("🔐 Login / Sign Up", type="primary", key="header_login_btn"):
                 st.switch_page("pages/00_login.py")
-
-
-    with col2:
-        st.markdown(
-            """
-            <div class="hero">
-                <h1>🧠 LogeekMind</h1>
-                <p>Your all-in-one AI-powered learning assistant.  
-                Understand faster, study smarter, achieve better.</p>
-            </div>
-            """,
-            unsafe_allow_html=True
-        )
 
 render_auth_header()
 
