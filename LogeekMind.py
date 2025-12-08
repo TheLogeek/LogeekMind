@@ -108,7 +108,7 @@ APP_VERSION = "1.5.1"
 
 # header 
 def render_auth_header():
-    col1, col2 = st.columns([4, 1])
+    col1, col2 = st.columns([1, 4])
 
     with col1:
         if "user" in st.session_state and st.session_state.user:
