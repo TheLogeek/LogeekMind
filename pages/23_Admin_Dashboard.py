@@ -5,10 +5,9 @@ from streamlit_autorefresh import st_autorefresh
 import plotly.express as px
 import time
 
-# --- CONFIG ---
 ADMIN_ID = st.secrets["ADMIN_ID"]
 
-# --- INITIALIZE SUPABASE ---
+# INITIALIZE SUPABASE
 @st.cache_resource
 def init_supabase():
     url = st.secrets["SUPABASE_URL"]
@@ -17,7 +16,7 @@ def init_supabase():
 
 supabase = init_supabase()
 
-# --- CHECK ADMIN ACCESS ---
+# CHECK ADMIN ACCESS
 if 'user' in st.session_state:
     user_id = st.session_state.user.id
 else:
@@ -76,7 +75,7 @@ def get_daily_activity(days=7):
         return activity
     return pd.Series([0]*days, index=pd.date_range(end=pd.Timestamp.now().date(), periods=days).date)
 
-# --- KPI METRICS ---
+# KPI METRICS
 total_users = get_total_users()
 active_users = get_active_users()
 top_user_df = get_top_users(1)
@@ -89,7 +88,7 @@ col3.metric("Top User (by usage)", top_user)
 
 st.markdown("---")
 
-# --- FEATURE USAGE CHARTS WITH INTERACTIVITY ---
+# FEATURE USAGE CHARTS WITH INTERACTIVITY
 feature_df = get_feature_usage()
 if not feature_df.empty:
     # Initialize selected_feature in session state
@@ -118,12 +117,12 @@ if not feature_df.empty:
 else:
     st.info("No feature usage data yet.")
 
-# --- DAILY ACTIVITY TREND ---
+# DAILY ACTIVITY TREND
 st.subheader("Daily Activity (Last 7 Days)")
 daily_activity = get_daily_activity(7)
 st.line_chart(daily_activity)
 
-# --- TOP USERS TABLE ---
+# TOP USERS TABLE
 top_users_df = get_top_users(10)
 if not top_users_df.empty:
     st.subheader("Top 10 Users by Feature Usage")
@@ -131,7 +130,7 @@ if not top_users_df.empty:
 else:
     st.info("No user usage data yet.")
 
-# --- SEARCHABLE USAGE TABLE ---
+# SEARCHABLE USAGE TABLE
 st.subheader("All User Activity")
 all_usage_resp = supabase.table("usage_log").select("*").execute()
 if all_usage_resp.data:
