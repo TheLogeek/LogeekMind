@@ -16,9 +16,7 @@ supabase = init_connection()
 
 def check_username_availability(username):
     try:
-        # Query the profiles table
         response = supabase.table("profiles").select("username").eq("username", username).execute()
-        # If any data is returned, the username exists
         if response.data:
             return False  # Username taken
         return True  # Username available
