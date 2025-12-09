@@ -88,7 +88,7 @@ def get_saved_auth():
 
 def save_auth(email, password):
     with open(AUTH_FILE, "w") as f:
-        f.write(f"{email} || {password}")
+        f.write(f"{email}||{password}")
 
 
 def try_auto_login():
@@ -108,3 +108,6 @@ def sign_out_user():
     for key in ['user', 'user_profile', 'chat_history']:
         if key in st.session_state:
             del st.session_state[key]
+
+    if os.path.exists(AUTH_FILE):
+        os.remove(AUTH_FILE)
