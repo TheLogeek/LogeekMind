@@ -34,7 +34,7 @@ with tab1:
                             #auth.save_auth(email, password)
                         #except:
                             #pass
-                    #time.sleep(1)
+                    time.sleep(1)
                     st.switch_page("LogeekMind.py")
                 else:
                     st.error(f"Error: {msg}")
