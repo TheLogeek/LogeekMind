@@ -51,26 +51,48 @@ def sign_up_user(email, password, username, terms_accepted):
         return False, str(e)
 
 
-def sign_in_user(email, password):
+def sign_in_user(email, password, remember_me=True):
 
     try:
         response = supabase.auth.sign_in_with_password({
             "email": email,
             "password": password
         })
+
         st.session_state.user = response.user
 
+        session = response.session
+        if session:
+            if remember_me:
+                st.session_state.access_token = session.access_token
+                st.session_state.refresh_token = session.refresh_token
+            else:
+                st.session_state.pop("access_token", None)
+                st.session_state.pop("refresh_token", None)
+
+        # Load profile
         profile_response = supabase.table("profiles").select("*").eq("id", response.user.id).single().execute()
         if profile_response.data:
             st.session_state.user_profile = profile_response.data
 
         return True, "Login successful!"
+
     except Exception as e:
         return False, str(e)
 
 
 def sign_out_user():
     supabase.auth.sign_out()
-    for key in ['user', 'user_profile', 'chat_history']:
+
+    for key in ['user', 'user_profile', 'chat_history', 'access_token', 'refresh_token']:
         if key in st.session_state:
             del st.session_state[key]
+
+    st.markdown("""
+    <script>
+        if (window.localStorage) {
+            localStorage.removeItem("lgm_access");
+            localStorage.removeItem("lgm_refresh");
+        }
+    </script>
+    """, unsafe_allow_html=True)

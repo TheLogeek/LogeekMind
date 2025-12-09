@@ -1,6 +1,22 @@
 import streamlit as st
 import streamlit.components.v1 as components
+import auth_manager as auth
 from auth_manager import sign_out_user
+
+# AUTO-LOGIN USING SAVED TOKEN
+if "refresh_token" in st.session_state and st.session_state.refresh_token:
+    try:
+        session = auth.supabase.auth.refresh_session({
+            "refresh_token": st.session_state.refresh_token
+        })
+
+        if session.user:
+            st.session_state.user = session.user
+            profile = auth.supabase.table("profiles").select("*").eq("id", session.user.id).single().execute()
+            if profile.data:
+                st.session_state.user_profile = profile.data
+    except:
+        pass
 
 st.set_page_config(
     page_title="LogeekMind: Your AI Academic Assistant",

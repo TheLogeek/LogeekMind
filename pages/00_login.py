@@ -5,7 +5,6 @@ import time
 st.set_page_config(page_title="Login / Sign Up", page_icon="🔐", layout="wide")
 
 
-
 st.title("🔐 LogeekMind Access")
 
 
@@ -16,6 +15,7 @@ with tab1:
     with st.form("login_form"):
         email = st.text_input("Email", key="login_email_root")
         password = st.text_input("Password", type="password", key="login_pass_root")
+        remember_me = st.checkbox("Remember Me", value=True)
 
         login_submitted = st.form_submit_button("Login", type="primary")
 
@@ -23,7 +23,7 @@ with tab1:
             if not email or not password:
                 st.error("Please enter both email and password.")
             else:
-                success, msg = auth.sign_in_user(email, password)
+                success, msg = auth.sign_in_user(email, password, remember_me)
                 if success:
                     st.success(msg)
                     time.sleep(1)
@@ -62,3 +62,18 @@ with tab2:
                     st.error(msg)
 
 #st.markdown("</div>", unsafe_allow_html=True)
+
+
+token_sync_js = """
+<script>
+if (window.localStorage) {
+    if (sessionStorage.access_token) {
+        localStorage.setItem("lgm_access", sessionStorage.access_token);
+    }
+    if (sessionStorage.refresh_token) {
+        localStorage.setItem("lgm_refresh", sessionStorage.refresh_token);
+    }
+}
+</script>
+"""
+st.markdown(token_sync_js, unsafe_allow_html=True)
