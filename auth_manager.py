@@ -1,6 +1,6 @@
 import streamlit as st
 from supabase import create_client
-import time
+import time, os
 
 
 # Connect to Supabase
@@ -51,7 +51,7 @@ def sign_up_user(email, password, username, terms_accepted):
         return False, str(e)
 
 
-def sign_in_user(email, password, remember_me=True):
+def sign_in_user(email, password):
 
     try:
         response = supabase.auth.sign_in_with_password({
@@ -60,15 +60,6 @@ def sign_in_user(email, password, remember_me=True):
         })
 
         st.session_state.user = response.user
-
-        session = response.session
-        if session:
-            if remember_me:
-                st.session_state.access_token = session.access_token
-                st.session_state.refresh_token = session.refresh_token
-            else:
-                st.session_state.pop("access_token", None)
-                st.session_state.pop("refresh_token", None)
 
         # Load profile
         profile_response = supabase.table("profiles").select("*").eq("id", response.user.id).single().execute()
@@ -80,19 +71,40 @@ def sign_in_user(email, password, remember_me=True):
     except Exception as e:
         return False, str(e)
 
+AUTH_FILE = "auth.txt"
+
+def get_saved_auth():
+    if os.path.exists(AUTH_FILE):
+        with open(AUTH_FILE, "r") as f:
+            data = f.read().strip()
+            if data:
+                try:
+                    email, password = data.split("||")
+                    return email, password
+                except:
+                    return None, None
+    return None, None
+
+
+def save_auth(email, password):
+    with open(AUTH_FILE, "w") as f:
+        f.write(f"{email} || {password}")
+
+
+def try_auto_login():
+    saved_email, saved_password = get_saved_auth()
+    if saved_email and saved_password:
+        success, msg = sign_in_user(saved_email, saved_password)
+        if success:
+            st.success("Logged in automatically!")
+            time.sleep(1)
+        else:
+            pass
+
 
 def sign_out_user():
     supabase.auth.sign_out()
 
-    for key in ['user', 'user_profile', 'chat_history', 'access_token', 'refresh_token']:
+    for key in ['user', 'user_profile', 'chat_history']:
         if key in st.session_state:
             del st.session_state[key]
-
-    st.markdown("""
-    <script>
-        if (window.localStorage) {
-            localStorage.removeItem("lgm_access");
-            localStorage.removeItem("lgm_refresh");
-        }
-    </script>
-    """, unsafe_allow_html=True)

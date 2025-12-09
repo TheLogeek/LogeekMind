@@ -8,14 +8,17 @@ st.set_page_config(page_title="Login / Sign Up", page_icon="🔐", layout="wide"
 st.title("🔐 LogeekMind Access")
 
 
+
+saved_email, saved_password = auth.get_saved_auth()
+
 tab1, tab2 = st.tabs(["Login", "Sign Up"])
 
 # LOGIN
 with tab1:
     with st.form("login_form"):
-        email = st.text_input("Email", key="login_email_root")
-        password = st.text_input("Password", type="password", key="login_pass_root")
-        remember_me = st.checkbox("Remember Me", value=True)
+        email = st.text_input("Email", key="login_email_root", value=saved_email or "")
+        password = st.text_input("Password", type="password", key="login_pass_root", value=saved_password or "")
+        remember_me = st.checkbox("Remember Me", value=bool(saved_email and saved_password))
 
         login_submitted = st.form_submit_button("Login", type="primary")
 
@@ -23,9 +26,14 @@ with tab1:
             if not email or not password:
                 st.error("Please enter both email and password.")
             else:
-                success, msg = auth.sign_in_user(email, password, remember_me)
+                success, msg = auth.sign_in_user(email, password)
                 if success:
                     st.success(msg)
+                    if remember_me:
+                        try:
+                            auth.save_auth(email, password)
+                        except:
+                            pass
                     time.sleep(1)
                     st.switch_page("LogeekMind.py")
                 else:
@@ -62,18 +70,3 @@ with tab2:
                     st.error(msg)
 
 #st.markdown("</div>", unsafe_allow_html=True)
-
-
-token_sync_js = """
-<script>
-if (window.localStorage) {
-    if (sessionStorage.access_token) {
-        localStorage.setItem("lgm_access", sessionStorage.access_token);
-    }
-    if (sessionStorage.refresh_token) {
-        localStorage.setItem("lgm_refresh", sessionStorage.refresh_token);
-    }
-}
-</script>
-"""
-st.markdown(token_sync_js, unsafe_allow_html=True)
