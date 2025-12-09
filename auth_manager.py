@@ -71,11 +71,11 @@ def sign_in_user(email, password):
     except Exception as e:
         return False, str(e)
 
-AUTHN_FILE = "auth.txt"
+AUTH_FILE = "authn.txt"
 
 def get_saved_auth():
-    if os.path.exists(AUTHN_FILE):
-        with open(AUTHN_FILE, "r") as f:
+    if os.path.exists(AUTH_FILE):
+        with open(AUTH_FILE, "r") as f:
             data = f.read().strip()
             if data:
                 try:
@@ -87,7 +87,7 @@ def get_saved_auth():
 
 
 def save_auth(email, password):
-    with open(AUTHN_FILE, "w") as f:
+    with open(AUTH_FILE, "w") as f:
         f.write(f"{email}||{password}")
 
 
@@ -109,5 +109,5 @@ def sign_out_user():
         if key in st.session_state:
             del st.session_state[key]
 
-    if os.path.exists(AUTHN_FILE):
-        os.remove(AUTHN_FILE)
+    if os.path.exists(AUTH_FILE):
+        os.remove(AUTH_FILE)
