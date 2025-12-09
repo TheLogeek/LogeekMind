@@ -9,15 +9,15 @@ st.title("🔐 LogeekMind Access")
 
 
 
-saved_email, saved_password = auth.get_saved_auth()
+#saved_email, saved_password = auth.get_saved_auth()
 
 tab1, tab2 = st.tabs(["Login", "Sign Up"])
 
 # LOGIN
 with tab1:
     with st.form("login_form"):
-        email = st.text_input("Email", key="login_email_root", value=saved_email or "")
-        password = st.text_input("Password", type="password", key="login_pass_root", value=saved_password or "")
+        email = st.text_input("Email", key="login_email_root")
+        password = st.text_input("Password", type="password", key="login_pass_root")
         #remember_me = st.checkbox("Remember Me", value=bool(saved_email and saved_password))
 
         login_submitted = st.form_submit_button("Login", type="primary")
