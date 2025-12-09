@@ -96,8 +96,7 @@ def try_auto_login():
     if saved_email and saved_password:
         success, msg = sign_in_user(saved_email, saved_password)
         if success:
-            st.success("Logged in automatically!")
-            time.sleep(1)
+            pass
         else:
             pass
 
