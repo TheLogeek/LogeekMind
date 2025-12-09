@@ -143,7 +143,8 @@ def render_auth_header():
             if st.button("🔐 Login / Sign Up", type="primary", key="header_login_btn"):
                 st.switch_page("pages/00_login.py")
 
-auth.try_auto_login()
+if "user" not in st.session_state:
+	auth.try_auto_login()
 render_auth_header()
 
 
