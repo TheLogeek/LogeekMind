@@ -71,34 +71,34 @@ def sign_in_user(email, password):
     except Exception as e:
         return False, str(e)
 
-AUTH_FILE = "authn.txt"
+#AUTH_FILE = "authn.txt"
 
-def get_saved_auth():
-    if os.path.exists(AUTH_FILE):
-        with open(AUTH_FILE, "r") as f:
-            data = f.read().strip()
-            if data:
-                try:
-                    email, password = data.split("||")
-                    return email, password
-                except:
-                    return None, None
-    return None, None
-
-
-def save_auth(email, password):
-    with open(AUTH_FILE, "w") as f:
-        f.write(f"{email}||{password}")
+#def get_saved_auth():
+    #if os.path.exists(AUTH_FILE):
+        #with open(AUTH_FILE, "r") as f:
+            #data = f.read().strip()
+            #if data:
+                #try:
+                    #email, password = data.split("||")
+                    #return email, password
+                #except:
+                    #return None, None
+    #return None, None
 
 
-def try_auto_login():
-    saved_email, saved_password = get_saved_auth()
-    if saved_email and saved_password:
-        success, msg = sign_in_user(saved_email, saved_password)
-        if success:
-            pass
-        else:
-            pass
+#def save_auth(email, password):
+    #with open(AUTH_FILE, "w") as f:
+        #f.write(f"{email}||{password}")
+
+
+#def try_auto_login():
+    #saved_email, saved_password = get_saved_auth()
+    #if saved_email and saved_password:
+        #success, msg = sign_in_user(saved_email, saved_password)
+        #if success:
+            #pass
+        #else:
+            #pass
 
 
 def sign_out_user():
@@ -108,5 +108,5 @@ def sign_out_user():
         if key in st.session_state:
             del st.session_state[key]
 
-    if os.path.exists(AUTH_FILE):
-        os.remove(AUTH_FILE)
+    #if os.path.exists(AUTH_FILE):
+        #os.remove(AUTH_FILE)
