@@ -13,3 +13,4 @@ streamlit-autorefresh
 plotly
 matplotlib
 seaborn
+colorama
