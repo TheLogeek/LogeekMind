@@ -38,7 +38,7 @@ def check_rate_limit():
     if len(history) >= MAX_REQUESTS:
         time_to_wait = int(TIME_WINDOW - (current_time - history[0]))
 
-        st.error(f"**Rate Limit Hit!** Please wait {time_to_wait} seconds before making using any AI feature, "
+        st.error(f"**Rate Limit Hit!** Please wait {time_to_wait} seconds before making use of any AI feature, "
                  f"or enter your own API key for unlimited access.")
         st.session_state[SESSION_HISTORY_KEY] = history
         return False

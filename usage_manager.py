@@ -30,7 +30,7 @@ def check_guest_limit(feature_name, limit=1):
         st.session_state[usage_key] = 0
 
     if st.session_state[usage_key] >= limit:
-        st.warning(f"🔒 You have reached the free limit for **{feature_name}** as a guest.")
+        st.warning(f"🔒 You have reached the limit for **{feature_name}** as a guest.")
         st.info("""Sign up for a free account to use this feature without limits!""")
 
         return False  # Block access
