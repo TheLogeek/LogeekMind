@@ -37,4 +37,4 @@ After creating your API key, you will see it displayed on the screen in the 'Key
 
 **LogeekMind does not store your API key, it's only saved temporarily for one-app session use, you will be prompted to enter your API key every time you open the application to access AI features.**
 
-[Go to homepage](index.md)
+##[Go to homepage](index.md)
