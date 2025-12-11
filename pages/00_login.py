@@ -18,7 +18,7 @@ with tab1:
     with st.form("login_form"):
         email = st.text_input("Email", key="login_email_root")
         password = st.text_input("Password", type="password", key="login_pass_root")
-        #remember_me = st.checkbox("Remember Me", value=bool(saved_email and saved_password))
+        remember_me = st.checkbox("Remember Me", value=True)
 
         login_submitted = st.form_submit_button("Login", type="primary")
 
@@ -29,11 +29,11 @@ with tab1:
                 success, msg = auth.sign_in_user(email, password)
                 if success:
                     st.success(msg)
-                    #if remember_me:
-                        #try:
-                            #auth.save_auth(email, password)
-                        #except:
-                            #pass
+                    if remember_me:
+                        try:
+                            auth.save_auth(email, password)
+                        except:
+                            pass
                     time.sleep(1)
                     st.switch_page("LogeekMind.py")
                 else:
