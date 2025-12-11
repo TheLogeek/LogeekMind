@@ -144,7 +144,7 @@ def render_auth_header():
                 st.switch_page("pages/00_login.py")
 
 if "user" not in st.session_state:
-	auth.try_auto_login()
+    auth.try_auto_login()
 render_auth_header()
 
 
