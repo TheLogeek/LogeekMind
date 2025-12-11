@@ -46,7 +46,8 @@ with tab1:
 
         if send_reset:
             try:
-                auth.supabase.auth.reset_password_for_email(reset_email)
+                auth.supabase.auth.reset_password_for_email(reset_email, {"redirect_to":
+                                                                              "https://logeekmind.streamlit.app/reset_password"})
                 st.success("A reset link has been sent to your email.")
             except Exception as e:
                 st.error(str(e))
