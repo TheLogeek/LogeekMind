@@ -1,4 +1,4 @@
-[Features](features.md) [Getting Started](getting-started.md) [API Setup](api-setup.md) [Troubleshooting & FAQ](troubleshooting.md) [Privacy Policy](privacy.md) [Terms of Service](terms.md)
+[Homepage](index.md) | [Features](features.md) | [Getting Started](getting-started.md) | [API Setup](api-setup.md) | [Troubleshooting & FAQ](troubleshooting.md) | [Privacy Policy](privacy.md) | [Terms of Service](terms.md)
 
 # 🛠️ Technology & Architecture
 
