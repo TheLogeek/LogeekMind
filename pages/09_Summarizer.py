@@ -10,12 +10,15 @@ from sumy.nlp.tokenizers import Tokenizer
 from sumy.summarizers.text_rank import TextRankSummarizer
 import nltk
 
-model_name = "gemini-2.5-flash"
+nltk.download("punkt")
+
+#model_name = "gemini-2.5-flash"
 
 st.title("📝 PDF/Notes Summarizer")
 st.markdown("Upload your document and instantly receive a summary of its key points.")
 
-client = get_gemini_client()
+#client = get_gemini_client()
+
 
 if "lecture_text" not in st.session_state:
     st.session_state.lecture_text = None
@@ -51,8 +54,8 @@ def extract_text_from_uploaded_file(file):
         st.error("Unsupported file type. ")
         return None
 
-def summarize_text(lecture_text):
-    """Sends the text to Gemini for summarization."""
+def summarize_text(lecture_text, sentence_count=10):
+    """Sends the text to Gemini for summarization
     prompt = (
         "Summarize the following lecture notes thoroughly. "
         "Output the most important key points as a clear, **bolded** bulleted list, "
@@ -64,6 +67,19 @@ def summarize_text(lecture_text):
         contents=[prompt]
     )
     return response.text
+    """
+    parser = PlaintextParser.from_string(lecture_text, Tokenizer("english"))
+    summarizer = TextRankSummarizer()
+
+    summary_sentences = summarizer(parser.document, sentence_count)
+
+    key_points = "\n".join([f"- **{str(sentence)}**" for sentence in summary_sentences])
+
+    overview = " ".join([str(sentence) for sentence in summary_sentences[:3]])
+
+    final_summary = f"### **Key Points**\n{key_points}\n\n### **Overview**\n{overview}"
+
+    return final_summary
 
 
 uploaded_file = st.file_uploader("Choose a PDF, TXT or DOCX file", type=["pdf", "txt", "docx"])
@@ -83,18 +99,18 @@ if st.session_state.lecture_text:
                 st.session_state.summary = summarize_text(st.session_state.lecture_text)
                 st.success("Summary Complete!")
 
-            except APIError as e:
-                error_text = str(e)
-                if "429" in error_text or "RESOURCE_EXHAUSTED" in error_text.upper():
-                    if "api_key" in st.session_state:
-                        del st.session_state.api_key
-                    st.error("🚨 **Quota Exceeded!** The Gemini API key has hit its limit")
-                    st.stop()
-                elif "503" in error_text:
-                    st.markdown("The Gemini AI model is currently experiencing high traffic. Please try again later.")
-                    st.info("Meanwhile, try other non-AI features like GPA Calculator, Study Scheduler, etc.")
-                else:
-                    st.error(f"An API Error occurred: {e}")
+            #except APIError as e:
+                #error_text = str(e)
+                #if "429" in error_text or "RESOURCE_EXHAUSTED" in error_text.upper():
+                    #if "api_key" in st.session_state:
+                        #del st.session_state.api_key
+                    #st.error("🚨 **Quota Exceeded!** The Gemini API key has hit its limit")
+                    #st.stop()
+                #elif "503" in error_text:
+                    #st.markdown("The Gemini AI model is currently experiencing high traffic. Please try again later.")
+                    #st.info("Meanwhile, try other non-AI features like GPA Calculator, Study Scheduler, etc.")
+                #else:
+                    #st.error(f"An API Error occurred: {e}")
             except Exception as e:
                 st.error(f"An Error occurred: {e}")
 
