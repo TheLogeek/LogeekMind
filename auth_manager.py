@@ -76,12 +76,12 @@ def sign_in_user(email, password):
 #AUTH_FILE = "auth.txt"
 
 def save_auth(email, password):
-    controller.set("auth_email", email)
-    controller.set("auth_password", password)
+    controller.set("logeekmind_auth_email", email)
+    controller.set("logeekmind_auth_password", password)
 
 def get_saved_auth():
-    email = controller.get("auth_email")
-    password = controller.get("auth_password")
+    email = controller.get("logeekmind_auth_email")
+    password = controller.get("logeekmind_auth_password")
     return email, password
 
 
@@ -103,7 +103,7 @@ def sign_out_user():
             del st.session_state[key]
 
     try:
-        controller.remove('auth_email')
-        controller.remove('auth_password')
+        controller.remove('logeekmind_auth_email')
+        controller.remove('logeekmind_auth_password')
     except:
         pass
