@@ -1,3 +1,5 @@
+[Getting Started](getting-started.md) [Technology Used](tech.md) [API Setup](api-setup.md) [Troubleshooting & FAQ](troubleshooting.md) [Privacy Policy](privacy.md) [Terms of Service](terms.md)
+
 # ✨ LogeekMind Features
 
 LogeekMind provides **10 powerful AI tools** to supercharge your academic journey.
@@ -69,5 +71,3 @@ Timed, graded, realistic exam environments that mimic real pressure.
 
 ---
 
-
-##[Go to homepage](index.md)
