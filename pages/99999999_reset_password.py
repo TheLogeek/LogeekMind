@@ -37,8 +37,8 @@ if st.button("Update Password"):
 
             url = f"{st.secrets['SUPABASE_URL']}/auth/v1/admin/users/reset-password"
             headers = {
-                "apikey": st.secrets["SUPABASE_KEY"],
-                "Authorization": f"Bearer {st.secrets['SUPABASE_KEY']}",
+                "apikey": st.secrets["SERVICE_KEY"],
+                "Authorization": f"Bearer {st.secrets['SERVICE_KEY']}",
                 "Content-Type": "application/json",
             }
             data = {"token": token, "password": new_password}
