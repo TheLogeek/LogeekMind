@@ -39,6 +39,18 @@ with tab1:
                 else:
                     st.error(f"Error: {msg}")
 
+    with st.form("forgot_pass_form"):
+        st.subheader("Reset Password")
+        reset_email = st.text_input("Enter your email: ")
+        send_reset = st.form_submit_button("Send Reset Link")
+
+        if send_reset:
+            try:
+                auth.supabase.auth.reset_password_for_email(reset_email)
+                st.success("A reset link has been sent to your email.")
+            except Exception as e:
+                st.error(str(e))
+
 #SIGN UP
 with tab2:
     with st.form("signup_form"):
