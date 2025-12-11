@@ -23,8 +23,6 @@ LogeekMind is built with a modern, scalable stack.
   - Multi-page merging  
   - Chapter spotting  
 
-No external paid AI API is used.
-
 ---
 
 ## 🔹 Frontend  
