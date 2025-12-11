@@ -204,6 +204,7 @@ st.markdown("---")
 st.header("🚀 Get Started")
 st.write("Use the **sidebar** to navigate all tools and features.")
 st.info("💡 **Tip:** You may be required to enter your Gemini API key in the sidebar to use AI features.")
+st.markdown("**[View the LogeekMind full documentation here](https://thelogeek.github.io/LogeekMind/)**")
 
 
 
