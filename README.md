@@ -10,7 +10,7 @@ LogeekMind is your all-in-one AI academic productivity platform and educational 
 
 [Use the LogeekMind web app (mobile phone, pc)](https://logeekmind.streamlit.app)
 
-[Download the LogeekMind Android app]()
+[Download the LogeekMind Android app](https://web2apkpro.com/public_download.php?project_id=5817&token=f40853c879)
 
 ### 🔑 Get Your Gemini API Key: [Read the full LogeekMind tutorial on how to get a Gemini API key](https://thelogeek.github.io/LogeekMind/api-setup.html)
 
