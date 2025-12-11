@@ -15,8 +15,7 @@ Download the [LogeekMind Android app](https://web2apkpro.com/public_download.php
 The app is a fast, lightweight WebView wrapper with:
 
 - Auto-login support  
-- File upload (PDF, images, audio)  
-- Full offline caching  
+- File upload (PDF, images, audio)
 - Native app feel  
 
 ---
