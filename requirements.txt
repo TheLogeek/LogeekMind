@@ -13,3 +13,6 @@ streamlit-autorefresh
 plotly
 matplotlib
 seaborn
+streamlit-cookies-controller
+nltk
+sumy

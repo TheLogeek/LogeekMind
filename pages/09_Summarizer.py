@@ -5,6 +5,10 @@ from io import BytesIO
 from docx import Document
 from utils import get_gemini_client
 import usage_manager as um
+from sumy.parsers.plaintext import PlaintextParser
+from sumy.nlp.tokenizers import Tokenizer
+from sumy.summarizers.text_rank import TextRankSummarizer
+import nltk
 
 model_name = "gemini-2.5-flash"
 

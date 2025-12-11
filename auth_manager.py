@@ -1,6 +1,7 @@
 import streamlit as st
 from supabase import create_client
-import time, os
+import time
+from streamlit_cookies_controller import CookieController
 
 
 # Connect to Supabase
@@ -12,6 +13,7 @@ def init_connection():
 
 
 supabase = init_connection()
+controller = CookieController()
 
 
 def check_username_availability(username):
@@ -71,24 +73,16 @@ def sign_in_user(email, password):
     except Exception as e:
         return False, str(e)
 
-AUTH_FILE = "auth.txt"
-
-def get_saved_auth():
-    if os.path.exists(AUTH_FILE):
-        with open(AUTH_FILE, "r") as f:
-            data = f.read().strip()
-            if data:
-                try:
-                    email, password = data.split("||")
-                    return email, password
-                except:
-                    return None, None
-    return None, None
-
+#AUTH_FILE = "auth.txt"
 
 def save_auth(email, password):
-    with open(AUTH_FILE, "w") as f:
-        f.write(f"{email}||{password}")
+    controller.set("auth_email", email)
+    controller.set("auth_password", password)
+
+def get_saved_auth():
+    email = controller.get("auth_email")
+    password = controller.get("auth_password")
+    return email, password
 
 
 def try_auto_login():
@@ -96,8 +90,7 @@ def try_auto_login():
     if saved_email and saved_password:
         success, msg = sign_in_user(saved_email, saved_password)
         if success:
-            st.success("Logged in automatically!")
-            time.sleep(1)
+            pass
         else:
             pass
 
@@ -109,5 +102,8 @@ def sign_out_user():
         if key in st.session_state:
             del st.session_state[key]
 
-    if os.path.exists(AUTH_FILE):
-        os.remove(AUTH_FILE)
+    try:
+        controller.remove('auth_email')
+        controller.remove('auth_password')
+    except:
+        pass
