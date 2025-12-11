@@ -37,6 +37,7 @@ LogeekMind combines AI + automation + smart workflows to remove the burden of st
 - [Features](features.md)
 - [Getting Started](getting-started.md)
 - [Technology Used](tech.md)
+- [API Setup](api-setup.md)
 - [Troubleshooting & FAQ](troubleshooting.md)
 - [Privacy Policy](privacy.md)
 - [Terms of Service](terms.md)
