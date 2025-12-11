@@ -1,9 +1,7 @@
 import streamlit as st
-from google.genai.errors import APIError
 from pypdf import PdfReader
 from io import BytesIO
 from docx import Document
-from utils import get_gemini_client
 import usage_manager as um
 from sumy.parsers.plaintext import PlaintextParser
 from sumy.nlp.tokenizers import Tokenizer
@@ -19,13 +17,9 @@ try:
     nltk.data.find("tokenizers/punkt_tab")
 except LookupError:
     nltk.download("punkt_tab")
-#model_name = "gemini-2.5-flash"
 
 st.title("📝 PDF/Notes Summarizer")
 st.markdown("Upload your document and instantly receive a summary of its key points.")
-
-#client = get_gemini_client()
-
 
 if "lecture_text" not in st.session_state:
     st.session_state.lecture_text = None
@@ -36,7 +30,6 @@ if "uploaded_file_name" not in st.session_state:
 
 
 def extract_text_from_uploaded_file(file):
-    """Extracts text from a streamlit uploaded file based on its extension."""
     file_name = file.name
     st.session_state.uploaded_file_name = file_name
 
@@ -61,22 +54,14 @@ def extract_text_from_uploaded_file(file):
         st.error("Unsupported file type. ")
         return None
 
-def summarize_text(lecture_text, sentence_count=10):
-    """Sends the text to Gemini for summarization
-    prompt = (
-        "Summarize the following lecture notes thoroughly. "
-        "Output the most important key points as a clear, **bolded** bulleted list, "
-        "and follow it with a one-paragraph summary overview. Use professional academic language. "
-        f"\n\n--- NOTES ---\n\n{lecture_text}"
-    )
-    response = client.models.generate_content(
-        model=model_name,
-        contents=[prompt]
-    )
-    return response.text
-    """
+def summarize_text(lecture_text):
+
     parser = PlaintextParser.from_string(lecture_text, Tokenizer("english"))
     summarizer = TextRankSummarizer()
+
+    total_sentences = len(parser.document.sentences)
+
+    sentence_count = max(10, int(total_sentences * 0.12))
 
     summary_sentences = summarizer(parser.document, sentence_count)
 
@@ -105,19 +90,6 @@ if st.session_state.lecture_text:
             try:
                 st.session_state.summary = summarize_text(st.session_state.lecture_text)
                 st.success("Summary Complete!")
-
-            #except APIError as e:
-                #error_text = str(e)
-                #if "429" in error_text or "RESOURCE_EXHAUSTED" in error_text.upper():
-                    #if "api_key" in st.session_state:
-                        #del st.session_state.api_key
-                    #st.error("🚨 **Quota Exceeded!** The Gemini API key has hit its limit")
-                    #st.stop()
-                #elif "503" in error_text:
-                    #st.markdown("The Gemini AI model is currently experiencing high traffic. Please try again later.")
-                    #st.info("Meanwhile, try other non-AI features like GPA Calculator, Study Scheduler, etc.")
-                #else:
-                    #st.error(f"An API Error occurred: {e}")
             except Exception as e:
                 st.error(f"An Error occurred: {e}")
 
