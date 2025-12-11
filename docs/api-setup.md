@@ -36,5 +36,3 @@ After creating your API key, you will see it displayed on the screen in the 'Key
 **Open LogeekMind, and expand the sidebar (the >>> button in the top left corner of the app) scroll down the the Gemini API key input bar,paste your API key and enjoy uninterrupted access on LogeekMind.**
 
 **LogeekMind does not store your API key, it's only saved temporarily for one-app session use, you will be prompted to enter your API key every time you open the application to access AI features.**
-
-##[Go to homepage](index.md)
