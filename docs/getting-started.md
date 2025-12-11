@@ -2,7 +2,7 @@
 
 ## ✔ Option 1: Use the Web Version
 Visit:  
-👉 https: //logeekmind.streamlit.app
+👉 [https: //logeekmind.streamlit.app](https: //logeekmind.streamlit.app)
 
 No installation needed.
 
@@ -10,8 +10,7 @@ No installation needed.
 
 ## ✔ Option 2: Install the Android App
 
-Download from APKPure:  
-👉 *[Insert your APKPure link]*
+Download the [LogeekMind Android app](https://web2apkpro.com/public_download.php?project_id=5817&token=f40853c879)
 
 The app is a fast, lightweight WebView wrapper with:
 
