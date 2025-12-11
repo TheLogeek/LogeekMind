@@ -1,3 +1,5 @@
+[Features](features.md) [Getting Started](getting-started.md) [API Setup](api-setup.md) [Troubleshooting & FAQ](troubleshooting.md) [Privacy Policy](privacy.md) [Terms of Service](terms.md)
+
 # 🛠️ Technology & Architecture
 
 LogeekMind is built with a modern, scalable stack.
