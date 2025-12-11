@@ -48,5 +48,4 @@ Once you sign in, LogeekMind remembers your session until:
 
 ---
 
-##[Go to homepage](index.md)
 
