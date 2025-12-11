@@ -1,4 +1,4 @@
-[Home](index.md) | [Features](features.md) | [Technology Used](tech.md) | [API Setup](api-setup.md) | [Troubleshooting & FAQ](troubleshooting.md) | [Privacy Policy](privacy.md) | [Terms of Service](terms.md)
+[Homepage](index.md) | [Features](features.md) | [Technology Used](tech.md) | [API Setup](api-setup.md) | [Troubleshooting & FAQ](troubleshooting.md) | [Privacy Policy](privacy.md) | [Terms of Service](terms.md)
 
 # 🚀 Getting Started
 
