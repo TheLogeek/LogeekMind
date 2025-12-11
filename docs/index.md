@@ -21,7 +21,7 @@ You can use LogeekMind on:
 
 - **Android App**
 - **Browser (PC or Phone)**  
-  👉 https: //logeekmind.streamlit.app
+  👉 [https://logeekmind.streamlit.app](https://logeekmind.streamlit.app)
 
 ---
 
@@ -29,6 +29,8 @@ You can use LogeekMind on:
 > *“Unlock academic superpowers, instantly.”*
 
 LogeekMind combines AI + automation + smart workflows to remove the burden of studying and let students focus on learning.
+
+Visit the LogeekMind landing page: [https://logeekmind.carrd.co](https://logeekmind.carrd.co)
 
 ---
 
