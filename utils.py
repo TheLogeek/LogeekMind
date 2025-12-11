@@ -65,7 +65,7 @@ def get_gemini_client():
 
             st.markdown(
                 "If you don't know how to get a Gemini API Key, "
-                "[**View the complete LogeekMind API Key Setup Guide here!**](https://github.com/TheLogeek/LogeekMind#getting-started)")
+                "[**View the complete LogeekMind API Key Setup Guide here!**](https://thelogeek.github.io/LogeekMind/api-setup.html)")
 
             if user_key:
                 if is_gemini_key_valid(user_key):
