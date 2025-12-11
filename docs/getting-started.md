@@ -2,7 +2,7 @@
 
 ## ✔ Option 1: Use the Web Version
 Visit:  
-👉 [https: //logeekmind.streamlit.app](https: //logeekmind.streamlit.app)
+👉 [https://logeekmind.streamlit.app](https://logeekmind.streamlit.app)
 
 No installation needed.
 
