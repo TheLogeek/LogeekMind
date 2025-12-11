@@ -1,3 +1,5 @@
+[Homepage](index.md) | [Features](features.md) | [Getting Started](getting-started.md) | [Technology Used](tech.md) | [API Setup](api-setup.md) | [Troubleshooting & FAQ](troubleshooting.md) | [Privacy Policy](privacy.md) | [Terms of Service](terms.md)
+
 To access **LogeekMind** AI features (AI Teacher, Homework Assistant, Course Outline Generator, Smart Quiz Generator, Notes Summarizer and Exam Simulator),you can use the app built-in shared key or enter your own key(having your own key ensures uninterrupted access to all AI features).
 
 1.  **Sign in to Google AI Studio:** 
