@@ -24,7 +24,7 @@ This includes:
 - Audio files you upload  
 - Transcribed text  
 - Chat prompts  
-- Quizzes, flashcards, notes, or summaries generated using the Service  
+- Quizzes, notes, or summaries generated using the Service  
 
 ### 2.2. Usage Data  
 This includes:
