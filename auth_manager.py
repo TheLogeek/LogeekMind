@@ -3,7 +3,6 @@ from supabase import create_client
 import time
 from streamlit_cookies_controller import CookieController
 
-
 # Connect to Supabase
 @st.cache_resource
 def init_connection():
@@ -75,26 +74,6 @@ def sign_in_user(email, password):
 
 #AUTH_FILE = "auth.txt"
 
-def save_auth(email, password):
-    controller.set("logeekmind_auth_email", email)
-    controller.set("logeekmind_auth_password", password)
-
-def get_saved_auth():
-    email = controller.get("logeekmind_auth_email")
-    password = controller.get("logeekmind_auth_password")
-    return email, password
-
-
-def try_auto_login():
-    saved_email, saved_password = get_saved_auth()
-    if saved_email and saved_password:
-        success, msg = sign_in_user(saved_email, saved_password)
-        if success:
-            pass
-        else:
-            pass
-
-
 def sign_out_user():
     supabase.auth.sign_out()
 
@@ -103,7 +82,7 @@ def sign_out_user():
             del st.session_state[key]
 
     try:
-        controller.remove('logeekmind_auth_email')
-        controller.remove('logeekmind_auth_password')
+        controller.remove('logeekmind_authn_email')
+        controller.remove('logeekmind_authn_password')
     except:
         pass

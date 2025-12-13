@@ -1,15 +1,18 @@
 import streamlit as st
 import auth_manager as auth
 import time
+from streamlit_cookies_controller import CookieController
 
 st.set_page_config(page_title="Login / Sign Up", page_icon="🔐", layout="wide")
 
 
 st.title("🔐 LogeekMind Access")
 
+controller = CookieController()
 
-
-#saved_email, saved_password = auth.get_saved_auth()
+def save_auth(email, password):
+    controller.set("logeekmind_authn_email", email)
+    controller.set("logeekmind_authn_password", password)
 
 tab1, tab2 = st.tabs(["Login", "Sign Up"])
 
@@ -31,7 +34,7 @@ with tab1:
                     st.success(msg)
                     if remember_me:
                         try:
-                            auth.save_auth(email, password)
+                            save_auth(email, password)
                         except:
                             pass
                     time.sleep(1)

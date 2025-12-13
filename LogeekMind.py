@@ -3,6 +3,7 @@ import streamlit as st
 import streamlit.components.v1 as components
 import auth_manager as auth
 from auth_manager import sign_out_user
+from streamlit_cookies_controller import CookieController
 
 st.set_page_config(
     page_title="LogeekMind: Your AI Academic Assistant",
@@ -105,9 +106,9 @@ css = """
 
 st.markdown(css, unsafe_allow_html=True)
 
-
-
 APP_VERSION = "1.5.1"
+
+controller = CookieController()
 
 # header 
 def render_auth_header():
@@ -143,8 +144,22 @@ def render_auth_header():
             if st.button("🔐 Login / Sign Up", type="primary", key="header_login_btn"):
                 st.switch_page("pages/00_login.py")
 
+def get_saved_auth():
+    email = controller.get("logeekmind_authn_email")
+    password = controller.get("logeekmind_authn_password")
+    return email, password
+
+def try_auto_login():
+    saved_email, saved_password = get_saved_auth()
+    if saved_email and saved_password:
+        success, msg = auth.sign_in_user(saved_email, saved_password)
+        if success:
+            pass
+        else:
+            pass
+
 if "user" not in st.session_state:
-    auth.try_auto_login()
+    try_auto_login()
 render_auth_header()
 
 
