@@ -1,58 +1,103 @@
 import streamlit as st
 
 PRIVACY_POLICY_CONTENT = """
-## LogeekMind Privacy Policy
-
-**(Effective Date: November 24, 2025)**
+# LogeekMind Privacy Policy  
+**Effective Date: November 24, 2025**
 
 ---
 
-### **1. Introduction & Contact Information**
+## 1. Introduction
 
-This Privacy Policy explains how LogeekMind, operated by **Solomon Adenuga**, collects, uses, and discloses information in connection with your use of our service ("LogeekMind" or the "Service").
+This Privacy Policy describes how **LogeekMind**, operated by **Solomon Adenuga**, collects, uses, and protects your information when you access or use the LogeekMind web application ("the Service").
 
-* **Operator:** Solomon Adenuga
-* **Contact:** solomonadenuga8@gmail.com
+**Contact:** solomonadenuga8@gmail.com
 
-By accessing or using the Service, you consent to the collection and use of your information as outlined in this policy.
+By using the Service, you agree to the practices described in this Privacy Policy.
 
-### **2. Information We Collect**
+---
 
-We collect information both when you register for an account (once implemented) and when you use the Service as an unregistered visitor.
+## 2. Information We Collect
 
-| Category | Description |
-| :--- | :--- |
-| **Submitted Content** | The lecture audio files, transcribed text, chat prompts, and any resulting quizzes, flashcards, or summaries you create. |
-| **Usage Data** | Your IP address, device type, operating system, browser type, pages viewed, time spent on the Service, and diagnostic data. |
-| **Account Information** | Once login is implemented, we will collect your email address and any other required registration details via our authentication provider, Supabase. |
+We collect information in two ways: (1) information you actively submit, and (2) information gathered automatically through usage.
 
-### **3. How We Use Your Information**
+### 2.1. Submitted Content
+This includes:
+- Audio files you upload  
+- Transcribed text  
+- Chat prompts  
+- Quizzes, flashcards, notes, or summaries generated using the Service  
 
-We use the collected information for the following purposes:
+### 2.2. Usage Data  
+This includes:
+- IP address  
+- Device and browser type  
+- Operating system  
+- Pages visited, time spent, and activity logs  
+- Diagnostic and crash data  
 
-* **To Provide the Service:** To process your audio/text and generate quizzes, summaries, and TTS responses (the core function of LogeekMind).
-* **Service Maintenance:** To monitor the usage of the Service, troubleshoot technical issues, and detect/prevent malicious activity.
-* **Abuse Monitoring:** To enforce our Terms of Service and comply with the usage policies of our third-party AI providers.
-* **Personalization:** To store your progress, quiz history, and preferences (once login is implemented).
+### 2.3. Account Information  
+(Only applies when login is enabled)  
+- Email address used for authentication  
+- Any additional registration information required by Supabase  
 
-### **4. Disclosure of Data to Third Parties (AI & Data Services)**
+---
 
-To fulfill your requests, we must share your **Submitted Content** with specialized third-party service providers.
+## 3. How Your Information Is Used
 
-* **AI Processing - Generative Model (Gemini):** Submitted text prompts are sent to the **Gemini API (via Google)** to generate personalized quizzes and summaries. Data shared with Google is subject to their usage policies, including potential retention for abuse monitoring.
-* **AI Processing - Speech-to-Text (Whisper):** Lecture audio files are sent to the **Whisper API (OpenAI or equivalent)** solely for transcription into text.
-* **Text-to-Speech (gTTS):** Text feedback is sent to gTTS to generate voice responses.
-* **Database & Authentication (Supabase):** User data, account credentials, and persistence data are stored and managed by **Supabase**.
+We use your information to:
+- Provide and improve the Service  
+- Generate quizzes, summaries, transcripts, and similar features  
+- Maintain system performance and prevent abuse  
+- Personalize your experience, such as saving your progress (when logged in)  
+- Monitor security and comply with legal obligations  
 
-**Crucial Notice:** You acknowledge that by submitting content for processing, you authorize LogeekMind to share this content with these third parties solely for the purpose of delivering the Service.
+---
 
-### **5. Data Security and Retention**
+## 4. Sharing of Data with Third Parties
 
-We employ industry-standard security measures (e.g., HTTPS encryption) to protect your data. We retain Submitted Content and Usage Data only for as long as necessary to provide the Service, maintain our business operations, and comply with legal obligations.
+To deliver core features, your Submitted Content may be shared *only* with trusted third-party providers:
 
-### **6. Your Privacy Rights**
+### 4.1. AI Processing
+- **Gemini API (Google)** → for text generation (quizzes, summaries, explanations)  
+- **Whisper API (OpenAI)** → for audio-to-text transcription  
+- **gTTS** → for generating voice output  
 
-You have the right to request access to, correction of, or deletion of your personal data. Please submit any such requests to our contact email provided above.
+### 4.2. Storage & Authentication
+- **Supabase** → stores your account data and optional saved content  
+
+**Important:**  
+By using the Service, you consent to your Submitted Content being transmitted to these third-party services **solely** to fulfill your requests.
+
+---
+
+## 5. Data Security & Retention
+
+- All data is transmitted over **encrypted HTTPS connections**  
+- Submitted Content is stored only as long as necessary to provide the Service  
+- Account data is retained while your account remains active  
+- We periodically delete old or inactive temporary processing files  
+
+---
+
+## 6. Your Rights
+
+You may request:
+- Access to your data  
+- Correction of inaccurate data  
+- Deletion of your data  
+
+To exercise these rights, contact: **solomonadenuga8@gmail.com**
+
+---
+
+## 7. Changes to This Policy
+
+We may update this Privacy Policy as the Service evolves. Continued use of LogeekMind after updates constitutes acceptance of the new terms.
+
+---
+
+If you have questions about your privacy, please reach out to us at the email above.
+
 
 """
 

@@ -52,17 +52,7 @@ def log_usage(user_id, user_name, feature_name, action, metadata=None):
 
 
 def log_performance(user_id, feature, score, total_questions, correct_answers, extra=None):
-    """
-    Logs a user's performance on a feature into the performance_log table.
-
-    Args:
-        user_id (str): The user's unique ID.
-        feature (str): Name of the feature used (e.g., "Quiz Generator", "Exam Simulator").
-        score (int): The score achieved.
-        total_questions (int): Total number of questions in the session.
-        correct_answers (int): Number of correct answers.
-        extra (dict, optional): Any extra data to store.
-    """
+   
     supabase.table("performance_log").insert({
         "user_id": user_id,
         "feature": feature,
