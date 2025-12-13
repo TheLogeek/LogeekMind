@@ -151,7 +151,7 @@ def render_auth_header():
 
 def try_auto_login():
     saved_email = controller.get("logeekmind_authn_email")
-    saved_password = controller.get("logeekmind_authn_passwors")
+    saved_password = controller.get("logeekmind_authn_password")
     if saved_email and saved_password:
         success, msg = auth.sign_in_user(saved_email, saved_password)
         if success:
