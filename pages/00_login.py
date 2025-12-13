@@ -33,10 +33,10 @@ with tab1:
                 if success:
                     st.success(msg)
                     if remember_me:
-                        #try:
+                        try:
                             save_auth(email, password)
-                        #except:
-                            #pass
+                        except:
+                            pass
                     time.sleep(1)
                     st.switch_page("LogeekMind.py")
                 else:
