@@ -153,10 +153,10 @@ def try_auto_login():
     saved_email, saved_password = get_saved_auth()
     if saved_email and saved_password:
         success, msg = auth.sign_in_user(saved_email, saved_password)
-        if success:
-            pass
-        else:
-            pass
+        #if success:
+            #pass
+        #else:
+            #pass
 
 if "user" not in st.session_state:
     try_auto_login()
