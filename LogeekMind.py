@@ -159,8 +159,8 @@ def try_auto_login():
         else:
             pass
 
-if "user" not in st.session_state:
-    try_auto_login()
+#if "user" not in st.session_state:
+    #try_auto_login()
 render_auth_header()
 
 
