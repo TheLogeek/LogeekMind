@@ -144,13 +144,14 @@ def render_auth_header():
             if st.button("🔐 Login / Sign Up", type="primary", key="header_login_btn"):
                 st.switch_page("pages/00_login.py")
 
-def get_saved_auth():
-    email = controller.get("logeekmind_authn_email")
-    password = controller.get("logeekmind_authn_password")
-    return email, password
+#def get_saved_auth():
+    #email = controller.get("logeekmind_authn_email")
+    #password = controller.get("logeekmind_authn_password")
+    #return email, password
 
 def try_auto_login():
-    saved_email, saved_password = get_saved_auth()
+    saved_email = controller.get("logeekmind_authn_email")
+    saved_password = controller.get("logeekmind_authn_password")
     if saved_email and saved_password:
         success, msg = auth.sign_in_user(saved_email, saved_password)
         if success:
@@ -158,8 +159,8 @@ def try_auto_login():
         else:
             pass
 
-if "user" not in st.session_state:
-    try_auto_login()
+#if "user" not in st.session_state:
+    #try_auto_login()
 render_auth_header()
 
 
