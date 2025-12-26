@@ -1,51 +1,69 @@
-[Homepage](index.md) | [Features](features.md) | [Technology Used](tech.md) | [API Setup](api-setup.md) | [Troubleshooting & FAQ](troubleshooting.md) | [Privacy Policy](privacy.md) | [Terms of Service](terms.md)
+[Homepage](index.md) | [Features](features.md) | [Technology Used](tech.md) | [API Setup](api-setup.md) | [Troubleshooting & FAQ](troubleshooting.md)
 
-# 🚀 Getting Started
+# 🚀 Getting Started with LogeekMind v2.0
 
-## ✔ Option 1: Use the Web Version
-Visit:  
-👉 [https://logeekmind.streamlit.app](https://logeekmind.streamlit.app)
+LogeekMind has been rebuilt with a modern, scalable architecture. The frontend is now a Next.js application, and it communicates with a separate Python backend.
 
-No installation needed.
-
----
-
-## ✔ Option 2: Install the Android App
-
-Download the [LogeekMind Android app](https://web2apkpro.com/public_download.php?project_id=5817&token=f40853c879)
-
-The app is a fast, lightweight WebView wrapper with:
-
-- Auto-login support  
-- File upload (PDF, images, audio)
-- Native app feel  
+## Architecture Overview
+- **Frontend:** A [Next.js](https://nextjs.org/) and [React](https://reactjs.org/) application.
+- **Backend:** A Python server (using [FastAPI](https://fastapi.tiangolo.com/)) that handles all AI processing and business logic.
+- **Database & Auth:** [Supabase](https://supabase.com/) is used for user authentication and database storage.
 
 ---
 
-## ✔ Creating an Account
+## 🛠️ Local Development Setup
 
-1. Open LogeekMind  
-2. Go to **Login / Sign Up**  
-3. Enter email, password, and a unique username  
-4. Accept Terms of Service  
-5. You're in!
+To run LogeekMind locally, you need to run both the backend and frontend servers.
 
----
+### 1. Backend Setup
 
-## ✔ Auto Login  
-Once you sign in, LogeekMind remembers your session until:
+First, get the Python backend server running.
 
-- You log out  
-- Your Supabase session expires  
-- You clear app data  
+1.  **Navigate to the backend directory:**
+    ```sh
+    # Assuming you are in the root 'LogeekMind_2.0' directory
+    cd backend
+    ```
+2.  **Create and activate a virtual environment:**
+    ```sh
+    python -m venv venv
+    # On Windows:
+    .\venv\Scripts\activate
+    # On macOS/Linux:
+    source venv/bin/activate
+    ```
+3.  **Install requirements:**
+    ```sh
+    pip install -r requirements.txt
+    ```
+4.  **Run the server:**
+    ```sh
+    uvicorn main:app --reload
+    ```
+    The backend should now be running at `http://127.0.0.1:8000`.
 
----
+### 2. Frontend Setup
 
-## ✔ Required Permissions  
-- File access (for uploads)  
-- Storage (for text/audio conversions)  
-- Network (AI features)
+With the backend running, set up the Next.js frontend in a **new terminal window**.
 
----
+1.  **Navigate to the frontend directory:**
+    ```sh
+    # Assuming you are in the root 'LogeekMind_2.0' directory
+    cd frontend
+    ```
+2.  **Install dependencies:**
+    ```sh
+    npm install
+    ```
+3.  **Environment Variables:** For authentication to work, you must create a file named `.env.local` in the `frontend` directory and add your Supabase keys.
+    ```
+    # LogeekMind_2.0/frontend/.env.local
 
-
+    NEXT_PUBLIC_SUPABASE_URL=YOUR_SUPABASE_URL
+    NEXT_PUBLIC_SUPABASE_ANON_KEY=YOUR_SUPABASE_ANON_KEY
+    ```
+4.  **Run the app:**
+    ```sh
+    npm run dev
+    ```
+    Open [http://localhost:3000](http://localhost:3000) in your browser to see the application.

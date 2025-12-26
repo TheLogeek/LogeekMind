@@ -1,40 +1,44 @@
-[Homepage](index.md) | [Features](features.md) | [Getting Started](getting-started.md) | [Technology Used](tech.md) | [API Setup](api-setup.md) | [Troubleshooting & FAQ](troubleshooting.md) | [Privacy Policy](privacy.md) | [Terms of Service](terms.md)
+[Homepage](index.md) | [Features](features.md) | [Getting Started](getting-started.md) | [Technology Used](tech.md) | [Troubleshooting & FAQ](troubleshooting.md)
 
-To access **LogeekMind** AI features (AI Teacher, Homework Assistant, Course Outline Generator, Smart Quiz Generator, Notes Summarizer and Exam Simulator),you can use the app built-in shared key or enter your own key(having your own key ensures uninterrupted access to all AI features).
+# 🔑 API Key Setup (v2.0)
 
-1.  **Sign in to Google AI Studio:** 
+LogeekMind integrates with several services that require API keys to function. This guide explains how they are configured.
 
-Visit the [Google AI Studio](https://aistudio.google.com/welcome).Use your Google account to sign in. If you don't have one, you will need to create it. Click on the Get started option to log in or sign up
+---
 
-![Sign in](screenshots/gemini_screenshot1.jpg)
+## Service-Side Keys (Admin Setup)
 
-Once you are signed in, you will see the main dashboard.
- 
-2.  **API Keys Section:** 
+For the application to run, the backend server needs keys for Supabase and the AI models (Gemini, Whisper, etc.). These are configured as environment variables on the server where the Python backend is deployed.
 
-After signing in,look for the API Keys option in the dashboard. Click on **'Get API Key'** option.
+-   `SUPABASE_URL`: Your Supabase project URL.
+-   `SUPABASE_KEY`: Your Supabase service role key.
+-   `GEMINI_API_KEY`: Your default Google Gemini API key for AI features.
+-   `OPENAI_API_KEY`: Your OpenAI API key for Whisper transcription.
 
-![API Keys Section](screenshots/gemini_screenshot2.jpg)
+These are **not** exposed to the frontend.
 
-3.  **Create a New Project:** 
+---
 
-On the API Key management page,there's a button that says **"Create API Key"**. Click on it and click on "+Create project" in the dropdown menu that says 'Choose an imported project', give it a name and hit 'Create project'. You should see it in a dropdown list
+## User-Provided Gemini Key (Optional)
 
-![Create a New Project](screenshots/gemini_screenshot3.jpg)
+For AI-powered features like the AI Teacher, Smart Quiz, and Summarizer, the application can use a globally configured Gemini API key (set up by the admin).
 
-4. **Create Gemini API Key:**
+However, to ensure uninterrupted access and avoid hitting shared usage limits, users have the option to provide their own Gemini API key directly in the user interface.
 
-Select the project name from the drop-down list and give your api key a name.Then hit the 'Create Key' button. Google will instantly generate a new key for your project. The key is a long string of letters, numbers, and symbols.
+### How it Works
 
-![Create Key](screenshots/gemini_screenshot4.jpg)
+-   When you use an AI feature, you will see an input field labeled **"Your Gemini API Key (Optional)"**.
+-   If you provide your own key, your request to the AI will be processed using your key instead of the shared one.
+-   This key is stored temporarily in your browser's session or local storage for convenience. It is **never** saved on our servers.
 
-5. **Copy your API Key and store it securely**
+### How to Get Your Own Gemini API Key
 
-After creating your API key, you will see it displayed on the screen in the 'Key' columnn. It looks like a long mix of letters, numbers, and symbols. Copy and store this key somewhere safe so anytime you are prompted by the application to enter your key, you can simply copy and paste this key into the **"API Key Setup"** section in the app's sidebar.
+You can follow these steps to get a free Gemini API key from Google AI Studio.
 
+1.  **Go to Google AI Studio:** Visit [aistudio.google.com](https://aistudio.google.com).
+2.  **Get API Key:** Click the "**Get API Key**" button.
+3.  **Create a New Project:** You may need to create a new Google Cloud project to associate with your key.
+4.  **Generate & Copy:** Create and copy your new API key.
+5.  **Paste into LogeekMind:** Paste this key into the input field when using an AI feature in the app.
 
-![Copy your Key](screenshots/gemini_screenshot5.jpg)
-
-**Open LogeekMind, and expand the sidebar (the >>> button in the top left corner of the app) scroll down the the Gemini API key input bar,paste your API key and enjoy uninterrupted access on LogeekMind.**
-
-**LogeekMind does not store your API key, it's only saved temporarily for one-app session use, you will be prompted to enter your API key every time you open the application to access AI features.**
+This gives you direct, personal access to the AI models without relying on a shared key.

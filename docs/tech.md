@@ -1,46 +1,56 @@
-[Homepage](index.md) | [Features](features.md) | [Getting Started](getting-started.md) | [API Setup](api-setup.md) | [Troubleshooting & FAQ](troubleshooting.md) | [Privacy Policy](privacy.md) | [Terms of Service](terms.md)
+[Homepage](index.md) | [Features](features.md) | [Getting Started](getting-started.md) | [API Setup](api-setup.md) | [Troubleshooting & FAQ](troubleshooting.md)
 
-# 🛠️ Technology & Architecture
+# 🛠️ Technology & Architecture (v2.0)
 
-LogeekMind is built with a modern, scalable stack.
-
----
-
-## 🔹 Backend & Database  
-- **Supabase**  
-  - Authentication  
-  - Profiles table  
-  - Realtime features  
-  - Secure user data  
+LogeekMind v2.0 has been re-architected with a decoupled frontend and backend for better performance, scalability, and developer experience.
 
 ---
 
-## 🔹 AI & NLP Engine  
+## Frontend
 
-### **Summarizer Engine (Updated)**
-- **NLTK** – Tokenization, sentence ranking  
-- **Sumy** – LexRank / LSA summarization  
-- Custom heuristics for:
-  - Key point extraction  
-  - Multi-page merging  
-  - Chapter spotting  
+The entire frontend is built with modern web technologies, providing a fast, responsive, and interactive user experience.
 
----
-
-## 🔹 Frontend  
-- **Streamlit Multipage App**  
-- Custom CSS animations  
-- PWA support  
-- Native-like UI components  
+-   **Framework:** [Next.js](https://nextjs.org/) (with App Router)
+-   **Language:** [TypeScript](https://www.typescriptlang.org/)
+-   **UI Library:** [React](https://reactjs.org/)
+-   **Styling:** CSS Modules
+-   **Progressive Web App (PWA):** Enabled via `next-pwa` for an installable, app-like experience.
 
 ---
 
-## 🔹 Android App  
-- Wrapped using Web2APK  
-- Supports:
-  - File uploads
-  - Camera access
-  - Downloads
-  - App splash screen
-  - Auto-login friendly
+## Backend
 
+The backend is a robust Python server that handles all business logic, AI processing, and communication with third-party services.
+
+-   **Framework:** [FastAPI](https://fastapi.tiangolo.com/) (Assumed)
+-   **Language:** Python
+-   **Function:** Serves a REST API that the Next.js frontend consumes. It manages all interactions with AI models and the database.
+
+---
+
+## 🔹 Database & Authentication
+
+User management and data storage are handled by Supabase.
+
+-   **Service:** [Supabase](https://supabase.io/)
+-   **Features Used:**
+    -   **Authentication:** Manages user sign-up, sign-in, and password resets via JWT.
+    -   **Database:** PostgreSQL database for storing user profiles, usage logs, and other application data.
+
+---
+
+## 🔹 AI & Third-Party Services
+
+LogeekMind integrates with several best-in-class AI services to power its features.
+
+-   **Text Generation (AI Teacher, Quizzes, etc.):** Google's Gemini API
+-   **Audio Transcription (Audio-to-Text):** OpenAI's Whisper API
+-   **Text-to-Speech (Notes-to-Audio):** gTTS (Google Text-to-Speech)
+
+---
+
+## 🚀 Deployment
+
+-   **Frontend (Next.js):** Deployed on [Vercel](https://vercel.com/) for optimal performance and CI/CD.
+-   **Backend (Python):** Can be deployed on any service that supports Python servers, such as Render, Heroku, or a cloud VM.
+-   **Database (Supabase):** Managed cloud platform.
