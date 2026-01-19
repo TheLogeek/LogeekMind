@@ -81,6 +81,17 @@ Follow this unless the user requests a different style.
 st.title("🧠 Your AI Teacher")
 st.markdown("Struggling with a topic? Tell me the subject and topic, and I'll explain it simply!")
 
+st.warning(
+    """
+    **LogeekMind 2.0 is Here! 🎉**
+
+    This version of LogeekMind is no longer being actively updated. For a faster, more powerful, and feature-rich experience, please use the new and improved **LogeekMind 2.0**.
+
+    **[👉 Click here to launch LogeekMind 2.0](https://logeekmind.vercel.app)**
+    """,
+    icon="🚀"
+)
+
 client = get_gemini_client()
 
 if "messages" not in st.session_state:

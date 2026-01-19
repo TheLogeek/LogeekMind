@@ -25,6 +25,17 @@ if 'exam_score' not in st.session_state:
 st.set_page_config(page_title="Exam Simulator", layout="wide")
 st.title("🔥 Exam Simulator")
 
+st.warning(
+    """
+    **LogeekMind 2.0 is Here! 🎉**
+
+    This version of LogeekMind is no longer being actively updated. For a faster, more powerful, and feature-rich experience, please use the new and improved **LogeekMind 2.0**.
+
+    **[👉 Click here to launch LogeekMind 2.0](https://logeekmind.vercel.app)**
+    """,
+    icon="🚀"
+)
+
 def _save_radio_answer(idx):
     key = f"q_{idx}"
     st.session_state["exam_answers"][str(idx)] = st.session_state.get(key)

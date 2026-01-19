@@ -11,6 +11,17 @@ model_name = "gemini-2.5-flash"
 st.title("📸 Homework Assistant")
 st.markdown("Upload a picture of your homework problem and get a step-by-step, downloadable solution.")
 
+st.warning(
+    """
+    **LogeekMind 2.0 is Here! 🎉**
+
+    This version of LogeekMind is no longer being actively updated. For a faster, more powerful, and feature-rich experience, please use the new and improved **LogeekMind 2.0**.
+
+    **[👉 Click here to launch LogeekMind 2.0](https://logeekmind.vercel.app)**
+    """,
+    icon="🚀"
+)
+
 client = get_gemini_client()
 
 

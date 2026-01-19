@@ -1,120 +1,125 @@
 import streamlit as st
 import pandas as pd
-import random
+import datetime
+from google.genai.errors import APIError
+from utils import get_gemini_client
 import usage_manager as um
 
-st.title("📅Study Scheduler")
-st.markdown("Create a structured daily or weekly study plan by listing your subjects and estimated time needs.")
+model_name = "gemini-2.5-flash"
 
-if 'subjects' not in st.session_state:
-    st.session_state.subjects = [
-        {'name': 'Math', 'priority': 3, 'time_hr': 2.0},
-        {'name': 'English', 'priority': 2, 'time_hr': 1.5},
-    ]
+st.title("Study Schedule Generator 🗓️")
+st.markdown("Create a personalized study plan for any exam or course.")
 
-def add_subject():
-    st.session_state.subjects.append({'name': '', 'priority': 1, 'time_hr': 1.0})
+st.warning(
+    """
+    **LogeekMind 2.0 is Here! 🎉**
 
-def generate_schedule():
-    valid_subjects = [s for s in st.session_state.subjects if s['name'].strip() != '']
+    This version of LogeekMind is no longer being actively updated. For a faster, more powerful, and feature-rich experience, please use the new and improved **LogeekMind 2.0**.
 
-    schedule_data = []
+    **[👉 Click here to launch LogeekMind 2.0](https://logeekmind.vercel.app)**
+    """,
+    icon="🚀"
+)
 
-    if not valid_subjects:
-        st.error("Please add at least one subject to generate a study schedule.")
-        return None
+client = get_gemini_client()
 
-    total_time_needed = sum(s['time_hr'] for s in valid_subjects)
 
-    DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
-    study_blocks = []
+if "schedule" not in st.session_state:
+    st.session_state.schedule = None
+if "schedule_filename" not in st.session_state:
+    st.session_state.schedule_filename = None
 
-    for subject in valid_subjects:
-        block_count = int(subject['time_hr'] * 2)
 
-        weighted_count = block_count * subject['priority']
-        study_blocks.extend([subject['name']] * weighted_count)
+with st.form("study_schedule_form"):
+    st.subheader("Study Plan Details")
+    col1, col2 = st.columns(2)
+    with col1:
+        course_name = st.text_input("Course Name", placeholder="e.g., Data Structures and Algorithms")
+        exam_date = st.date_input("Exam Date", datetime.date.today() + datetime.timedelta(days=7))
+    with col2:
+        study_duration_hours = st.slider("Daily Study Hours", 1, 8, 2)
+        study_days = st.multiselect(
+            "Preferred Study Days",
+            ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
+            default=["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
+        )
+    study_topics = st.text_area("Key Topics to Cover (comma-separated)",
+                                placeholder="e.g., Linked Lists, Trees, Graphs, Sorting Algorithms")
 
-    random.shuffle(study_blocks)
+    submitted = st.form_submit_button("Generate Study Schedule", type="primary")
 
-    schedule = {day: [] for  day in DAYS}
-    day_index = 0
-
-    for block in study_blocks:
-        day = DAYS[day_index % 7]
-        schedule[day].append(block)
-        day_index += 1
-
-    schedule_data = []
-
-    for day, subjects_list in schedule.items():
-        daily_subjects = {}
-
-        for subject_name in subjects_list:
-            daily_subjects[subject_name] = daily_subjects.get(subject_name, 0) + 1
-
-        plan_summary = []
-        for subject, block_count in daily_subjects.items():
-            total_minutes = block_count * 30
-
-            hours = total_minutes // 60
-            minutes = total_minutes % 60
-
-            time_str = ""
-            if hours > 0:
-                time_str += f"{hours}hours "
-            if minutes > 0:
-                time_str += f"{minutes}minutes"
-
-            if not time_str:
-                continue
-
-            plan_summary.append(f"{subject} ({time_str.strip()})")
-
-        schedule_data.append({
-            'Day': day,
-            'Study Plan': ', '.join(plan_summary)
-        })
-
-    schedule_df = pd.DataFrame(schedule_data)
-
-    st.metric(
-        label="Total Weekly Study Time Allocated",
-        value=f"{total_time_needed:.1f} Hours",
-        delta=f"Based on {len(valid_subjects)} subjects."
-    )
-
-    return schedule_df
-
-st.subheader("📚Subject Input")
-
-cols = st.columns([3, 1.5, 1.5])
-cols[0].write("Subject Name")
-cols[1].write("Priority (1-5)")
-cols[2].write("Time/Week (Hours)")
-
-for i, subject in enumerate(st.session_state.subjects):
-    c1, c2, c3 = st.columns([3, 1.5, 1.5])
-
-    subject['name'] = c1.text_input("Name", value=subject['name'], label_visibility="collapsed", key=f"sub_name_{i}")
-    subject['priority'] = c2.number_input("Priority", min_value=1, max_value=5, value=subject['priority'], step=1,
-                                          label_visibility="collapsed", key=f"sub_priority_{i}")
-    subject['time_hr'] = c3.number_input("Time", min_value=0.5, value=subject['time_hr'], step=0.5, format="%.1f",
-                                         label_visibility="collapsed", key=f"sub_time_{i}")
-
-st.button("➕Add Subject", on_click=add_subject)
-st.divider()
-
-if st.button("Generate Study Schedule", type="primary"):
-    if not um.check_guest_limit("Study Scheduler", limit=5):
-        login_link = st.page_link("pages/00_login.py", label="Login/Signup", icon="🔑")
+if submitted:
+    if not course_name or not study_topics:
+        st.error("Please fill in Course Name and Key Topics.")
         st.stop()
-    schedule_df = generate_schedule()
-    if schedule_df is not None:
-        st.header("📅Your Weekly Study plan")
-        st.dataframe(schedule_df, width='stretch', hide_index=True)
-        st.success("Your schedule has been generated! Rememeber, this is a suggestion, feel free to adjust.")
-        if "user" in st.session_state:
-            auth_user_id = st.session_state.user.id
-            username = st.session_state.user_profile.get("username", "Scholar")
-            um.log_usage(auth_user_id, username, "Study Scheduler", "generated", {"topic": 'N/A'})
+
+    if not um.check_guest_limit("Study Schedule Generator", limit=1):
+        st.page_link("pages/00_login.py", label="Login/Signup", icon="🔑")
+        st.stop()
+
+    prompt = f"""
+    You are an expert academic planner. Create a detailed study schedule for the course: "{course_name}".
+    The exam is on {exam_date}.
+    The student can study for {study_duration_hours} hours per day on {", ".join(study_days)}.
+    Key topics to cover: {study_topics}.
+
+    Generate a day-by-day study plan, including specific topics, tasks, and estimated times.
+    The output should be in Markdown format, using a table for the schedule.
+    """
+
+    with st.spinner("Crafting your personalized study schedule..."):
+        try:
+            response = client.models.generate_content(
+                model=model_name,
+                contents=[prompt]
+            )
+
+            schedule_text = response.text
+            st.session_state.schedule = schedule_text
+            st.session_state.schedule_filename = f"{course_name.replace(' ', '_')}_Study_Schedule.txt"
+
+            if "user" in st.session_state:
+                auth_user_id = st.session_state.user.id
+                username = st.session_state.user_profile.get("username", "Scholar")
+                um.log_usage(auth_user_id, username, "Study Schedule Generator", "generated", {"course": course_name})
+
+
+        except APIError as e:
+            msg = str(e)
+            if "429" in msg or "RESOURCE_EXHAUSTED" in msg.upper():
+                if "api_key" in st.session_state:
+                    del st.session_state.api_key
+                st.error("🚨 **Quota Exceeded!** The Gemini API key has hit its limit.")
+                st.stop()
+            elif "503" in msg:
+                st.warning("The Gemini AI model is currently experiencing high traffic. Please try again later.")
+            else:
+                st.error(f"API Error: {e}")
+        except Exception as e:
+            st.error(f"Unexpected Error: {e}")
+
+if st.session_state.schedule is not None:
+    st.subheader("Your Study Schedule")
+    st.markdown(st.session_state.schedule)
+
+    if um.premium_gate("Download Study Schedule"):
+        download_clicked = st.download_button(
+            label="⬇ Download Schedule as TXT",
+            data=st.session_state.schedule.encode("utf-8"),
+            file_name=st.session_state.schedule_filename,
+            mime="text/plain"
+        )
+        if download_clicked:
+            del st.session_state.schedule
+            del st.session_state.schedule_filename
+            st.rerun()
+    else:
+        st.info("Creating an account is free and saves your progress!")
+        st.page_link("pages/00_login.py", label="Login/Signup", icon="🔑")
+
+
+st.markdown("---")
+if st.button("🆕 Generate New Schedule"):
+    st.session_state.schedule = None
+    st.session_state.schedule_filename = None
+    st.rerun()

@@ -163,7 +163,16 @@ def try_auto_login():
     #try_auto_login()
 render_auth_header()
 
+st.warning(
+    """
+    **LogeekMind 2.0 is Here! 🎉**
 
+    This version of LogeekMind is no longer being actively updated. For a faster, more powerful, and feature-rich experience, please use the new and improved **LogeekMind 2.0**.
+
+    **[👉 Click here to launch LogeekMind 2.0](https://logeekmind.vercel.app)**
+    """,
+    icon="🚀"
+)
 
 st.markdown("### ✨ What you can do with LogeekMind")
 st.write("Explore powerful tools designed to supercharge your learning.")

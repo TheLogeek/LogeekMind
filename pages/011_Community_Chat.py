@@ -202,6 +202,17 @@ def display_messages(group_name: str, current_user: Optional[str]):
 # APP LAYOUT / SIDEBAR
 st.title("LogeekMind Community Chat 💬")
 
+st.warning(
+    """
+    **LogeekMind 2.0 is Here! 🎉**
+
+    This version of LogeekMind is no longer being actively updated. For a faster, more powerful, and feature-rich experience, please use the new and improved **LogeekMind 2.0**.
+
+    **[👉 Click here to launch LogeekMind 2.0](https://logeekmind.vercel.app)**
+    """,
+    icon="🚀"
+)
+
 with st.sidebar:
     st.write("### Chat Settings")
     current_username = get_current_username()

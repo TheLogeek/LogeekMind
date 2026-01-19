@@ -12,6 +12,17 @@ def load_whisper_model():
 st.title("🎧 Lecture Audio-to-Text Converter & Document Generator")
 st.markdown("Upload a lecture audio file to transcribe it and download the text as a .txt.")
 
+st.warning(
+    """
+    **LogeekMind 2.0 is Here! 🎉**
+
+    This version of LogeekMind is no longer being actively updated. For a faster, more powerful, and feature-rich experience, please use the new and improved **LogeekMind 2.0**.
+
+    **[👉 Click here to launch LogeekMind 2.0](https://logeekmind.vercel.app)**
+    """,
+    icon="🚀"
+)
+
 model = load_whisper_model()
 st.success("STT model loaded successfully! Ready for audio")
 

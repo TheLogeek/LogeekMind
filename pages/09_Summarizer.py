@@ -21,6 +21,17 @@ except LookupError:
 st.title("📝 PDF/Notes Summarizer")
 st.markdown("Upload your document and instantly receive a summary of its key points.")
 
+st.warning(
+    """
+    **LogeekMind 2.0 is Here! 🎉**
+
+    This version of LogeekMind is no longer being actively updated. For a faster, more powerful, and feature-rich experience, please use the new and improved **LogeekMind 2.0**.
+
+    **[👉 Click here to launch LogeekMind 2.0](https://logeekmind.vercel.app)**
+    """,
+    icon="🚀"
+)
+
 if "lecture_text" not in st.session_state:
     st.session_state.lecture_text = None
 if "summary" not in st.session_state:

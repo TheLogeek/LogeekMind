@@ -21,6 +21,17 @@ client = get_gemini_client()
 st.title("❓ Smart Quiz Generator")
 st.markdown("Generate interactive quizzes with instant grading and explanations.")
 
+st.warning(
+    """
+    **LogeekMind 2.0 is Here! 🎉**
+
+    This version of LogeekMind is no longer being actively updated. For a faster, more powerful, and feature-rich experience, please use the new and improved **LogeekMind 2.0**.
+
+    **[👉 Click here to launch LogeekMind 2.0](https://logeekmind.vercel.app)**
+    """,
+    icon="🚀"
+)
+
 with st.form("quiz_generator_form"):
     quiz_topic = st.text_input("Topic to Quiz on", placeholder="e.g., Newton's Laws of Motion")
     num_questions = st.selectbox("Number of Questions", options=[5, 10, 15], index=0)

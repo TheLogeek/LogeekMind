@@ -11,6 +11,17 @@ import usage_manager as um
 st.title("Lecture Notes-to-Audio Converter 📢")
 st.markdown("Convert your notes into an MP3 lecture instantly!")
 
+st.warning(
+    """
+    **LogeekMind 2.0 is Here! 🎉**
+
+    This version of LogeekMind is no longer being actively updated. For a faster, more powerful, and feature-rich experience, please use the new and improved **LogeekMind 2.0**.
+
+    **[👉 Click here to launch LogeekMind 2.0](https://logeekmind.vercel.app)**
+    """,
+    icon="🚀"
+)
+
 if "audio_data" not in st.session_state:
     st.session_state.audio_data = None
 if "audio_filename" not in st.session_state:
