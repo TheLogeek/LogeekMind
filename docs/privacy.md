@@ -86,7 +86,7 @@ You may request:
 - Correction of inaccurate data  
 - Deletion of your data  
 
-To exercise these rights, contact: **solomonadenuga8@gmail.com**
+To exercise these rights, contact: **logeekmind@gmail.com**
 
 ---
 
