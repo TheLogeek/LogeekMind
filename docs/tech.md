@@ -53,5 +53,5 @@ LogeekMind integrates with several best-in-class AI services to power its featur
 ## 🚀 Deployment
 
 -   **Frontend (Next.js):** Deployed on [Vercel](https://vercel.com/) for optimal performance and CI/CD.
--   **Backend (Python):** Can be deployed on any service that supports Python servers, such as Render, Heroku, or a cloud VM.
+-   **Backend (Python):** Render
 -   **Database (Supabase):** Managed cloud platform.
