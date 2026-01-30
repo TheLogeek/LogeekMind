@@ -57,9 +57,10 @@ We use your information to:
 To deliver core features, your Submitted Content may be shared *only* with trusted third-party providers:
 
 ### 4.1. AI Processing
-- **Gemini API (Google)** → for text generation (quizzes, summaries, explanations)  
-- **Whisper API (OpenAI)** → for audio-to-text transcription  
-- **gTTS** → for generating voice output  
+- **Groq Cloud** → for text generation (quizzes, exam questions, summaries, explanations) for AI Teacher, Course Outline Generator, Summarizer, Exam Simulator, and Smart Quiz Generator.
+- **Gemini API (Google)** → for text and image-based interactions for the Homework Assistant.
+- **Whisper API (OpenAI)** → for audio-to-text transcription.
+- **gTTS** → for generating voice output.  
 
 ### 4.2. Storage & Authentication
 - **Supabase** → stores your account data and optional saved content  

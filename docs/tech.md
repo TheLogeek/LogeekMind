@@ -43,7 +43,8 @@ User management and data storage are handled by Supabase.
 
 LogeekMind integrates with several best-in-class AI services to power its features.
 
--   **Text Generation (AI Teacher, Quizzes, etc.):** Google's Gemini API
+-   **Core AI Processing (AI Teacher, Quizzes, Summaries, Exams, Course Outlines):** Groq Cloud (Llama-3, Mixtral)
+-   **Homework Assistant AI:** Google's Gemini API
 -   **Audio Transcription (Audio-to-Text):** OpenAI's Whisper API
 -   **Text-to-Speech (Notes-to-Audio):** gTTS (Google Text-to-Speech)
 

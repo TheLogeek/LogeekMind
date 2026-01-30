@@ -2,8 +2,8 @@
 
 # 🧠 LogeekMind Documentation (v2.0)
 
-Welcome to the documentation for **LogeekMind v2.0**, your all-in-one **AI academic super-assistant**!
-This platform helps you **study smarter, learn faster, and reduce stress** across school, university, and research work.
+Welcome to the documentation for **LogeekMind v2.0**, your all-in-one **AI-Powered Academic Assistant**!
+This platform helps you **unlock your full academic potential**, study smarter, learn faster, and reduce stress across school, university, and research work.
 
 ---
 

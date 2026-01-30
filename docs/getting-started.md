@@ -36,7 +36,16 @@ First, get the Python backend server running.
     ```sh
     pip install -r requirements.txt
     ```
-4.  **Run the server:**
+4.  **Environment Variables:** Create a file named `.env` in the `backend` directory and add your API keys.
+    ```
+    # LogeekMind_2.0/backend/.env
+
+    SUPABASE_URL=YOUR_SUPABASE_URL
+    SUPABASE_KEY=YOUR_SUPABASE_KEY
+    GEMINI_API_KEY=YOUR_GOOGLE_GEMINI_API_KEY
+    GROQ_API_KEY=YOUR_GROQ_CLOUD_API_KEY
+    ```
+5.  **Run the server:**
     ```sh
     uvicorn main:app --reload
     ```
