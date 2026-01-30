@@ -35,8 +35,8 @@ Try restarting the app.
 ---
 
 ### **How can I report a bug?**  
-Email: **solomonadenuga8@gmail.com**  
-WhatsApp: **+234 802 371 0562**
+Email: **logeekmind@gmail.com**  
+WhatsApp: **+2347058036730**
 
 ---
 
