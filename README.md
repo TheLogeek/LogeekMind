@@ -3,6 +3,7 @@
 ### Empowering Smarter Learning
 
 [Use the LogeekMind app](https://logeekmind.streamlit.app)
+https://logeekmind.xyz
 
 LogeekMind is your all-in-one AI academic productivity platform and educational technology tool built using Streamlit and majorly powered by Google's Gemini AI models. It’s designed to simplify studying, accelerate content mastery, and optimize academic planning for students across all disciplines.
 
